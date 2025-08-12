@@ -1,21 +1,103 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh lpR fFf" class="bg-grey-1">
+    <q-header elevated class="bg-white text-grey-8 q-py-xs">
       <q-toolbar>
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
-        <q-toolbar-title> Quasar App </q-toolbar-title>
+        <q-btn flat no-caps no-wrap class="q-ml-xs" :to="{ name: 'home' }">
+          <q-icon name="img:/logo.gif" size="28px" />
+          <q-toolbar-title shrink class="text-weight-bold"> TEi LIMS </q-toolbar-title>
+        </q-btn>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <q-space />
+
+        <div class="q-gutter-sm row items-center no-wrap">
+          <q-btn round dense flat color="grey-8" icon="search">
+            <q-menu>
+              <div class="toolbar-input-container row no-wrap">
+                <q-input
+                  dense
+                  outlined
+                  square
+                  v-model="search"
+                  placeholder="Search"
+                  class="bg-white col"
+                />
+                <q-btn
+                  class="toolbar-input-btn"
+                  color="grey-3"
+                  text-color="grey-8"
+                  icon="search"
+                  unelevated
+                />
+              </div>
+            </q-menu>
+            <q-tooltip>Search</q-tooltip>
+          </q-btn>
+
+          <q-btn round dense flat color="grey-8" icon="message">
+            <q-tooltip>Messages</q-tooltip>
+          </q-btn>
+
+          <q-btn round dense flat color="grey-8" icon="notifications">
+            <q-badge color="red" text-color="white" floating> 2 </q-badge>
+            <q-tooltip>Notifications</q-tooltip>
+          </q-btn>
+
+          <q-btn round flat>
+            <q-menu>
+              <q-list>
+                <q-item clickable v-ripple v-close-popup :to="{ name: 'user-profile' }">
+                  <q-item-section avatar>
+                    <q-icon color="grey-8" name="face"></q-icon>
+                  </q-item-section>
+                  <q-item-section>Employee Info</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple v-close-popup :to="{ name: 'change-password' }">
+                  <q-item-section avatar>
+                    <q-icon color="grey-8" name="manage_accounts"></q-icon>
+                  </q-item-section>
+                  <q-item-section>User Settings</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple v-close-popup :to="{ name: 'change-password' }">
+                  <q-item-section avatar>
+                    <q-icon color="grey-8" name="help"></q-icon>
+                  </q-item-section>
+                  <q-item-section>Help</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable v-ripple v-close-popup :to="{ name: 'login' }">
+                  <!-- TODO: Actually log out the user when this is clicked, then navigate back to the login screen -->
+                  <q-item-section avatar>
+                    <q-icon color="grey-8" name="logout"></q-icon>
+                  </q-item-section>
+                  <q-item-section>Log Out</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+            <q-avatar size="26px">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+            </q-avatar>
+            <q-tooltip>Account</q-tooltip>
+          </q-btn>
+        </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered class="bg-grey-2">
+      <q-scroll-area class="fit">
+        <q-list padding>
+          <MenuLink v-for="link in linksList" :key="link.title" v-bind="link" />
+          <q-separator class="q-mt-xs q-mb-xs" />
 
-        <EssentialLink v-for="link in linksList" :key="link.title" v-bind="link" />
-      </q-list>
+          <MenuLinkSection
+            v-for="section in linkSectionList"
+            :key="section.title"
+            v-bind="section"
+          />
+          <q-separator class="q-mt-xs q-mb-xs" />
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
@@ -26,50 +108,81 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import EssentialLink, { type EssentialLinkProps } from 'components/EssentialLink.vue';
+import MenuLink, { type MenuLinkProps } from 'src/components/MenuLink.vue';
+import MenuLinkSection, { type MenuLinkSectionProps } from 'src/components/MenuLinkSection.vue';
 
-const linksList: EssentialLinkProps[] = [
+const search = ref('');
+
+const linksList: MenuLinkProps[] = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev',
+    title: 'Dashboard',
+    icon: 'home',
+    link: 'home',
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework',
+    title: 'Projects',
+    icon: 'work',
+    link: 'home',
   },
   {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev',
+    title: 'Customers',
+    icon: 'people',
+    link: 'customer-list',
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev',
+    title: 'Personnel',
+    icon: 'engineering',
+    link: 'personnel-list',
+  },
+];
+
+const linkSectionList: MenuLinkSectionProps[] = [
+  {
+    title: 'Quality System',
+    icon: 'fact_check',
+    linksList: [
+      { icon: 'description', title: 'Quality Documents', link: 'home' },
+      { icon: 'policy', title: 'Legal Documents', link: 'home' },
+      { icon: 'account_tree', title: 'Org Structure & Roles', link: 'home' },
+      { icon: 'gpp_maybe', title: 'Risk Management', link: 'home' },
+      { icon: 'list', title: 'Corrective/Preventive Actions', link: 'home' },
+      { icon: 'thumb_down_alt', title: 'Complaints/Appeals', link: 'home' },
+      { icon: 'dangerous', title: 'Nonconforming Work', link: 'home' },
+      { icon: 'local_shipping', title: 'External Providers', link: 'home' },
+      { icon: 'checklist', title: 'Internal Audits', link: 'home' },
+      { icon: 'grading', title: 'Management Reviews', link: 'home' },
+    ],
   },
   {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev',
+    title: 'Quality Control',
+    icon: 'insights',
+    linksList: [{ icon: 'help', title: 'TBD-QC', link: 'home' }],
   },
   {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev',
+    title: 'Testing',
+    icon: 'science',
+    linksList: [
+      { icon: 'construction', title: 'Equipment', link: 'home' },
+      { icon: 'help', title: 'TBD-TS', link: 'home' },
+    ],
   },
   {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev',
+    title: 'Certification',
+    icon: 'verified',
+    linksList: [{ icon: 'help', title: 'TBD-LS', link: 'home' }],
+  },
+  {
+    title: 'Inspection',
+    icon: 'badge',
+    linksList: [{ icon: 'help', title: 'TBD-IS', link: 'home' }],
+  },
+  {
+    title: 'Library',
+    icon: 'local_library',
+    linksList: [
+      { icon: 'library_books', title: 'Standards', link: 'home' },
+      { icon: 'help', title: 'TBD-LibSvcs', link: 'home' },
+    ],
   },
 ];
 

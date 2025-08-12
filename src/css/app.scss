@@ -1,1 +1,49 @@
 // app global css in SCSS form
+
+.page-header {
+  padding: 10px 0 10px 15px;
+  margin-bottom: 10px;
+  background-color: #cccccc;
+  width: 100%;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.page-subheader {
+  width: 100%;
+  background-color: #dbf4fa;
+  margin-top: -11px;
+}
+
+.toolbar-input-container {
+  min-width: 200px;
+}
+
+.toolbar-input-btn {
+  border-radius: 0;
+  border-style: solid;
+  border-width: 1px 1px 1px 0;
+  border-color: rgba(0, 0, 0, 0.24);
+  max-width: 60px;
+  width: 100%;
+}
+
+.drawer-footer-link {
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.drawer-footer-link:hover {
+  color: #000;
+}
+
+li {
+  margin-bottom: 3px;
+}
+
+ul,
+ol {
+  margin: 0 0 0 -10px;
+}
