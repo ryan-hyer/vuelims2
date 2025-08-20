@@ -25,7 +25,9 @@
         <q-item>
           <q-item-section>
             <q-item-label overline>Home Address</q-item-label>
-            <q-item-label class="q-pl-md">{{ employee.homeAddress }}</q-item-label>
+            <q-item-label class="q-pl-md">
+              <span v-html="employee.homeAddress"></span>
+            </q-item-label>
           </q-item-section>
           <q-item-section side bottom>
             <q-btn flat round color="grey" icon="edit">

@@ -59,6 +59,10 @@ export default defineConfigWithVueTs(
         chrome: 'readonly', // BEX related
         browser: 'readonly', // BEX related
       },
+
+      parserOptions: {
+        project: true,
+      },
     },
 
     // add your custom rules here

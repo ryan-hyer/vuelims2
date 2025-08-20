@@ -35,15 +35,6 @@
             <q-tooltip>Search</q-tooltip>
           </q-btn>
 
-          <q-btn round dense flat color="grey-8" icon="message">
-            <q-tooltip>Messages</q-tooltip>
-          </q-btn>
-
-          <q-btn round dense flat color="grey-8" icon="notifications">
-            <q-badge color="red" text-color="white" floating> 2 </q-badge>
-            <q-tooltip>Notifications</q-tooltip>
-          </q-btn>
-
           <q-btn round flat>
             <q-menu>
               <q-list>
@@ -51,7 +42,23 @@
                   <q-item-section avatar>
                     <q-icon color="grey-8" name="face"></q-icon>
                   </q-item-section>
-                  <q-item-section>Employee Info</q-item-section>
+                  <q-item-section>My Employee Info</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple v-close-popup :to="{ name: 'change-password' }">
+                  <q-item-section avatar>
+                    <q-icon color="grey-8" name="message">
+                      <q-badge color="red" text-color="white" floating>572</q-badge>
+                    </q-icon>
+                  </q-item-section>
+                  <q-item-section>Messages</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple v-close-popup :to="{ name: 'change-password' }">
+                  <q-item-section avatar>
+                    <q-icon color="grey-8" name="notifications">
+                      <q-badge color="red" text-color="white" floating>812</q-badge>
+                    </q-icon>
+                  </q-item-section>
+                  <q-item-section>Notifications</q-item-section>
                 </q-item>
                 <q-item clickable v-ripple v-close-popup :to="{ name: 'change-password' }">
                   <q-item-section avatar>
@@ -77,6 +84,7 @@
             </q-menu>
             <q-avatar size="26px">
               <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
+              <q-badge rounded floating color="red" text-color="white">6,954</q-badge>
             </q-avatar>
             <q-tooltip>Account</q-tooltip>
           </q-btn>
@@ -130,7 +138,7 @@ const linksList: MenuLinkProps[] = [
     link: 'customer-list',
   },
   {
-    title: 'Personnel',
+    title: 'Employees',
     icon: 'engineering',
     link: 'personnel-list',
   },

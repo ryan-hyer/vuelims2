@@ -240,6 +240,7 @@ const employee = ref({
   probationVerifiedBy: '',
 });
 
+// Real data should be sorted by date descending, newest at top
 const trainingRecords = ref([
   {
     id: 1,
@@ -327,5 +328,6 @@ const newTrainingRecordFormIsVisible = ref(false);
 
 const submitForm = () => {
   console.log('Form submitted');
+  newTrainingRecordFormIsVisible.value = false;
 };
 </script>
