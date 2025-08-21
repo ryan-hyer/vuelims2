@@ -47,77 +47,31 @@
         <q-item>
           <q-item-section>
             <q-item-label overline>Locations</q-item-label>
-            <q-list separator>
-              <q-item v-for="location in customerLocations" :key="location.id">
-                <q-item-section>
-                  <q-item-label overline v-if="location.isPrimary">(Primary)</q-item-label>
-                  <q-form @submit="submitForm" class="q-gutter-xs">
-                    <q-input
-                      dense
-                      hide-bottom-space
-                      v-model="location.address"
-                      label="Street Address"
-                      lazy-rules
-                      :rules="[(val) => !!val || 'Cannot be blank']"
-                    />
-                    <q-input
-                      dense
-                      hide-bottom-space
-                      v-model="location.city"
-                      label="City"
-                      lazy-rules
-                      :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
-                    />
-                    <q-input
-                      dense
-                      hide-bottom-space
-                      v-model="location.customerState"
-                      label="State"
-                      lazy-rules
-                      :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
-                    />
-                    <q-input
-                      dense
-                      hide-bottom-space
-                      v-model="location.zipCode"
-                      label="Zip Code"
-                      lazy-rules
-                      :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
-                    />
-                    <q-input
-                      dense
-                      hide-bottom-space
-                      v-model="location.country"
-                      label="Country"
-                      lazy-rules
-                      :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
-                    />
-
-                    <q-card-actions>
-                      <q-btn label="Submit" type="submit" color="teal" />
-                      <q-btn label="Cancel" flat class="q-ml-sm" />
-                    </q-card-actions>
-                  </q-form>
-                  <q-item-label>
-                    {{ location.address }}<br />{{ location.city }}, {{ location.customerState }}
-                    {{ location.zipCode }}<br />{{ location.country }}
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side bottom>
-                  <q-btn flat round color="grey" icon="edit"> </q-btn>
-                </q-item-section>
-              </q-item>
+            <q-list separator style="border-left: 5px solid lightgrey">
+              <CustomerLocationForm
+                v-for="(location, index) in customerLocations"
+                :location="location"
+                :key="location.id"
+                @delete-location="deleteLocation(index)"
+              />
+              <CustomerLocationForm :key="'new-location'" @add-location="addLocation" />
             </q-list>
           </q-item-section>
         </q-item>
         <q-item>
           <q-item-section>
             <q-item-label overline>Contacts</q-item-label>
-            <q-item-label class="q-pl-md">
-              <div v-for="contact in customerContacts" :key="contact.id">
-                {{ contact.name }} - {{ contact.email }} - {{ contact.phone }}
-              </div>
-            </q-item-label>
+            <q-list separator style="border-left: 5px solid lightgrey">
+              <CustomerContactForm
+                v-for="(contact, index) in customerContacts"
+                :contact="contact"
+                :key="contact.id"
+                @delete-contact="deleteContact(index)"
+              />
+              <q-item>
+                <q-btn color="green" icon="add" label="Add New Contact" class="q-ma-xs" size="sm" />
+              </q-item>
+            </q-list>
           </q-item-section>
         </q-item>
         <q-item>
@@ -149,8 +103,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useQuasar } from 'quasar';
 import type { Customer, CustomerLocation, CustomerContact } from './models';
+import CustomerLocationForm from './CustomerLocation.vue';
+import CustomerContactForm from './CustomerContact.vue';
 
+const $q = useQuasar();
+
+// Dummy data and functions -- replace with actual API calls or props as needed
 const customer = ref<Customer>({
   id: 2,
   name: 'Alpha Systems',
@@ -170,6 +130,7 @@ const customerLocations = ref<CustomerLocation[]>([
   },
   {
     id: 2,
+    name: 'Warehouse',
     address: '456 Elm St',
     city: 'Othertown',
     customerState: 'TX',
@@ -185,16 +146,37 @@ const customerContacts = ref<CustomerContact[]>([
     name: 'John Doe',
     email: 'johndoe@nil.com',
     phone: '555-1234',
+    position: 'President',
   },
   {
     id: 2,
     name: 'Jane Smith',
-    email: 'janesmith@nil.com',
     phone: '555-5678',
+    position: 'Plant Manager',
+    notes: 'Contact for invoicing',
+  },
+  {
+    id: 3,
+    name: 'Alice Johnson',
   },
 ]);
 
-const submitForm = () => {
-  console.log('Form submitted');
+const addLocation = (newLocation: object) => {
+  // Use an actual API call eventually
+  customerLocations.value.push(newLocation as CustomerLocation);
+};
+
+const deleteLocation = (index: number) => {
+  // Use an actual API call eventually
+  // Do I want to delete locations? Or just archive them or something?
+  customerLocations.value.splice(index, 1);
+  $q.notify('Location deleted successfully'); // This doesn't seem to work?
+};
+
+const deleteContact = (index: number) => {
+  // Use an actual API call eventually
+  // Do I want to delete locations? Or just archive them or something?
+  customerContacts.value.splice(index, 1);
+  $q.notify('Contact deleted successfully'); // This doesn't seem to work?
 };
 </script>
