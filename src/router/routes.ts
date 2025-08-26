@@ -34,6 +34,53 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/projects',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'project-list',
+        component: () => import('components/Projects/ProjectList.vue'),
+      },
+    ],
+  },
+  {
+    path: '/customers',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'customer-list',
+        component: () => import('components/Customers/CustomerList.vue'),
+      },
+      {
+        path: ':customerId',
+        component: () => import('components/Customers/CustomerDetail.vue'),
+        props: true,
+        children: [
+          {
+            path: '',
+            name: 'customer-info',
+            component: () => import('components/Customers/CustomerInfo.vue'),
+            props: true,
+          },
+          {
+            path: 'interactions',
+            name: 'customer-interactions',
+            component: () => import('components/Customers/CustomerInteractions.vue'),
+            props: true,
+          },
+          {
+            path: 'projects',
+            name: 'customer-projects',
+            component: () => import('components/Customers/CustomerProjects.vue'),
+            props: true,
+          },
+        ],
+      },
+    ],
+  },
+  {
     path: '/personnel',
     component: () => import('layouts/MainLayout.vue'),
     children: [
@@ -75,42 +122,6 @@ const routes: RouteRecordRaw[] = [
             path: 'reviews',
             name: 'personnel-reviews',
             component: () => import('components/Personnel/PersonnelReviews.vue'),
-            props: true,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: '/customers',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      {
-        path: '',
-        name: 'customer-list',
-        component: () => import('components/Customers/CustomerList.vue'),
-      },
-      {
-        path: ':customerId',
-        component: () => import('components/Customers/CustomerDetail.vue'),
-        props: true,
-        children: [
-          {
-            path: '',
-            name: 'customer-info',
-            component: () => import('components/Customers/CustomerInfo.vue'),
-            props: true,
-          },
-          {
-            path: 'interactions',
-            name: 'customer-interactions',
-            component: () => import('components/Customers/CustomerInteractions.vue'),
-            props: true,
-          },
-          {
-            path: 'projects',
-            name: 'customer-projects',
-            component: () => import('components/Customers/CustomerProjects.vue'),
             props: true,
           },
         ],

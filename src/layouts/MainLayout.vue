@@ -130,7 +130,7 @@ const linksList: MenuLinkProps[] = [
   {
     title: 'Projects',
     icon: 'work',
-    link: 'home',
+    link: 'project-list',
   },
   {
     title: 'Customers',
@@ -171,7 +171,10 @@ const linkSectionList: MenuLinkSectionProps[] = [
   {
     title: 'Quality Control',
     icon: 'insights',
-    linksList: [{ icon: 'help', title: 'TBD-QC', link: 'home' }],
+    linksList: [
+      { icon: 'quiz', title: 'Proficiency Testing', link: 'home' },
+      { icon: 'help', title: 'TBD-QC', link: 'home' },
+    ],
   },
   {
     title: 'Testing',
