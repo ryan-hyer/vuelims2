@@ -1,7 +1,7 @@
 <template>
-  <q-item>
+  <q-item v-if="formIsVisible">
     <q-item-section>
-      <q-card bordered class="q-pa-sm" v-if="formIsVisible">
+      <q-card bordered :class="props.contact ? 'q-pa-sm bg-light-blue-1' : 'q-pa-sm bg-green-1'">
         <q-form @submit="submitForm" class="q-gutter-xs">
           <q-input
             dense
@@ -25,11 +25,20 @@
             <q-btn label="Submit" type="submit" color="teal" />
             <q-btn label="Cancel" flat class="q-ml-sm" @click="formIsVisible = false" />
             <q-space />
-            <q-btn round color="red" icon="delete" @click="emit('deleteContact')" />
+            <span v-if="props.contact">
+              <q-btn round color="red" icon="delete" @click="emit('deleteContact')">
+                <q-tooltip>Delete Contact</q-tooltip>
+              </q-btn>
+            </span>
           </q-card-actions>
         </q-form>
       </q-card>
-      <q-item-label v-else>
+    </q-item-section>
+  </q-item>
+
+  <q-item v-if="!formIsVisible && props.contact">
+    <q-item-section>
+      <q-item-label>
         <div>
           {{ contact.name }} <span v-if="contact.position">({{ contact.position }})</span>
         </div>
@@ -46,9 +55,20 @@
         </q-btn>
       </q-item-label>
     </q-item-section>
-    <q-item-section side bottom v-if="!formIsVisible">
+    <q-item-section side bottom>
       <q-btn flat round color="grey" icon="edit" @click="formIsVisible = true" />
     </q-item-section>
+  </q-item>
+
+  <q-item v-if="!formIsVisible && !props.contact">
+    <q-btn
+      color="green"
+      icon="add"
+      label="Add New Contact"
+      class="q-ma-xs"
+      size="sm"
+      @click="formIsVisible = true"
+    />
   </q-item>
 </template>
 
@@ -59,21 +79,41 @@ import type { CustomerContact } from './models';
 const props = defineProps({
   contact: {
     type: Object as () => CustomerContact,
-    required: true,
   },
 });
 
 const emit = defineEmits<{
+  addContact: [contact: object];
   deleteContact: [];
 }>();
 
-const contact = ref(props.contact);
+const contact = ref(
+  props.contact || {
+    id: Date.now(),
+    name: '',
+    position: '',
+    phone: '',
+    email: '',
+    notes: '',
+  },
+);
 
 const formIsVisible = ref(false);
 
 const submitForm = () => {
-  // Update the database
+  if (props.contact) {
+    // Update the database
+  } else {
+    emit('addContact', contact.value);
+    contact.value = {
+      id: Date.now(), // Reset for a new entry
+      name: '',
+      position: '',
+      phone: '',
+      email: '',
+      notes: '',
+    };
+  }
   formIsVisible.value = false;
-  console.log(contact.value);
 };
 </script>

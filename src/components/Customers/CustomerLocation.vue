@@ -2,7 +2,7 @@
 <template>
   <q-item v-if="formIsVisible">
     <q-item-section>
-      <q-card bordered :class="props.location ? 'q-pa-sm bg-light-blue-2' : 'q-pa-sm bg-green-2'">
+      <q-card bordered :class="props.location ? 'q-pa-sm bg-light-blue-1' : 'q-pa-sm bg-green-1'">
         <q-form @submit="submitForm" class="q-gutter-xs">
           <q-input dense hide-bottom-space v-model="location.name" label="Facility Name" />
           <q-input
@@ -53,7 +53,7 @@
             <q-btn label="Submit" type="submit" color="teal" />
             <q-btn label="Cancel" flat class="q-ml-sm" @click="formIsVisible = false" />
             <q-space />
-            <span v-if="props">
+            <span v-if="props.location">
               <q-btn round color="red" icon="delete" @click="emit('deleteLocation')">
                 <q-tooltip>Delete Location</q-tooltip>
               </q-btn>

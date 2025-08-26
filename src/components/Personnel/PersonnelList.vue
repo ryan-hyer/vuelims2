@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div class="page-header">Employees</div>
+    <div class="page-header">Personnel</div>
     <q-table
       flat
       bordered
@@ -12,7 +12,7 @@
     >
       <template v-slot:top>
         <q-toolbar>
-          <q-input v-model="search" placeholder="Search employees..." dense outlined clearable />
+          <q-input v-model="search" placeholder="Search personnel..." dense outlined clearable />
           <q-space />
           <q-btn round color="green" icon="add" class="q-ma-sm" :to="{ name: 'personnel-new' }">
             <q-tooltip>Add New Employee</q-tooltip>

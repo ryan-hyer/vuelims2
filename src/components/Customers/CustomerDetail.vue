@@ -20,8 +20,7 @@
     >
       <q-route-tab label="Company Info" :to="{ name: 'customer-info' }" />
       <q-route-tab label="Interactions" :to="{ name: 'customer-interactions' }" />
-      <q-route-tab label="Projects" :to="{ name: 'customer-projects' }" />
-      <q-route-tab label="Invoices" :to="{ name: 'customer-invoices' }" />
+      <q-route-tab label="Projects / Invoices" :to="{ name: 'customer-projects' }" />
     </q-tabs>
     <q-separator />
 

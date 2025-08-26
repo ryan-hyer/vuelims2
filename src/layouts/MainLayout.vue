@@ -96,14 +96,14 @@
       <q-scroll-area class="fit">
         <q-list padding>
           <MenuLink v-for="link in linksList" :key="link.title" v-bind="link" />
-          <q-separator class="q-mt-xs q-mb-xs" />
+          <q-separator class="q-my-xs" />
 
           <MenuLinkSection
             v-for="section in linkSectionList"
             :key="section.title"
             v-bind="section"
           />
-          <q-separator class="q-mt-xs q-mb-xs" />
+          <q-separator class="q-my-xs" />
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -138,20 +138,27 @@ const linksList: MenuLinkProps[] = [
     link: 'customer-list',
   },
   {
-    title: 'Employees',
-    icon: 'engineering',
-    link: 'personnel-list',
+    title: 'Invoicing',
+    icon: 'receipt_long',
+    link: 'home',
   },
 ];
 
 const linkSectionList: MenuLinkSectionProps[] = [
   {
+    title: 'Organization',
+    icon: 'apartment',
+    linksList: [
+      { icon: 'policy', title: 'Legal Documents', link: 'home' },
+      { icon: 'account_tree', title: 'Org Structure & Roles', link: 'home' },
+      { icon: 'engineering', title: 'Personnel', link: 'personnel-list' },
+    ],
+  },
+  {
     title: 'Quality System',
     icon: 'fact_check',
     linksList: [
       { icon: 'description', title: 'Quality Documents', link: 'home' },
-      { icon: 'policy', title: 'Legal Documents', link: 'home' },
-      { icon: 'account_tree', title: 'Org Structure & Roles', link: 'home' },
       { icon: 'gpp_maybe', title: 'Risk Management', link: 'home' },
       { icon: 'list', title: 'Corrective/Preventive Actions', link: 'home' },
       { icon: 'thumb_down_alt', title: 'Complaints/Appeals', link: 'home' },

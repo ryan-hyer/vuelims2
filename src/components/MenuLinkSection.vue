@@ -1,5 +1,5 @@
 <template>
-  <q-expansion-item expand-separator>
+  <q-expansion-item>
     <template v-slot:header>
       <q-item-section avatar>
         <q-icon color="grey" :name="icon" />

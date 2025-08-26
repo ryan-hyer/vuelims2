@@ -1,9 +1,9 @@
 <template>
   <q-page padding>
-    <div class="page-header">Employees</div>
+    <div class="page-header">Personnel</div>
     <div class="page-subheader q-pa-sm">
       <q-breadcrumbs>
-        <q-breadcrumbs-el label="Employee List" :to="{ name: 'personnel-list' }" />
+        <q-breadcrumbs-el label="Personnel List" :to="{ name: 'personnel-list' }" />
         <q-breadcrumbs-el label="Ryan Hyer" />
       </q-breadcrumbs>
     </div>

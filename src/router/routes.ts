@@ -104,19 +104,13 @@ const routes: RouteRecordRaw[] = [
           {
             path: 'interactions',
             name: 'customer-interactions',
-            component: () => import('components/Customers/CustomerInfo.vue'),
+            component: () => import('components/Customers/CustomerInteractions.vue'),
             props: true,
           },
           {
             path: 'projects',
             name: 'customer-projects',
-            component: () => import('components/Customers/CustomerInfo.vue'),
-            props: true,
-          },
-          {
-            path: 'invoices',
-            name: 'customer-invoices',
-            component: () => import('components/Customers/CustomerInfo.vue'),
+            component: () => import('components/Customers/CustomerProjects.vue'),
             props: true,
           },
         ],

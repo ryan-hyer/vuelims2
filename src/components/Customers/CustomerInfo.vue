@@ -58,6 +58,7 @@
             </q-list>
           </q-item-section>
         </q-item>
+
         <q-item>
           <q-item-section>
             <q-item-label overline>Contacts</q-item-label>
@@ -68,9 +69,7 @@
                 :key="contact.id"
                 @delete-contact="deleteContact(index)"
               />
-              <q-item>
-                <q-btn color="green" icon="add" label="Add New Contact" class="q-ma-xs" size="sm" />
-              </q-item>
+              <CustomerContactForm :key="'new-contact'" @add-contact="addContact" />
             </q-list>
           </q-item-section>
         </q-item>
@@ -171,6 +170,11 @@ const deleteLocation = (index: number) => {
   // Do I want to delete locations? Or just archive them or something?
   customerLocations.value.splice(index, 1);
   $q.notify('Location deleted successfully'); // This doesn't seem to work?
+};
+
+const addContact = (newContact: object) => {
+  // Use an actual API call eventually
+  customerContacts.value.push(newContact as CustomerContact);
 };
 
 const deleteContact = (index: number) => {
