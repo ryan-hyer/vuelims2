@@ -1,7 +1,15 @@
 <template>
   <q-page padding>
     <div class="page-header">Projects</div>
-    <q-table flat bordered dense :rows="projects" :columns="columns" row-key="id">
+    <q-table
+      flat
+      bordered
+      dense
+      :rows="projects"
+      :columns="columns"
+      row-key="id"
+      @row-click="onRowClick"
+    >
       <template v-slot:top>
         <q-toolbar>
           <q-input v-model="search" placeholder="Search projects..." dense outlined clearable />
@@ -10,6 +18,7 @@
             <q-tooltip>Add New Project</q-tooltip>
           </q-btn>
         </q-toolbar>
+        <div class="text-caption text-italic">Click a record to view more details</div>
       </template>
     </q-table>
   </q-page>
@@ -19,6 +28,7 @@
 import { ref } from 'vue';
 import type { Project } from './models';
 import type { QTableColumn } from 'quasar';
+import { useRouter } from 'vue-router';
 
 const search = ref('');
 
@@ -47,19 +57,13 @@ const columns: QTableColumn[] = [
     field: 'description',
     align: 'left',
   },
-  {
-    name: 'standards',
-    label: 'Standards',
-    field: 'standards',
-    align: 'left',
-  },
-  {
-    name: 'purchaseOrder',
-    label: 'Purchase Order',
-    field: 'purchaseOrder',
-    align: 'left',
-  },
 ];
+
+const router = useRouter();
+
+const onRowClick = (evt: Event, row: { [key: string]: string }) => {
+  void router.push({ name: 'project-info', params: { projectId: row.id } });
+};
 
 // Production data should be sorted so that open projects are at the top, then by start date descending
 const projects = ref<Project[]>([
