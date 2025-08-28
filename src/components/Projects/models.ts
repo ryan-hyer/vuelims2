@@ -4,7 +4,7 @@ export interface Project {
   customer: string; // should ultimately be clientId: number;
   description: string;
   startDate: string;
-  standards?: string;
+  standards?: string[];
   purchaseOrder?: string; // ask how much we need this field, and whether I'm missing any others
   assignedTo?: string; // should ultimately be a number linked to personnelId, and should be non optional
   completeDate?: string;

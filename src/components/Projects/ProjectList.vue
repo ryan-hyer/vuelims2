@@ -14,11 +14,17 @@
         <q-toolbar>
           <q-input v-model="search" placeholder="Search projects..." dense outlined clearable />
           <q-space />
-          <q-btn round color="green" icon="add" class="q-ma-sm">
+          <q-btn round color="green" icon="add" class="q-ma-sm" :to="{ name: 'project-new' }">
             <q-tooltip>Add New Project</q-tooltip>
           </q-btn>
         </q-toolbar>
         <div class="text-caption text-italic">Click a record to view more details</div>
+      </template>
+      <template v-slot:body-cell-description="props">
+        <q-td :props="props">
+          {{ props.row.description.substring(0, 30) }}
+          <span v-if="props.row.description.length > 30">...</span>
+        </q-td>
       </template>
     </q-table>
   </q-page>
@@ -73,7 +79,7 @@ const projects = ref<Project[]>([
     customer: 'Alpha Systems',
     description: 'Listing Addition',
     startDate: '2023-10-01',
-    standards: 'Standard A (2015), Standard B (2022)',
+    standards: ['Standard A (2015)', 'Standard B (2022)'],
   },
   {
     id: 2,
@@ -81,7 +87,7 @@ const projects = ref<Project[]>([
     customer: 'Beta Corp',
     description: 'Flow',
     startDate: '2023-11-15',
-    standards: 'Standard C (2018)',
+    standards: ['Standard C (2018)'],
     purchaseOrder: 'PO12345',
   },
   {
@@ -90,7 +96,7 @@ const projects = ref<Project[]>([
     customer: 'Gamma LLC',
     description: 'Plastic shower pans',
     startDate: '2024-01-20',
-    standards: 'Standard A (2015), Standard D (2020)',
+    standards: ['Standard A (2015)', 'Standard D (2020)'],
   },
   {
     id: 4,
@@ -98,16 +104,16 @@ const projects = ref<Project[]>([
     customer: 'Delta Inc',
     description: 'RFI 2024',
     startDate: '2024-02-10',
-    standards: 'Standard E (2019)',
+    standards: ['Standard E (2019)'],
     completeDate: '2024-04-15',
   },
   {
     id: 5,
     number: 'LS2500315',
     customer: 'Epsilon Partners',
-    description: 'Energy Efficiency Upgrade',
+    description: 'Energy Efficiency Upgrade\nCan I do two lines?\nDoes it look stupid?',
     startDate: '2024-03-05',
-    standards: 'Standard F (2021), Standard B (2022)',
+    standards: ['Standard F (2021)', 'Standard B (2022)'],
     purchaseOrder: 'PO54321',
   },
 ]);

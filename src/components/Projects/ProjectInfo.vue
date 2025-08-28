@@ -98,7 +98,9 @@
         <q-item>
           <q-item-section>
             <q-item-label overline>Standards</q-item-label>
-            <q-item-label class="q-pl-md">{{ project.standards || 'None' }}</q-item-label>
+            <q-item-label class="q-pl-md" v-for="standard in project.standards" :key="standard">
+              {{ standard }}
+            </q-item-label>
           </q-item-section>
           <q-item-section side bottom>
             <q-btn flat round color="grey" icon="edit">
@@ -209,7 +211,7 @@ const project = ref<Project>({
   customer: 'Alpha Systems',
   description: 'Listing Addition',
   startDate: '2023/10/01',
-  standards: 'Standard A (2015), Standard B (2022)',
+  standards: ['Standard A (2015)', 'Standard B (2022)'],
   purchaseOrder: '',
   assignedTo: 'Ryan Hyer',
   completeDate: '',
