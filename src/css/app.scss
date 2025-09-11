@@ -51,3 +51,21 @@ ol {
 .q-icon .q-badge {
   font-family: $typography-font-family;
 }
+
+@keyframes highlight-new {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
+    background-color: inherit;
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    background-color: #fafa5c;
+  }
+}
