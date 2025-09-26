@@ -95,7 +95,9 @@
         <q-item-label class="q-pl-md" v-for="standard in project.standards" :key="standard">
           {{ standard }}
         </q-item-label>
-        <q-item-label class="q-pl-md" v-if="!project.standards">None</q-item-label>
+        <q-item-label class="q-pl-md" v-if="!project.standards || project.standards.length == 0"
+          >None</q-item-label
+        >
       </q-item-section>
       <q-item-section side bottom>
         <q-btn flat round color="grey" icon="edit">
@@ -107,7 +109,34 @@
             anchor="center end"
             self="center start"
           >
-            <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
+            <q-select
+              filled
+              v-model="scope.value"
+              use-chips
+              multiple
+              emit-value
+              options-dense
+              label="Standards"
+              :options="dummyStandardsFiltered"
+              class="q-mb-md"
+              style="min-width: 250px"
+            >
+              <template v-slot:before-options>
+                <q-input
+                  outlined
+                  clearable
+                  dense
+                  v-model="filterStandardsInput"
+                  label="Search Standards..."
+                  debounce="200"
+                />
+              </template>
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey"> No results </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
           </q-popup-edit>
         </q-btn>
       </q-item-section>
@@ -196,7 +225,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import type { Project } from './models';
 
 const project = ref<Project>({
@@ -208,5 +237,36 @@ const project = ref<Project>({
   purchaseOrder: '',
   assignedTo: 'Ryan Hyer',
   completeDate: '',
+});
+
+const dummyStandards = [
+  {
+    value: 'ANSI Z124 / CSA B45.5 (2017)',
+    label: 'ANSI Z124 / CSA B45.5 (2017) - Plastic plumbing fixtures',
+  },
+  {
+    value: 'ASSE 1051 (2009)',
+    label:
+      'ASSE 1051 (2009) - Individual and Branch Type Air Admittance Valves for Sanitary Drainage Systems',
+  },
+  {
+    value: 'CSA C22.2 No. 107.1 (2021)',
+    label: 'CSA C22.2 No. 107.1 (2021) - Power conversion equipment',
+  },
+  {
+    value: 'IAPMO TS 30 (1997e1)',
+    label: 'IAPMO TS 30 (1997e1) - Termination valves for use in recreational vehicles',
+  },
+  {
+    value: 'UL 174 (11th)',
+    label: 'UL 174 (11th) - Household Electric Storage Tank Water Heaters',
+  },
+];
+
+const filterStandardsInput = ref('');
+
+const dummyStandardsFiltered = computed(() => {
+  const needle: string = filterStandardsInput.value || '';
+  return dummyStandards.filter((v) => v.label.toLowerCase().indexOf(needle.toLowerCase()) > -1);
 });
 </script>

@@ -5,7 +5,7 @@
       <q-breadcrumbs>
         <q-breadcrumbs-el label="Project List" :to="{ name: 'project-list' }" />
         <q-breadcrumbs-el :label="props.projectId" />
-        <!-- Replace this with the job number once data is coming from the backend -->
+        <!-- TODO: Replace this with the job number once data is coming from the backend -->
       </q-breadcrumbs>
     </div>
 
@@ -24,7 +24,7 @@
       </q-card>
     </q-expansion-item>
 
-    <!-- There needs to be some logic here to disable this tab if project info is missing, particularly a job number and possibly standards -->
+    <!-- TODO: There needs to be some logic here to disable this tab if project info is missing, particularly a checklist or standards -->
     <q-expansion-item
       expand-separator
       icon="looks_two"

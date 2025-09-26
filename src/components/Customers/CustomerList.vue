@@ -1,7 +1,17 @@
 <template>
   <q-page padding>
     <div class="page-header">Customers</div>
-    <q-table flat bordered dense :rows="dummyCustomers" :columns="columns" row-key="id" hide-header>
+    <q-table
+      flat
+      bordered
+      dense
+      :rows="customers"
+      :columns="columns"
+      row-key="id"
+      :loading="loading"
+      hide-header
+      @row-click="onRowClick"
+    >
       <template v-slot:top>
         <q-toolbar>
           <q-input v-model="search" placeholder="Search customers..." dense outlined clearable />
@@ -10,52 +20,50 @@
             <q-tooltip>Add New Customer</q-tooltip>
           </q-btn>
         </q-toolbar>
-      </template>
-      <template v-slot:body-cell="props">
-        <q-td>
-          <q-item
-            clickable
-            :key="props.row.id"
-            :to="{ name: 'customer-info', params: { customerId: props.row.id } }"
-          >
-            <q-item-section>
-              <q-item-label>{{ props.row.customerName }}</q-item-label>
-              <q-item-label caption>
-                {{ props.row.customerCity }}, {{ props.row.customerState }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-td>
+        <div class="text-caption text-italic">Click a row to view more details</div>
       </template>
     </q-table>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useCustomerStore } from 'src/stores/store';
+import type { Customer } from './models';
 import type { QTableColumn } from 'quasar';
 
+const router = useRouter();
+const store = useCustomerStore();
+
+const customers = ref<Customer[]>([{ id: 0, name: 'Loading...' }]);
 const search = ref('');
+const loading = ref(false);
+
+onMounted(() => {
+  loading.value = true;
+  store
+    .fetchCustomers()
+    .then(() => {
+      customers.value = store.customers;
+      loading.value = false;
+    })
+    .catch((error) => {
+      console.log('Error fetching customers:', error);
+      loading.value = false;
+    });
+});
 
 const columns: QTableColumn[] = [
   {
-    name: 'customerName',
+    name: 'name',
     label: 'Customer Name',
-    field: 'customerName',
+    field: 'name',
     align: 'left',
   },
 ];
 
-const dummyCustomers = ref([
-  { id: 1, customerName: 'Customer A', customerCity: 'City X', customerState: 'State Y' },
-  { id: 2, customerName: 'Customer B', customerCity: 'City X', customerState: 'State Y' },
-  { id: 3, customerName: 'Customer C', customerCity: 'City X', customerState: 'State Y' },
-  { id: 4, customerName: 'Customer D', customerCity: 'City X', customerState: 'State Y' },
-  { id: 5, customerName: 'Customer E', customerCity: 'City X', customerState: 'State Y' },
-  { id: 6, customerName: 'Customer F', customerCity: 'City X', customerState: 'State Y' },
-  { id: 7, customerName: 'Customer G', customerCity: 'City X', customerState: 'State Y' },
-  { id: 8, customerName: 'Customer H', customerCity: 'City X', customerState: 'State Y' },
-  { id: 9, customerName: 'Customer I', customerCity: 'City X', customerState: 'State Y' },
-  { id: 10, customerName: 'Customer J', customerCity: 'City X', customerState: 'State Y' },
-]);
+const onRowClick = (evt: Event, row: { [key: string]: string }) => {
+  void router.push({ name: 'customer-info', params: { customerId: row.id } });
+};
 </script>

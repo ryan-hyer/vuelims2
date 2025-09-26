@@ -1,7 +1,7 @@
 export interface Customer {
   id: number;
   name: string;
-  website: string;
+  website?: string;
   notes?: string;
 }
 

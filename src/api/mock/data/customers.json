@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Alpha Systems, LLC",
+    "website": "https://alphasystems.com",
+    "notes": "Important client"
+  },
+  { "id": 2, "name": "Camco Manufacturing, LLC", "website": "https://camco.com" },
+  {
+    "id": 3,
+    "name": "Elwell Corporation",
+    "website": "https://elwellsystems.com",
+    "notes": "We're approved in Canada!"
+  },
+  { "id": 4, "name": "Expion360" },
+  { "id": 5, "name": "Icon Technologies Limited" },
+  { "id": 6, "name": "N.P.S. Plastics LLC" },
+  { "id": 7, "name": "Rixens Enterprises" },
+  { "id": 8, "name": "Seaflo Marine & RV North America, LLC" },
+  { "id": 9, "name": "Valterra Products Inc." },
+  { "id": 10, "name": "Winnebago Industries", "notes": "Ask what their website is" }
+]

@@ -12,16 +12,16 @@
 
     <div class="q-pa-md">
       <q-form @submit.prevent="submitForm">
-        <q-stepper
-          alternative-labels
-          active-icon="none"
-          v-model="step"
-          ref="stepper"
-          color="primary"
-          animated
-        >
-          <q-step :name="1" prefix="1" title="Project Type" :done="newProject.number != ''">
-            <q-select filled v-model="projectType" :options="jobTypes" label="Project Type" />
+        <Transition name="fade" mode="out-in">
+          <div v-if="!newProject.number">
+            <q-select
+              filled
+              options-dense
+              v-model="projectType"
+              :options="jobTypes"
+              label="Project Type"
+              hint="Select the company this job belongs to"
+            />
 
             <q-card bordered class="q-pa-sm q-mt-sm" v-if="projectType">
               <p>
@@ -33,10 +33,7 @@
                 label="Yes"
                 icon="check"
                 size="xs"
-                @click="
-                  newProject.number = newNumber;
-                  step = 2;
-                "
+                @click="newProject.number = newNumber"
               />
               <q-btn
                 color="red"
@@ -44,14 +41,12 @@
                 icon="close"
                 size="xs"
                 class="q-ml-sm"
-                @click="
-                  newProject.number = projectType.value;
-                  step = 2;
-                "
+                @click="newProject.number = projectType.value"
               />
             </q-card>
-          </q-step>
-          <q-step :name="2" title="Basic Info" prefix="2" :done="step > 2">
+          </div>
+          <div v-else>
+            <!-- TODO: Need to check job number uniqueness before allowing form submit -->
             <q-input
               filled
               v-model="newProject.number"
@@ -88,7 +83,7 @@
               filled
               v-model="newProject.customer"
               use-input
-              fill-input
+              options-dense
               input-debounce="200"
               label="Customer"
               :options="dummyCustomersRef"
@@ -110,6 +105,17 @@
               lazy-rules
               :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
             />
+
+            <q-select
+              filled
+              v-model="newProject.assignedTo"
+              label="Assign Project To"
+              :options="dummyEmployees"
+              option-value="employeeId"
+              option-label="name"
+              class="q-mb-md"
+            />
+
             <q-field filled label="Supporting Documents (optional)" stack-label>
               <!-- Might be cleaner to do the actual upload along with form submit, and just stage files here -->
               <template v-slot:control>
@@ -123,119 +129,30 @@
                 />
               </template>
             </q-field>
-          </q-step>
 
-          <q-step :name="3" prefix="3" title="Additional Info" :done="step > 3">
-            <div class="text-caption bg-light-blue-2 q-mb-md q-pa-sm">
-              {{ newProject.number }} - {{ customerName }}
-            </div>
-            <!-- Which fields appear here will depend on the project type -->
-            <q-select
-              filled
-              v-model="newProject.standards"
-              use-chips
-              multiple
-              emit-value
-              label="Standards"
-              :options="dummyStandardsFiltered"
-              class="q-mb-md"
-            >
-              <template v-slot:before-options>
-                <q-input
-                  outlined
-                  clearable
-                  dense
-                  v-model="filterStandardsInput"
-                  label="Search Standards..."
-                  debounce="200"
-                />
-              </template>
-              <template v-slot:no-option>
-                <q-item>
-                  <q-item-section class="text-grey"> No results </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-
-            <q-input
-              filled
-              v-model="newProject.purchaseOrder"
-              label="Customer PO Number"
-              class="q-mb-md"
-            />
-          </q-step>
-
-          <q-step :name="4" prefix="4" title="Assignment">
-            <div class="text-caption bg-light-blue-2 q-mb-md q-pa-sm">
-              {{ newProject.number }} - {{ customerName }}
-            </div>
-            <q-select
-              filled
-              v-model="newProject.assignedTo"
-              label="Assign Project To"
-              :options="dummyEmployees"
-              option-value="employeeId"
-              option-label="name"
-              class="q-mb-md"
-            />
-
-            <q-separator />
-          </q-step>
-          <template v-slot:navigation>
-            <q-stepper-navigation>
+            <div class="row justify-end q-gutter-sm q-mt-md">
+              <q-btn flat label="Cancel" color="red" :to="{ name: 'project-list' }" />
               <q-btn
-                v-if="step > 1"
-                @click="handleNext"
+                type="submit"
+                label="Create Project"
                 color="primary"
-                :label="step === 4 ? 'Finish' : 'Next'"
-                :disable="step == 2 && (!newProject.customer || !newProject.description)"
-              >
-                <q-tooltip
-                  anchor="top left"
-                  self="bottom left"
-                  v-if="step == 2 && (!newProject.customer || !newProject.description)"
-                  >Please enter required information before proceeding</q-tooltip
-                >
-              </q-btn>
-              <q-btn
-                v-if="step > 1"
-                flat
-                color="primary"
-                @click="($refs.stepper as QStepper).previous()"
-                label="Back"
-                class="q-ml-sm"
+                :disable="!newProject.number || !newProject.customer || !newProject.description"
               />
-              <q-btn flat color="red" :to="{ name: 'project-list' }" label="Cancel" />
-            </q-stepper-navigation>
-          </template>
-        </q-stepper>
+            </div>
+          </div>
+        </Transition>
       </q-form>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, useTemplateRef } from 'vue';
+import { ref, computed } from 'vue';
 import { date } from 'quasar';
 import type { Project } from './models';
-import type { QSelect, QStepper } from 'quasar';
+import type { QSelect } from 'quasar';
 import { useRouter } from 'vue-router';
 const router = useRouter();
-
-const step = ref(1);
-const stepper = useTemplateRef('stepper');
-
-const handleNext = () => {
-  if (step.value == 4) {
-    // submit the form
-    console.log('Form submitted: ', newProject.value);
-    /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
-    router.push({ name: 'project-list', query: { flash: 1 } });
-  } else {
-    // progress to the next step
-    step.value += 1;
-  }
-};
 
 const newProject = ref<Project>({
   id: Date.now(),
@@ -243,10 +160,7 @@ const newProject = ref<Project>({
   customer: '',
   description: '',
   startDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
-  standards: [],
-  purchaseOrder: '',
   assignedTo: '',
-  completeDate: '',
 });
 
 const newNumber = computed<string>(() => {
@@ -255,14 +169,6 @@ const newNumber = computed<string>(() => {
       new Date().toLocaleDateString('en', { year: '2-digit' }),
       nextNumbers[projectType.value.value as keyof typeof nextNumbers].toString().padStart(5, '0'),
     );
-  }
-  return '';
-});
-
-const customerName = computed<string>(() => {
-  if (newProject.value.customer) {
-    //return JSON.parse(newProject.value.customer).name;
-    return newProject.value.customer;
   }
   return '';
 });
@@ -292,8 +198,15 @@ const filterCustomers = (
   });
 };
 
-const filterStandardsInput = ref(null);
+const submitForm = () => {
+  console.log('Form submitted: ', newProject.value);
+  /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
+  router.push({ name: 'project-list', query: { flash: 1 } });
+};
 
+//
+// In production, everything below here should come from the backend
+//
 const nextNumbers = {
   A: 1367,
   E: 311,
@@ -318,36 +231,7 @@ const dummyCustomers = [
   { value: 10, label: 'Winnebago Industries' },
 ];
 
-const dummyStandards = [
-  {
-    value: 'ANSI Z124 / CSA B45.5 (2017)',
-    label: 'ANSI Z124 / CSA B45.5 (2017) - Plastic plumbing fixtures',
-  },
-  {
-    value: 'ASSE 1051 (2009)',
-    label:
-      'ASSE 1051 (2009) - Individual and Branch Type Air Admittance Valves for Sanitary Drainage Systems',
-  },
-  {
-    value: 'CSA C22.2 No. 107.1 (2021)',
-    label: 'CSA C22.2 No. 107.1 (2021) - Power conversion equipment',
-  },
-  {
-    value: 'IAPMO TS 30 (1997e1)',
-    label: 'IAPMO TS 30 (1997e1) - Termination valves for use in recreational vehicles',
-  },
-  {
-    value: 'UL 174 (11th)',
-    label: 'UL 174 (11th) - Household Electric Storage Tank Water Heaters',
-  },
-];
-
 const dummyCustomersRef = ref(dummyCustomers);
-
-const dummyStandardsFiltered = computed(() => {
-  const needle: string = filterStandardsInput.value || '';
-  return dummyStandards.filter((v) => v.label.toLowerCase().indexOf(needle.toLowerCase()) > -1);
-});
 
 const dummyEmployees = ref([
   {
@@ -368,8 +252,4 @@ const dummyEmployees = ref([
     name: 'Frank Strickland',
   },
 ]);
-
-const submitForm = () => {
-  console.log('New project created:', newProject.value);
-};
 </script>
