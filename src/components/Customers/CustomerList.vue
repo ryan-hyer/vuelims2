@@ -14,7 +14,7 @@
     >
       <template v-slot:top>
         <q-toolbar>
-          <q-input v-model="search" placeholder="Search customers..." dense outlined clearable />
+          <q-input v-model="filter" placeholder="Search customers..." dense outlined clearable />
           <q-space />
           <q-btn round color="green" icon="add" class="q-ma-sm" :to="{ name: 'customer-list' }">
             <q-tooltip>Add New Customer</q-tooltip>
@@ -36,8 +36,8 @@ import type { QTableColumn } from 'quasar';
 const router = useRouter();
 const store = useCustomerStore();
 
-const customers = ref<Customer[]>([{ id: 0, name: 'Loading...' }]);
-const search = ref('');
+const customers = ref<Customer[]>([]);
+const filter = ref('');
 const loading = ref(false);
 
 onMounted(() => {
@@ -50,6 +50,12 @@ onMounted(() => {
     })
     .catch((error) => {
       console.log('Error fetching customers:', error);
+      customers.value = [
+        {
+          id: -1,
+          name: 'Error loading customers! Please contact the administrator for assistance.',
+        },
+      ];
       loading.value = false;
     });
 });
@@ -64,6 +70,6 @@ const columns: QTableColumn[] = [
 ];
 
 const onRowClick = (evt: Event, row: { [key: string]: string }) => {
-  void router.push({ name: 'customer-info', params: { customerId: row.id } });
+  void router.push({ name: 'customer-detail', params: { customerId: row.id } });
 };
 </script>

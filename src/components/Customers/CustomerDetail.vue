@@ -1,16 +1,18 @@
 <template>
   <q-page padding>
+    <q-inner-loading :showing="!customer" label="Loading..." />
+
     <div class="page-header">Customers</div>
     <div class="page-subheader q-pa-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el label="Customer List" :to="{ name: 'customer-list' }" />
-        <q-breadcrumbs-el :label="props.customerId" />
+        <q-breadcrumbs-el :label="customer?.name" />
       </q-breadcrumbs>
     </div>
-
     <q-separator />
 
     <q-tabs
+      v-model="tab"
       dense
       class="text-grey"
       active-color="primary"
@@ -18,18 +20,44 @@
       narrow-indicator
       mobile-arrows
     >
-      <q-route-tab label="Company Info" :to="{ name: 'customer-info' }" />
-      <q-route-tab label="Interactions" :to="{ name: 'customer-interactions' }" />
-      <q-route-tab label="Projects / Invoices" :to="{ name: 'customer-projects' }" />
+      <q-tab name="identity" label="Company Info" />
+      <q-tab name="interactions" label="Interactions" />
+      <q-tab name="projects" label="Projects / Invoices" disable />
     </q-tabs>
     <q-separator />
 
-    <router-view />
+    <q-tab-panels v-if="customer" v-model="tab" animated>
+      <q-tab-panel name="identity"> <CustomerInfo :customer="customer" /></q-tab-panel>
+      <q-tab-panel name="interactions"> <CustomerInteractions :customer="customer" /></q-tab-panel>
+    </q-tab-panels>
   </q-page>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import type { Customer } from './models';
+import { useCustomerStore } from 'src/stores/store';
+import CustomerInfo from './CustomerInfo.vue';
+import CustomerInteractions from './CustomerInteractions.vue';
+
+const store = useCustomerStore();
+const customer = ref<Customer>();
+
 const props = defineProps<{
   customerId: string;
 }>();
+
+const tab = ref('identity');
+
+onMounted(() => {
+  // some kind of loading indicator here, also use this same script to retrieve the one customer entry
+  store
+    .fetchCustomer(props.customerId)
+    .then(() => {
+      customer.value = store.customer;
+    })
+    .catch((error) => {
+      console.log('Error fetching customer locations:', error);
+    });
+});
 </script>

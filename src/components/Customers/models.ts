@@ -3,10 +3,14 @@ export interface Customer {
   name: string;
   website?: string;
   notes?: string;
+  locations?: CustomerLocation[];
+  contacts?: CustomerContact[];
+  interactions?: CustomerInteraction[];
 }
 
 export interface CustomerLocation {
   id: number;
+  customerId: number;
   name?: string;
   address: string;
   city: string;
@@ -20,6 +24,7 @@ export interface CustomerLocation {
 
 export interface CustomerContact {
   id: number;
+  customerId: number;
   name: string;
   email?: string;
   phone?: string;
@@ -29,6 +34,7 @@ export interface CustomerContact {
 
 export interface CustomerInteraction {
   id: number;
+  customerId: number;
   date: string;
   type: string; // e.g., 'call', 'meeting', 'email'
   with: string;

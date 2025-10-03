@@ -67,28 +67,9 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: ':customerId',
+        name: 'customer-detail',
         component: () => import('components/Customers/CustomerDetail.vue'),
         props: true,
-        children: [
-          {
-            path: '',
-            name: 'customer-info',
-            component: () => import('components/Customers/CustomerInfo.vue'),
-            props: true,
-          },
-          {
-            path: 'interactions',
-            name: 'customer-interactions',
-            component: () => import('components/Customers/CustomerInteractions.vue'),
-            props: true,
-          },
-          {
-            path: 'projects',
-            name: 'customer-projects',
-            component: () => import('components/Customers/CustomerProjects.vue'),
-            props: true,
-          },
-        ],
       },
     ],
   },

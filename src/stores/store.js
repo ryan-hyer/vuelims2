@@ -4,6 +4,7 @@ import api from 'src/api/mock';
 export const useCustomerStore = defineStore('customers', {
   state: () => ({
     customers: [],
+    customer: { id: -1, name: '' },
   }),
 
   getters: {},
@@ -19,13 +20,15 @@ export const useCustomerStore = defineStore('customers', {
           console.error('Error fetching customers:', error);
         });
     },
-    addProject(newProject) {
-      // can I mock an api call here like above?
-      this.customers.unshift(newProject);
-    },
-    deleteProject(projectId) {
-      // not sure if this works, but also not sure if I want the capability to delete customers at all
-      this.customers = this.customers.splice((p) => p.id == projectId);
+    async fetchCustomer(customerId) {
+      return api
+        .fetchCustomer(customerId)
+        .then((response) => {
+          this.customer = response;
+        })
+        .catch((error) => {
+          console.error('Error fetching customer:', error);
+        });
     },
   },
 });

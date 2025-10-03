@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "customerId": 1,
+    "name": "John Doe",
+    "email": "johndoe@nil.com",
+    "phone": "555-1234",
+    "position": "President"
+  },
+  {
+    "id": 2,
+    "customerId": 1,
+    "name": "Jane Smith",
+    "phone": "555-5678",
+    "position": "Plant Manager",
+    "notes": "Contact for invoicing"
+  },
+  {
+    "id": 3,
+    "customerId": 1,
+    "name": "Alice Johnson"
+  },
+  {
+    "id": 4,
+    "customerId": 2,
+    "name": "Bob Brown",
+    "email": "bob@nil.com"
+  },
+  {
+    "id": 5,
+    "customerId": 3,
+    "name": "Charlie Davis",
+    "email": "charlie@charlie.com"
+  }
+]

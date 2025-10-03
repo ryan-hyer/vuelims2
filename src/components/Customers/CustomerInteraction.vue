@@ -152,6 +152,7 @@ const interaction = ref(
     description: '',
     followUpAction: '',
     followUpByDate: '',
+    followUpAssignedTo: '',
     followUpCompleted: false,
   },
 );

@@ -1,0 +1,43 @@
+[
+  {
+    "id": 1,
+    "customerId": 1,
+    "address": "123 Main St",
+    "city": "Anytown",
+    "customerState": "CA",
+    "zipCode": "12345",
+    "country": "USA",
+    "isPrimary": true
+  },
+  {
+    "id": 2,
+    "customerId": 1,
+    "name": "Warehouse",
+    "address": "456 Elm St",
+    "city": "Othertown",
+    "customerState": "TX",
+    "zipCode": "67890",
+    "country": "USA",
+    "isPrimary": false
+  },
+  {
+    "id": 3,
+    "customerId": 2,
+    "address": "789 Oak St",
+    "city": "Sometown",
+    "customerState": "FL",
+    "zipCode": "11223",
+    "country": "USA",
+    "isPrimary": true
+  },
+  {
+    "id": 4,
+    "customerId": 3,
+    "address": "321 Pine St",
+    "city": "Anycity",
+    "customerState": "WA",
+    "zipCode": "33445",
+    "country": "USA",
+    "isPrimary": true
+  }
+]
