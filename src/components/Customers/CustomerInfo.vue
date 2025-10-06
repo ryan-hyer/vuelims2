@@ -47,6 +47,7 @@
         <q-item-section>
           <q-item-label overline>Locations</q-item-label>
           <q-list separator style="border-left: 5px solid lightgrey">
+            <q-inner-loading :showing="loadingLocations" />
             <CustomerLocationForm
               v-for="(location, index) in customerLocations"
               :location="location"
@@ -62,6 +63,8 @@
         <q-item-section>
           <q-item-label overline>Contacts</q-item-label>
           <q-list separator style="border-left: 5px solid lightgrey">
+            <q-inner-loading :showing="loadingContacts" />
+
             <CustomerContactForm
               v-for="(contact, index) in customerContacts"
               :contact="contact"
@@ -103,6 +106,8 @@ import { ref } from 'vue';
 import type { Customer, CustomerLocation, CustomerContact } from './models';
 import CustomerLocationForm from './CustomerLocation.vue';
 import CustomerContactForm from './CustomerContact.vue';
+import { useCustomerStore } from 'src/stores/store';
+const store = useCustomerStore();
 
 const props = defineProps<{
   customer: Customer;
@@ -112,8 +117,11 @@ const customer = ref(props.customer || {});
 const customerContacts = ref<CustomerContact[]>(props.customer.contacts || []);
 const customerLocations = ref<CustomerLocation[]>(props.customer.locations || []);
 
+const loadingContacts = ref(false);
+const loadingLocations = ref(false);
+
 const addLocation = (newLocation: object) => {
-  customerLocations.value.push(newLocation as CustomerLocation);
+  store.addLocation(newLocation as CustomerLocation);
 };
 
 const deleteLocation = (index: number) => {
@@ -121,10 +129,10 @@ const deleteLocation = (index: number) => {
 };
 
 const addContact = (newContact: object) => {
-  customerContacts.value.push(newContact as CustomerContact);
+  store.addContact(newContact as CustomerContact);
 };
 
 const deleteContact = (index: number) => {
-  customerContacts.value.splice(index, 1);
+  store.deleteContact(index);
 };
 </script>

@@ -75,7 +75,7 @@
         </div>
         <div>{{ location.country }}</div>
         <div v-if="location.phone">{{ location.phone }}</div>
-        <q-btn flat label="View Notes" size="sm" v-if="location.notes">
+        <q-btn flat label="View Notes" size="sm" icon="description" v-if="location.notes">
           <q-popup-proxy>
             <q-card>
               <q-card-section>
@@ -122,6 +122,7 @@ const emit = defineEmits<{
 const location = ref(
   props.location || {
     id: Date.now(), // Simulate an ID for the new location
+    customerId: 0,
     name: '',
     address: '',
     city: '',
@@ -142,6 +143,7 @@ const submitForm = () => {
     emit('addLocation', location.value);
     location.value = {
       id: Date.now(), // Reset for a new entry
+      customerId: 0,
       name: '',
       address: '',
       city: '',

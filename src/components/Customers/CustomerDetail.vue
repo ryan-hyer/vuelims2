@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <q-inner-loading :showing="!customer" label="Loading..." />
+    <q-inner-loading :showing="!customer" label="Loading customer data..." />
 
     <div class="page-header">Customers</div>
     <div class="page-subheader q-pa-sm">
@@ -34,6 +34,12 @@
 </template>
 
 <script setup lang="ts">
+/*
+TODO:
+Once Personnel module is completed, pull employee list for interaction dropdown from API
+Look into easy ways of populating addresses, e.g. Google Places API
+Once Projects and Invoicing modules are completed, finish Projects / Invoices tab
+*/
 import { ref, onMounted } from 'vue';
 import type { Customer } from './models';
 import { useCustomerStore } from 'src/stores/store';
@@ -50,14 +56,13 @@ const props = defineProps<{
 const tab = ref('identity');
 
 onMounted(() => {
-  // some kind of loading indicator here, also use this same script to retrieve the one customer entry
   store
     .fetchCustomer(props.customerId)
     .then(() => {
       customer.value = store.customer;
     })
     .catch((error) => {
-      console.log('Error fetching customer locations:', error);
+      console.log('Error fetching customer:', error);
     });
 });
 </script>

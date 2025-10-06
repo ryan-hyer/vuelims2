@@ -9,14 +9,13 @@
       :columns="columns"
       row-key="id"
       :loading="loading"
-      hide-header
       @row-click="onRowClick"
     >
       <template v-slot:top>
         <q-toolbar>
           <q-input v-model="filter" placeholder="Search customers..." dense outlined clearable />
           <q-space />
-          <q-btn round color="green" icon="add" class="q-ma-sm" :to="{ name: 'customer-list' }">
+          <q-btn round color="green" icon="add" class="q-ma-sm" :to="{ name: 'customer-new' }">
             <q-tooltip>Add New Customer</q-tooltip>
           </q-btn>
         </q-toolbar>

@@ -44,7 +44,7 @@
         </div>
         <div v-if="contact.phone">{{ contact.phone }}</div>
         <div v-if="contact.email">{{ contact.email }}</div>
-        <q-btn flat label="View Notes" size="sm" v-if="contact.notes">
+        <q-btn label="View Notes" size="sm" icon="description" v-if="contact.notes">
           <q-popup-proxy>
             <q-card>
               <q-card-section>
@@ -87,9 +87,10 @@ const emit = defineEmits<{
   deleteContact: [];
 }>();
 
-const contact = ref(
+const contact = ref<CustomerContact>(
   props.contact || {
     id: Date.now(),
+    customerId: 0,
     name: '',
     position: '',
     phone: '',
@@ -107,6 +108,7 @@ const submitForm = () => {
     emit('addContact', contact.value);
     contact.value = {
       id: Date.now(), // Reset for a new entry
+      customerId: 0,
       name: '',
       position: '',
       phone: '',

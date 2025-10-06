@@ -146,6 +146,7 @@ const emit = defineEmits<{
 const interaction = ref(
   props.interaction || {
     id: Date.now(),
+    customerId: 0,
     date: '',
     type: '',
     with: '',
@@ -158,6 +159,14 @@ const interaction = ref(
 );
 
 const interactionTypeOptions = ['Phone Call', 'Email', 'Meeting', 'Virtual Meeting', 'Other'];
+// Employee list will eventually be pulled from an API call
+const employees = [
+  'Merrill Gee',
+  'Ryan Hyer',
+  'Alona MacGregor',
+  'Matthew MacGregor',
+  'Frank Strickland',
+];
 
 const formIsVisible = ref(false);
 
@@ -168,36 +177,17 @@ const submitForm = () => {
     emit('addInteraction', interaction.value);
     interaction.value = {
       id: Date.now(), // Reset for a new entry
+      customerId: 0,
       date: '',
       type: '',
       with: '',
       description: '',
       followUpAction: '',
       followUpByDate: '',
-      followUpAssignedTo: '',
+      followUpAssignedTo: '', // This should eventually be a userId (for ease in dashboarding), and then the name gets retrieved through a query
       followUpCompleted: false,
     };
   }
   formIsVisible.value = false;
 };
-
-const employees = [
-  {
-    value: '1',
-    label: 'Merrill Gee',
-  },
-  { value: '2', label: 'Ryan Hyer' },
-  {
-    value: '3',
-    label: 'Alona MacGregor',
-  },
-  {
-    value: '4',
-    label: 'Matthew MacGregor',
-  },
-  {
-    value: '5',
-    label: 'Frank Strickland',
-  },
-];
 </script>
