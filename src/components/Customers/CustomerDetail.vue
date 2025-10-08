@@ -42,7 +42,7 @@ Once Projects and Invoicing modules are completed, finish Projects / Invoices ta
 */
 import { ref, onMounted } from 'vue';
 import type { Customer } from './models';
-import { useCustomerStore } from 'src/stores/store';
+import { useCustomerStore } from 'src/stores/customer-store';
 import CustomerInfo from './CustomerInfo.vue';
 import CustomerInteractions from './CustomerInteractions.vue';
 
@@ -57,7 +57,7 @@ const tab = ref('identity');
 
 onMounted(() => {
   store
-    .fetchCustomer(props.customerId)
+    .fetchCustomer(parseInt(props.customerId))
     .then(() => {
       customer.value = store.customer;
     })

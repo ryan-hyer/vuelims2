@@ -79,6 +79,22 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/org',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      {
+        path: 'legal',
+        name: 'org-legal',
+        component: () => import('components/Personnel/OrgSetupLegal.vue'),
+      },
+      {
+        path: 'roles',
+        name: 'org-roles',
+        component: () => import('components/Personnel/OrgSetupRoles.vue'),
+      },
+    ],
+  },
+  {
     path: '/personnel',
     component: () => import('layouts/MainLayout.vue'),
     children: [
@@ -86,7 +102,6 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'personnel-list',
         component: () => import('components/Personnel/PersonnelList.vue'),
-        props: true,
       },
       {
         path: 'new',
@@ -96,33 +111,8 @@ const routes: RouteRecordRaw[] = [
       {
         path: ':employeeId',
         component: () => import('components/Personnel/PersonnelDetail.vue'),
+        name: 'personnel-detail',
         props: true,
-        children: [
-          {
-            path: '',
-            name: 'personnel-info',
-            component: () => import('components/Personnel/PersonnelInfo.vue'),
-            props: true,
-          },
-          {
-            path: 'roles',
-            name: 'personnel-roles',
-            component: () => import('components/Personnel/PersonnelRoles.vue'),
-            props: true,
-          },
-          {
-            path: 'training',
-            name: 'personnel-training',
-            component: () => import('components/Personnel/PersonnelTraining.vue'),
-            props: true,
-          },
-          {
-            path: 'reviews',
-            name: 'personnel-reviews',
-            component: () => import('components/Personnel/PersonnelReviews.vue'),
-            props: true,
-          },
-        ],
       },
     ],
   },

@@ -106,7 +106,7 @@ import { ref } from 'vue';
 import type { Customer, CustomerLocation, CustomerContact } from './models';
 import CustomerLocationForm from './CustomerLocation.vue';
 import CustomerContactForm from './CustomerContact.vue';
-import { useCustomerStore } from 'src/stores/store';
+import { useCustomerStore } from 'src/stores/customer-store';
 const store = useCustomerStore();
 
 const props = defineProps<{

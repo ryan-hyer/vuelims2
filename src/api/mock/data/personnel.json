@@ -2,6 +2,12 @@
   {
     "id": 1,
     "name": "Merrill Gee",
+    "homeAddress": "5097 W Alamosa St<br />Boise, ID 83703",
+    "homePhone": "801-425-3175",
+    "emergencyContact": "T'Lesa Meadowcroft",
+    "emergencyPhone": "801-574-1855",
+    "hireDate": "2/26/2007",
+    "terminationDate": null,
     "roles": ["Quality Manager", "Technician - TEi-TS Analytical"]
   },
   {
@@ -11,23 +17,41 @@
     "homePhone": "801-425-3175",
     "emergencyContact": "T'Lesa Meadowcroft",
     "emergencyPhone": "801-574-1855",
-    "hireDate": "2007/02/26",
+    "hireDate": "2/26/2007",
     "terminationDate": null,
     "roles": ["Listing Compliance Engineer"]
   },
   {
     "id": 3,
     "name": "Alona MacGregor",
+    "homeAddress": "5097 W Alamosa St<br />Boise, ID 83703",
+    "homePhone": "801-425-3175",
+    "emergencyContact": "T'Lesa Meadowcroft",
+    "emergencyPhone": "801-574-1855",
+    "hireDate": "2/26/2007",
+    "terminationDate": null,
     "roles": ["Director Human Resources", "Executive Director TEi-LS", "TEi-IS Inspector"]
   },
   {
     "id": 4,
     "name": "Matthew MacGregor",
+    "homeAddress": "5097 W Alamosa St<br />Boise, ID 83703",
+    "homePhone": "801-425-3175",
+    "emergencyContact": "T'Lesa Meadowcroft",
+    "emergencyPhone": "801-574-1855",
+    "hireDate": "2/26/2007",
+    "terminationDate": null,
     "roles": ["President and CEO", "Executive Director TEi-TS"]
   },
   {
     "id": 5,
     "name": "Frank Strickland",
+    "homeAddress": "5097 W Alamosa St<br />Boise, ID 83703",
+    "homePhone": "801-425-3175",
+    "emergencyContact": "T'Lesa Meadowcroft",
+    "emergencyPhone": "801-574-1855",
+    "hireDate": "2/26/2007",
+    "terminationDate": null,
     "roles": ["Director TEi-TS Stone & Tile"]
   }
 ]

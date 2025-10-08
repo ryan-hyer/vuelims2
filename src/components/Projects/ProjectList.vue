@@ -38,7 +38,7 @@ import { ref, onMounted } from 'vue';
 //import type { Project } from './models';
 import type { QTableColumn } from 'quasar';
 import { useRouter, useRoute } from 'vue-router';
-import { useProjectStore } from 'src/stores/store';
+import { useProjectStore } from 'src/stores/project-store';
 
 const router = useRouter();
 const route = useRoute();

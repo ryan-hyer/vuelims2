@@ -149,8 +149,8 @@ const linkSectionList: MenuLinkSectionProps[] = [
     title: 'Organization',
     icon: 'apartment',
     linksList: [
-      { icon: 'policy', title: 'Legal Documents', link: 'home' },
-      { icon: 'account_tree', title: 'Org Structure & Roles', link: 'home' },
+      { icon: 'policy', title: 'Legal Documents', link: 'org-legal' },
+      { icon: 'account_tree', title: 'Org Structure & Roles', link: 'org-roles' },
       { icon: 'engineering', title: 'Personnel', link: 'personnel-list' },
     ],
   },

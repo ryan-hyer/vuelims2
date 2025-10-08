@@ -39,7 +39,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
-import { useCustomerStore } from 'src/stores/store';
+import { useCustomerStore } from 'src/stores/customer-store';
 const store = useCustomerStore();
 import type { Customer } from './models';
 

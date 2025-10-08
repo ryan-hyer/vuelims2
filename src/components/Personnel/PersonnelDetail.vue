@@ -1,16 +1,18 @@
 <template>
   <q-page padding>
+    <q-inner-loading :showing="!employee" label="Loading employee data..." />
     <div class="page-header">Personnel</div>
     <div class="page-subheader q-pa-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el label="Personnel List" :to="{ name: 'personnel-list' }" />
-        <q-breadcrumbs-el label="Ryan Hyer" />
+        <q-breadcrumbs-el :label="employee?.name" />
       </q-breadcrumbs>
     </div>
 
     <q-separator />
 
     <q-tabs
+      v-model="tab"
       dense
       class="text-grey"
       active-color="primary"
@@ -18,23 +20,48 @@
       narrow-indicator
       mobile-arrows
     >
-      <q-route-tab label="Basic Info" :to="{ name: 'personnel-info' }" />
-      <q-route-tab label="Roles & Authorizations" :to="{ name: 'personnel-roles' }" />
-      <q-route-tab label="Competency & Training" :to="{ name: 'personnel-training' }" />
-      <q-route-tab label="Performance Reviews" :to="{ name: 'personnel-reviews' }" />
+      <q-tab name="identity" label="Basic Info" />
+      <q-tab name="roles" label="Roles & Authorizations" />
+      <q-tab name="training" label="Competency & Training" />
+      <q-tab name="reviews" label="Performance Reviews" />
     </q-tabs>
     <q-separator />
 
-    <router-view />
+    <q-tab-panels v-if="employee" v-model="tab" animated>
+      <q-tab-panel name="identity"> <PersonnelInfo :employee="employee" /></q-tab-panel>
+      <q-tab-panel name="roles"> <PersonnelRoles :employee="employee" /></q-tab-panel>
+      <q-tab-panel name="training"> <PersonnelTraining :employee="employee" /></q-tab-panel>
+      <q-tab-panel name="reviews"> <PersonnelReviews :employee="employee" /></q-tab-panel>
+    </q-tab-panels>
   </q-page>
 </template>
 
 <script setup lang="ts">
-const employee = {
-  name: 'PersonnelDetail',
-  props: ['employeeId'],
-};
-defineExpose({
-  employee,
+import { ref, onMounted } from 'vue';
+import type { Employee } from './models';
+import { usePersonnelStore } from 'src/stores/personnel-store';
+import PersonnelInfo from './PersonnelInfo.vue';
+import PersonnelRoles from './PersonnelRoles.vue';
+import PersonnelTraining from './PersonnelTraining.vue';
+import PersonnelReviews from './PersonnelReviews.vue';
+
+const store = usePersonnelStore();
+const employee = ref<Employee>();
+
+const props = defineProps<{
+  employeeId: string;
+}>();
+
+const tab = ref('identity');
+
+onMounted(() => {
+  store
+    .fetchEmployee(parseInt(props.employeeId))
+    .then(() => {
+      employee.value = store.employee;
+    })
+    .catch((error) => {
+      console.log('Error fetching customer:', error);
+    });
 });
 </script>

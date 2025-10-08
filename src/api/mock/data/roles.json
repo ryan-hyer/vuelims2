@@ -1,0 +1,266 @@
+[
+  {
+    "id": 1,
+    "title": "President",
+    "supervisor": 0,
+    "roleDescription": "The TEi President is responsible for the overall business operations of the entire TEi structure.",
+    "keyDuties": [
+      "Provides leadership and direction to the company at the highest level.",
+      "Delegates duties as necessary to lower levels of management.",
+      "Ensures compliance of each individual TEi company to the relevant international standards.",
+      "Interfacing with the Board of Directors"
+    ],
+    "authorizations": [
+      "Establish, implement, and maintain overall company direction",
+      "Identify and implement actions to grow the company and ensure success in the business environment",
+      "Has overall authority to manage the company and direct its personnel as necessary"
+    ],
+    "hiringQualifications": ["None"],
+    "probationTargets": ["None"],
+    "trainingFocusAreas": [
+      "TEi Quality Management System",
+      "Business administration",
+      "TEi-LS certification programs, requirements, and standards",
+      "TEi-TS testing methods, equipment, requirements, and standards",
+      "TEi-IS requirements and standards",
+      "ISO 17025/17065/17020 and accreditation requirements"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Quality Manager",
+    "supervisor": 1,
+    "roleDescription": "The TEi corporate Quality Manager is responsible for the TEi Quality Management System and reports directly to TEi top management.",
+    "keyDuties": [
+      "Performs Internal Audits of all TEi operations in accordance with policies and procedures. Performs follow-up and miscellaneous audits as necessary.",
+      "Ensures good customer relations by tracking and acting to resolve customer complaints and appeals.",
+      "Approves new quality system documents and forms, and revisions to the same.",
+      "Plans, coordinates, tracks, and implements quality improvement projects, including corrective and preventive actions."
+    ],
+    "authorizations": [
+      "Establish, implement, maintain, and improve the TEi Quality Management System process and procedures",
+      "Identify deviations from the Quality Management System or from established procedures",
+      "Initiate actions to prevent or minimize deviations",
+      "Report to TEi top management on the performance of the Quality Management System and any need for improvement",
+      "Ensure the effectiveness of all TEi activities",
+      "Ensure that the integrity of the Quality Management System is maintained even when changes are planned and implemented"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "TEi-TS - Executive Director",
+    "supervisor": 1,
+    "roleDescription": "The TEi-TS Executive Director is responsible for the administrative oversight and overall operation of TEi-TS as well as the supervision of all TEi-TS personnel.",
+    "keyDuties": [
+      "Ensures continued compliance of TEi-TS to ISO/IEC 17025.",
+      "Ensures and documents that each technical employee demonstrates initial and ongoing proficiency for testing performed by the employee.",
+      "Assists the Quality Manager in ensuring the quality of the operation and results reported by each laboratory.",
+      "Oversees the training of all TEi-TS employees according to the duties they are assigned.",
+      "Evaluates and assigns work to technicians.",
+      "Creates test data forms and approves test reports.",
+      "Reviews and addresses complaints, disputes, and corrective actions pertaining to the laboratory.",
+      "Coordinates the development and validation of non-standard test methods."
+    ],
+    "authorizations": ["Management of all testing operations within TEi-TS"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Five years of office management experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures",
+      "Understanding of duties and responsibilities of other TEi positions"
+    ],
+    "trainingFocusAreas": [
+      "TEi Quality Management System",
+      "Laboratory testing practices",
+      "Company management (leadership, teamwork, interpersonal skills, administration, customer service, contract management, organizational quality)"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "TEi-TS - Laboratory Director",
+    "supervisor": 3,
+    "roleDescription": "A TEi-TS laboratory Director is responsible for managing the operations of a specific laboratory, e.g. electrical, plumbing, mechanical. Each laboratory Director reports to the TEi-TS Executive Director.",
+    "keyDuties": [
+      "Responsible for the day-to-day operation of the laboratory.",
+      "Ensures the quality of work, documentation, records, reports, and other activities performed by the laboratory and its technicians.",
+      "Supervises all technical employees of the laboratory, to include training, performance evaluations, and recommending remedial action.",
+      "Assures that test samples are accepted and handled in accordance with requirements."
+    ],
+    "authorizations": ["Supervise technicians"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Five years of office management experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures",
+      "Understanding of duties and responsibilities of other laboratory positions"
+    ],
+    "trainingFocusAreas": [
+      "TEi Quality Management System",
+      "Laboratory testing practices",
+      "Test methods pertaining to the laboratory "
+    ]
+  },
+  {
+    "id": 5,
+    "title": "TEi-TS - Laboratory Technician",
+    "supervisor": 4,
+    "roleDescription": "A TEi-TS laboratory technician is responsible for performing the actual laboratory testing. Laboratory technicians report to their respective laboratory Director.",
+    "keyDuties": [
+      "Performs laboratory testing in accordance with specified test methods and TEi-TS procedures.",
+      "Maintains equipment, supplies, glassware, etc in a good operating and interference-free condition.",
+      "Reports problems that are not immediately remediable to his or her supervisor.",
+      "Operates equipment correctly and safely.",
+      "Maintains his or her work environment clean and organized."
+    ],
+    "authorizations": ["Perform testing and record data"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A high school diploma",
+      "- Some documented or demonstrated work experience in a technical field",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures"
+    ],
+    "trainingFocusAreas": [
+      "Laboratory testing practices",
+      "TEi and TEi-TS policies and procedures",
+      "Test methods pertaining to the scope of work in his or her laboratory"
+    ]
+  },
+  {
+    "id": 6,
+    "title": "TEi-LS - Director",
+    "supervisor": 1,
+    "roleDescription": "The TEi-LS Director has overall responsibility for the management of TEi-LS operations.",
+    "keyDuties": [
+      "Ensures continued compliance of TEi-LS to ISO/IEC 17065.",
+      "Oversees certification decisions.",
+      "Ensures that contractual documents between TEi-LS and clients are signed and enforced in accordance with policies and procedures.",
+      "Directs the implementation of goals, objectives, policies, procedures and work standards for TEi-LS.  Assists in the selection, training, development, and evaluation of TEi-LS staff; authorizes discipline as required; provides policy guidance to staff.",
+      "Monitors the day-to-day operations of TEi-LS to ensure that the company is meeting goals and objectives, is following policies and procedures and is providing services effectively and efficiently; takes corrective action as appropriate.",
+      "Handles administrative responsibilities for the company, including conferring with and representing the company in meetings with the corporate board of directors, various accrediting agencies and the public; and preparing and delivering presentations.",
+      "Directs the preparation of TEi-LS written correspondence, reports, procedures, policies and other materials; maintains and directs the maintenance of working and official company files.",
+      "Monitors changes in certification regulations, standards and technology that may affect company operations; implements policy and procedural changes as required."
+    ],
+    "authorizations": [
+      "Development of policies relating to the operation of TEi-LS",
+      "Supervision of the implementation of TEi-LS policies and procedures",
+      "Supervision of TEi-LS finances",
+      "Development of certification activities",
+      "Development of certification requirements",
+      "Delegation of authority to committees or personnel, as required, to undertake defined activities on behalf of TEi-LS",
+      "Responsibility for contractual arrangements (signing certification contracts and certificates)",
+      "Provision of adequate resources for certification activities",
+      "Respond to appeals and complaints",
+      "Define and implement personnel competence requirements",
+      "Management of the TEi-LS management system"
+    ],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "A college or university degree in an Engineering or Business Administration field",
+      "Ten years of experience working in testing, certification, or quality assurance",
+      "Two years of management experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of the TEi-LS certification programs, requirements, and procedures",
+      "Understanding of certification body accreditation requirements",
+      "Understanding of duties and responsibilities of other TEi-LS positions"
+    ],
+    "trainingFocusAreas": [
+      "Product certification systems",
+      "TEi-LS Quality Management System",
+      "Recreational vehicles",
+      "TEi-LS certification standards",
+      "Company management (leadership, teamwork, interpersonal skills, administration, customer service, contract management, organizational quality)"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Listing Compliance Engineer",
+    "supervisor": 6,
+    "roleDescription": "The Listing Compliance Engineer (LCE) supplies the basic technical knowledge of the products and standards involved in the TEi-LS certification programs, coordinates certification evaluation activities, and performs the evaluation review and certification decision.",
+    "keyDuties": [
+      "Monitors and manages the day-to-day operations of certification files, including reviewing applications, reports, manuals, standards, codes and other documents in accordance with TEi-LS policies and procedures.",
+      "Plans and coordinates the evaluation of certification applications and amendments. Selects applicable standards for evaluation of products. Creates and manages certification projects. Schedules and arranges periodic surveillance activities of certification clients.",
+      "Reviews standards and codes as they apply to TEi-LS, its clients, and supported regulatory bodies and industry organizations. Maintains up-to-date knowledge of applicable standards and revisions of standards.",
+      "Assists in development and implementation of TEi-LS policies and procedures. Recommends revisions to the TEi Quality Management System documents as appropriate.",
+      "Participates in industry events and standards-writing bodies, in order to stay on the forefront of upcoming information as well as to build and maintain relationships with key players in those organizations."
+    ],
+    "authorizations": [
+      "Arrange for certification evaluation activities to take place, and review the results",
+      "Perform evaluation review",
+      "Make certification decisions"
+    ],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "A four-year college or university degree in an Engineering field",
+      "Five years of engineering experience",
+      "Two years of standards development or standards compliance experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of the TEi-LS certification programs, requirements, and procedures",
+      "Understanding of certification body accreditation requirements",
+      "Basic understanding of the standards used in the TEi-LS certification programs",
+      "Successful completion of at least three certification evaluation reviews under the supervision of the TEi-LS Director and TEi Quality Manager"
+    ],
+    "trainingFocusAreas": [
+      "TEi Quality Management System",
+      "TEi-LS certification program and standards",
+      "Recreational vehicles",
+      "Accreditation requirements"
+    ]
+  },
+  {
+    "id": 8,
+    "title": "TEi-IS - Inspector",
+    "supervisor": 1,
+    "roleDescription": "An Inspector performs the actual inspection work done by TEi-IS. This may involve traveling to client sites, collecting samples, recording data, and compiling and reporting results. Most inspections done at TEi are in support of TEi-LS certification work, but some inspections are independent third-party inspections for external clients.",
+    "keyDuties": [
+      "Plans and schedules travel arrangements. Travels to clients' facilities and accomplishes inspections in accordance with client needs and TEi-IS policies and procedures.",
+      "When performing inspections associated with a TEi-LS certification project:",
+      "- Completes inspection reports for TEi-LS using provided forms and procedures.",
+      "- Identifies and tags certified products for Listing Compliance Testing.",
+      "Acts as a representative of TEi in the field, and as a source of knowledge about TEi policies and requirements. Answers questions and supplies information as required by clients, where possible."
+    ],
+    "authorizations": [
+      "Perform inspections",
+      "Perform sampling (when necessary)",
+      "Sign inspection reports and certificates"
+    ],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A high school diploma",
+      "- Two years of inspection or auditing experience",
+      "Good written and verbal interpersonal and communication skills",
+      "Possesses a valid driver's license and U.S. passport",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to work in the field at clients’ facilities; strength to lift and carry materials weighing up to 50 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of the TEi-IS Operations Manual and procedures",
+      "Understanding of the TEi-LS inspection program and criteria",
+      "Basic understanding of the standards used in the TEi-LS certification programs",
+      "Successful completion of at least five inspections under the supervision of the Director, the Listing Compliance Engineer, and the Quality Manager"
+    ],
+    "trainingFocusAreas": [
+      "TEi Quality Management System",
+      "Inspections and auditing",
+      "TEi-LS certification programs and standards",
+      "Recreational vehicles"
+    ]
+  }
+]

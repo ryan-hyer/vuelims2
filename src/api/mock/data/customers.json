@@ -18,5 +18,6 @@
   { "id": 7, "name": "Rixens Enterprises" },
   { "id": 8, "name": "Seaflo Marine & RV North America, LLC" },
   { "id": 9, "name": "Valterra Products Inc." },
-  { "id": 10, "name": "Winnebago Industries", "notes": "Ask what their website is" }
+  { "id": 10, "name": "Winnebago Industries", "notes": "Ask what their website is" },
+  { "id": 11, "name": "Zurn Industries, LLC" }
 ]

@@ -1,74 +1,73 @@
 <template>
-  <q-tab-panel name="authorizations">
-    <q-card bordered class="q-mb-md" v-for="role in roles" :key="role.id">
-      <q-list separator>
-        <q-expansion-item>
-          <template v-slot:header>
-            <q-item-section>
-              <q-item-label class="text-h6">
-                {{ role.title }}
-              </q-item-label>
-              <q-item-label caption>Expand to view all details</q-item-label>
-            </q-item-section>
-          </template>
-          <q-card>
-            <q-list separator>
-              <q-item>
-                <q-item-section>
-                  <q-item-label overline>Supervisor</q-item-label>
-                  <q-item-label class="q-pl-md">{{ role.supervisor }}</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item>
-                <q-item-section>
-                  <q-item-label overline>Role Description</q-item-label>
-                  <q-item-label class="q-pl-md">{{ role.roleDescription }}</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item>
-                <q-item-section>
-                  <q-item-label overline>Key Duties</q-item-label>
-                  <q-item-label>{{ role.keyDuties }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card>
-        </q-expansion-item>
-        <q-item>
+  <q-card bordered class="q-mb-md" v-for="role in roles" :key="role.id">
+    <q-list separator>
+      <q-expansion-item>
+        <template v-slot:header>
           <q-item-section>
-            <q-item-label overline>Authorizations</q-item-label>
-            <q-item-label>{{ role.authorizations }}</q-item-label>
+            <q-item-label class="text-h6">
+              {{ role.title }}
+            </q-item-label>
+            <q-item-label caption>Expand to view all details</q-item-label>
           </q-item-section>
-        </q-item>
-      </q-list>
-      <q-separator />
-      <q-card-actions align="right">
-        <q-btn flat rounded color="red" size="sm" @click="confirmRemoveRole(role)">
-          Unassign this role
-        </q-btn>
-      </q-card-actions>
-    </q-card>
-    <div v-if="addRoleFormIsVisible">
-      <q-select
-        filled
-        v-model="selectedNewRole"
-        :options="allRoles"
-        label="Select an Additional Role"
-        class="q-pb-md"
-      />
-      <q-btn label="Assign Role" type="submit" color="teal" @click="addRole" />
-      <q-btn label="Cancel" flat class="q-ml-sm" @click="addRoleFormIsVisible = false" />
-    </div>
-    <q-btn
-      v-else
-      rounded
-      color="green"
-      icon="add_box"
-      label="Assign New Role"
-      @click="addRoleFormIsVisible = true"
+        </template>
+        <q-card>
+          <q-list separator>
+            <q-item>
+              <q-item-section>
+                <q-item-label overline>Supervisor</q-item-label>
+                <q-item-label class="q-pl-md">{{ role.supervisor }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label overline>Role Description</q-item-label>
+                <q-item-label class="q-pl-md">{{ role.roleDescription }}</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>
+                <q-item-label overline>Key Duties</q-item-label>
+                <q-item-label>{{ role.keyDuties }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card>
+      </q-expansion-item>
+      <q-item>
+        <q-item-section>
+          <q-item-label overline>Authorizations</q-item-label>
+          <q-item-label>{{ role.authorizations }}</q-item-label>
+        </q-item-section>
+      </q-item>
+    </q-list>
+    <q-separator />
+    <q-card-actions align="right">
+      <q-btn flat rounded color="red" size="sm" @click="confirmRemoveRole(role)">
+        Unassign this role
+      </q-btn>
+    </q-card-actions>
+  </q-card>
+  <div v-if="addRoleFormIsVisible">
+    <q-select
+      filled
+      v-model="selectedNewRole"
+      :options="allRoles"
+      label="Select an Additional Role"
+      class="q-pb-md"
     />
+    <q-btn label="Assign Role" type="submit" color="teal" @click="addRole" />
+    <q-btn label="Cancel" flat class="q-ml-sm" @click="addRoleFormIsVisible = false" />
+  </div>
+  <q-btn
+    v-else
+    rounded
+    color="green"
+    icon="add_box"
+    label="Assign New Role"
+    @click="addRoleFormIsVisible = true"
+  />
 
-    <!--     <q-dialog v-model="removeRoleConfirmation" persistent>
+  <!--     <q-dialog v-model="removeRoleConfirmation" persistent>
       <q-card>
         <q-item>
           <q-item-section avatar>
@@ -85,13 +84,11 @@
         </q-card-actions>
       </q-card>
     </q-dialog> -->
-  </q-tab-panel>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 
-// TODO: Change these from HTML formatted to, perhaps, an array that gets converted to list items in an 'each' loop within the component
 const roles = ref([
   {
     id: 1,

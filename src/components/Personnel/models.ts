@@ -7,19 +7,31 @@ export interface Employee {
   emergencyPhone: string;
   hireDate: string;
   terminationDate?: string;
-  roles: number[];
 }
 
 export interface Role {
   id: number;
   title: string;
-  description: string;
+  supervisor: number; // ID of the *ROLE* (not the employee) that is the supervisor for this role
+  // This should assist in creating an org chart of some kind, and is necessary for things like performance reviews
+  // This means that an employee with multiple roles might have a different supervisor for each role, which is probably okay
+  // Except an employee only needs one performance review, etc., no matter how many roles they fill (right?) -- Needs more thought
+  // The only problem with this is TEi-TS Laboratory Director, since there can be more than one -- Do I need to create a role for each one?
+  // Example, a plumbing technician should report to the Plumbing Director, not any of the other Directors
+  roleDescription: string;
   keyDuties: string[];
   authorizations: string[];
-  hiring_qualifications: string[];
-  probation_targets: string[];
-  training_areas: string[];
-  // TODO: Double-check that the below stuff is the way I actually want this, since this data is probably going to come out of an employee/role join table
+  hiringQualifications: string[];
+  probationTargets: string[];
+  trainingFocusAreas: string[];
+}
+
+export interface EmployeeRole {
+  id: number;
+  employeeId: number;
+  roleId: number;
+  startDate: string;
+  endDate?: string;
   qualifications_verified_date: string;
   qualifications_verified_by: string;
   probation_verified_date: string;
@@ -38,7 +50,6 @@ export interface PerformanceReview {
   id: number;
   given_date: string;
   given_by: string;
-  responses: string[];
-  // TODO: Instead of an array of strings, can we have an array of question/answer objects? What happens if the questions change?
+  responses: string[]; // Should be an array of question/answer objects
   employee_signed_date: string;
 }
