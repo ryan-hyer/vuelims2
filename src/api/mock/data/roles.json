@@ -1,9 +1,20 @@
 [
   {
+    "id": 0,
+    "title": "Testing Engineers International",
+    "supervisor": null,
+    "roleDescription": "The Company",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": [],
+    "trainingFocusAreas": []
+  },
+  {
     "id": 1,
     "title": "President",
     "supervisor": 0,
-    "roleDescription": "The TEi President is responsible for the overall business operations of the entire TEi structure.",
+    "roleDescription": "The TEi President is a poopy head.",
     "keyDuties": [
       "Provides leadership and direction to the company at the highest level.",
       "Delegates duties as necessary to lower levels of management.",
@@ -44,6 +55,28 @@
       "Report to TEi top management on the performance of the Quality Management System and any need for improvement",
       "Ensure the effectiveness of all TEi activities",
       "Ensure that the integrity of the Quality Management System is maintained even when changes are planned and implemented"
+    ],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "A college or university degree in an Engineering or Business Administration field",
+      "Two years of experience in quality assurance and/or auditing",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of the TEi-LS certification programs and requirements",
+      "Understanding of TEi-TS processes, procedures, standards, and requirements",
+      "Successful completion of the American Society for Quality (ASQ) Internal Auditing Basics online course"
+    ],
+    "trainingFocusAreas": [
+      "TEi Quality Management System",
+      "Internal auditing",
+      "Quality improvement principles and practices",
+      "Recreational vehicles",
+      "TEi-LS certification programs, requirements, and standards",
+      "TEi-TS testing methods, equipment, requirements, and standards",
+      "TEi-IS requirements and standards",
+      "ISO 17025/17065/17020 and accreditation requirements"
     ]
   },
   {

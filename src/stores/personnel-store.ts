@@ -1,12 +1,15 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import api from 'src/api/mock';
-import type { Employee } from 'src/components/Personnel/models';
+import type { Employee, Role } from 'src/components/Personnel/models';
 
 export const usePersonnelStore = defineStore('personnel', {
   state: () => ({
     employees: [] as Employee[],
     totalEmployeeCount: 0,
     filteredEmployeeCount: 0,
+    orgTree: <object[]>[],
+    roleList: <string[]>[],
+    allRoles: [] as Role[],
     employee: {} as Employee,
   }),
 
@@ -30,6 +33,18 @@ export const usePersonnelStore = defineStore('personnel', {
         })
         .catch((error) => {
           console.error('Error fetching personnel data:', error);
+        });
+    },
+    async fetchOrg() {
+      await api
+        .fetchOrg()
+        .then((response) => {
+          this.orgTree = response[0];
+          this.roleList = response[1];
+          this.allRoles = response[2];
+        })
+        .catch((error) => {
+          console.error('Error fetching org tree data:', error);
         });
     },
     async fetchEmployee(employeeId: number) {

@@ -7,6 +7,7 @@ import customercontacts from './data/customercontacts.json';
 import customerinteractions from './data/customerinteractions.json';
 import projects from './data/projects.json';
 import personnel from './data/personnel.json';
+import roles from './data/roles.json';
 
 const fetch = (mockData, time = 0) => {
   return new Promise((resolve) => {
@@ -14,6 +15,15 @@ const fetch = (mockData, time = 0) => {
       resolve(mockData);
     }, time);
   });
+};
+
+const findChildren = (parent, roleData) => {
+  // iterate through the roleData object to transform the flat JSON into a hierarchy usable by the Quasar Tree component
+  parent.children = roleData.filter((role) => parseInt(role.supervisor) === parseInt(parent.id));
+  parent.children.forEach((child) => {
+    findChildren(child, roleData);
+  });
+  return parent;
 };
 
 export default {
@@ -120,6 +130,28 @@ export default {
         ? employeeArray.filter((row) => row.name.toLowerCase().includes(filter.toLowerCase()))
         : employeeArray.slice();
       return data.length;
+    });
+  },
+  async fetchOrg() {
+    return fetch(roles, 1000).then((response) => {
+      const roleData = response;
+      // start with a root object
+      let treeArray = [
+        {
+          id: 0,
+          title: 'Testing Engineers International',
+          roleDescription: 'The Company',
+          children: [],
+        },
+      ];
+      // create a hierarchy of roles, using a function due to the recursion
+      findChildren(treeArray[0], roleData);
+
+      // also need a flat array of all role ids, because the stupid Tree component won't expand all without it
+      const roleList = roleData.map((role) => role.id);
+      roleList.push(0);
+
+      return [treeArray, roleList, roleData];
     });
   },
 };
