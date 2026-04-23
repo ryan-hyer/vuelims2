@@ -1,57 +1,57 @@
 [
   {
     "id": 1,
-    "name": "Merrill Gee",
+    "firstName": "Merrill",
+    "lastName": "Gee",
     "homeAddress": "5097 W Alamosa St<br />Boise, ID 83703",
     "homePhone": "801-425-3175",
     "emergencyContact": "T'Lesa Meadowcroft",
     "emergencyPhone": "801-574-1855",
-    "hireDate": "2/26/2007",
-    "terminationDate": null,
-    "roles": ["Quality Manager", "Technician - TEi-TS Analytical"]
+    "hireDate": "2007/02/26",
+    "terminationDate": null
   },
   {
     "id": 2,
-    "name": "Ryan Hyer",
+    "firstName": "Ryan",
+    "lastName": "Hyer",
     "homeAddress": "5097 W Alamosa St<br />Boise, ID 83703",
     "homePhone": "801-425-3175",
     "emergencyContact": "T'Lesa Meadowcroft",
     "emergencyPhone": "801-574-1855",
-    "hireDate": "2/26/2007",
-    "terminationDate": null,
-    "roles": ["Listing Compliance Engineer"]
+    "hireDate": "2007/02/26",
+    "terminationDate": null
   },
   {
     "id": 3,
-    "name": "Alona MacGregor",
+    "firstName": "Alona",
+    "lastName": "MacGregor",
     "homeAddress": "5097 W Alamosa St<br />Boise, ID 83703",
     "homePhone": "801-425-3175",
     "emergencyContact": "T'Lesa Meadowcroft",
     "emergencyPhone": "801-574-1855",
-    "hireDate": "2/26/2007",
-    "terminationDate": null,
-    "roles": ["Director Human Resources", "Executive Director TEi-LS", "TEi-IS Inspector"]
+    "hireDate": "2007/02/26",
+    "terminationDate": null
   },
   {
     "id": 4,
-    "name": "Matthew MacGregor",
+    "firstName": "Matthew",
+    "lastName": "MacGregor",
     "homeAddress": "5097 W Alamosa St<br />Boise, ID 83703",
     "homePhone": "801-425-3175",
     "emergencyContact": "T'Lesa Meadowcroft",
     "emergencyPhone": "801-574-1855",
-    "hireDate": "2/26/2007",
-    "terminationDate": null,
-    "roles": ["President and CEO", "Executive Director TEi-TS"]
+    "hireDate": "2007/02/26",
+    "terminationDate": null
   },
   {
     "id": 5,
-    "name": "Frank Strickland",
+    "firstName": "Frank",
+    "lastName": "Strickland",
     "homeAddress": "5097 W Alamosa St<br />Boise, ID 83703",
     "homePhone": "801-425-3175",
     "emergencyContact": "T'Lesa Meadowcroft",
     "emergencyPhone": "801-574-1855",
-    "hireDate": "2/26/2007",
-    "terminationDate": null,
-    "roles": ["Director TEi-TS Stone & Tile"]
+    "hireDate": "2007/02/26",
+    "terminationDate": null
   }
 ]

@@ -7,14 +7,13 @@
     "keyDuties": [],
     "authorizations": [],
     "hiringQualifications": [],
-    "probationTargets": [],
-    "trainingFocusAreas": []
+    "probationTargets": []
   },
   {
     "id": 1,
     "title": "President",
     "supervisor": 0,
-    "roleDescription": "The TEi President is a poopy head.",
+    "roleDescription": "The TEi President is responsible for the overall leadership and direction of Testing Engineers International, ensuring each operating division meets its obligations to clients, accreditation bodies, and applicable international standards.",
     "keyDuties": [
       "Provides leadership and direction to the company at the highest level.",
       "Delegates duties as necessary to lower levels of management.",
@@ -27,15 +26,7 @@
       "Has overall authority to manage the company and direct its personnel as necessary"
     ],
     "hiringQualifications": ["None"],
-    "probationTargets": ["None"],
-    "trainingFocusAreas": [
-      "TEi Quality Management System",
-      "Business administration",
-      "TEi-LS certification programs, requirements, and standards",
-      "TEi-TS testing methods, equipment, requirements, and standards",
-      "TEi-IS requirements and standards",
-      "ISO 17025/17065/17020 and accreditation requirements"
-    ]
+    "probationTargets": ["None"]
   },
   {
     "id": 2,
@@ -58,8 +49,8 @@
     ],
     "hiringQualifications": [
       "Education/Experience - The following, or a demonstrated equivalent combination:",
-      "A college or university degree in an Engineering or Business Administration field",
-      "Two years of experience in quality assurance and/or auditing",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Two years of experience in quality assurance and/or auditing",
       "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
     ],
     "probationTargets": [
@@ -67,16 +58,6 @@
       "Understanding of the TEi-LS certification programs and requirements",
       "Understanding of TEi-TS processes, procedures, standards, and requirements",
       "Successful completion of the American Society for Quality (ASQ) Internal Auditing Basics online course"
-    ],
-    "trainingFocusAreas": [
-      "TEi Quality Management System",
-      "Internal auditing",
-      "Quality improvement principles and practices",
-      "Recreational vehicles",
-      "TEi-LS certification programs, requirements, and standards",
-      "TEi-TS testing methods, equipment, requirements, and standards",
-      "TEi-IS requirements and standards",
-      "ISO 17025/17065/17020 and accreditation requirements"
     ]
   },
   {
@@ -105,11 +86,6 @@
       "Understanding of the TEi Quality Management System",
       "Understanding of good laboratory testing procedures",
       "Understanding of duties and responsibilities of other TEi positions"
-    ],
-    "trainingFocusAreas": [
-      "TEi Quality Management System",
-      "Laboratory testing practices",
-      "Company management (leadership, teamwork, interpersonal skills, administration, customer service, contract management, organizational quality)"
     ]
   },
   {
@@ -134,11 +110,6 @@
       "Understanding of the TEi Quality Management System",
       "Understanding of good laboratory testing procedures",
       "Understanding of duties and responsibilities of other laboratory positions"
-    ],
-    "trainingFocusAreas": [
-      "TEi Quality Management System",
-      "Laboratory testing practices",
-      "Test methods pertaining to the laboratory "
     ]
   },
   {
@@ -163,11 +134,6 @@
     "probationTargets": [
       "Understanding of the TEi Quality Management System",
       "Understanding of good laboratory testing procedures"
-    ],
-    "trainingFocusAreas": [
-      "Laboratory testing practices",
-      "TEi and TEi-TS policies and procedures",
-      "Test methods pertaining to the scope of work in his or her laboratory"
     ]
   },
   {
@@ -200,9 +166,9 @@
     ],
     "hiringQualifications": [
       "Education/Experience - The following, or a demonstrated equivalent combination:",
-      "A college or university degree in an Engineering or Business Administration field",
-      "Ten years of experience working in testing, certification, or quality assurance",
-      "Two years of management experience",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Ten years of experience working in testing, certification, or quality assurance",
+      "- Two years of management experience",
       "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
     ],
     "probationTargets": [
@@ -210,13 +176,6 @@
       "Understanding of the TEi-LS certification programs, requirements, and procedures",
       "Understanding of certification body accreditation requirements",
       "Understanding of duties and responsibilities of other TEi-LS positions"
-    ],
-    "trainingFocusAreas": [
-      "Product certification systems",
-      "TEi-LS Quality Management System",
-      "Recreational vehicles",
-      "TEi-LS certification standards",
-      "Company management (leadership, teamwork, interpersonal skills, administration, customer service, contract management, organizational quality)"
     ]
   },
   {
@@ -238,9 +197,9 @@
     ],
     "hiringQualifications": [
       "Education/Experience - The following, or a demonstrated equivalent combination:",
-      "A four-year college or university degree in an Engineering field",
-      "Five years of engineering experience",
-      "Two years of standards development or standards compliance experience",
+      "- A four-year college or university degree in an Engineering field",
+      "- Five years of engineering experience",
+      "- Two years of standards development or standards compliance experience",
       "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
     ],
     "probationTargets": [
@@ -249,13 +208,37 @@
       "Understanding of certification body accreditation requirements",
       "Basic understanding of the standards used in the TEi-LS certification programs",
       "Successful completion of at least three certification evaluation reviews under the supervision of the TEi-LS Director and TEi Quality Manager"
-    ],
-    "trainingFocusAreas": [
-      "TEi Quality Management System",
-      "TEi-LS certification program and standards",
-      "Recreational vehicles",
-      "Accreditation requirements"
     ]
+  },
+  {
+    "id": 9,
+    "title": "Human Resources Director",
+    "supervisor": 1,
+    "roleDescription": "The Human Resources Director manages the human resources function for Testing Engineers International, supporting recruitment, onboarding, employee relations, and compliance across all divisions.",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": []
+  },
+  {
+    "id": 10,
+    "title": "TEi-TS - Stone & Tile Director",
+    "supervisor": 3,
+    "roleDescription": "The TEi-TS Stone & Tile Director manages the operations of the Stone & Tile laboratory, overseeing all testing activities, personnel, equipment, and compliance within that laboratory.",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": []
+  },
+  {
+    "id": 11,
+    "title": "TEi-TS - Analytical Technician",
+    "supervisor": 3,
+    "roleDescription": "The TEi-TS Analytical Technician performs analytical laboratory testing and reports directly to the TEi-TS Executive Director.",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": []
   },
   {
     "id": 8,
@@ -288,12 +271,6 @@
       "Understanding of the TEi-LS inspection program and criteria",
       "Basic understanding of the standards used in the TEi-LS certification programs",
       "Successful completion of at least five inspections under the supervision of the Director, the Listing Compliance Engineer, and the Quality Manager"
-    ],
-    "trainingFocusAreas": [
-      "TEi Quality Management System",
-      "Inspections and auditing",
-      "TEi-LS certification programs and standards",
-      "Recreational vehicles"
     ]
   }
 ]

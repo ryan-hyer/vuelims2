@@ -51,7 +51,9 @@ export const useCustomerStore = defineStore('customers', {
     // TODO: Everything from here down is subject to change when switching to a real API
     // Also will need functions to submit edits, etc. to the real API
     addCustomer(newCustomer: Customer) {
-      newCustomer.id = this.customers.length + 1;
+      newCustomer.id = this.customers.length
+        ? Math.max(...this.customers.map((c) => c.id)) + 1
+        : 1;
       this.customers.push(newCustomer);
       this.customers.sort((a, b) => a.name.localeCompare(b.name));
       return newCustomer.id; // so that we can immediately navigate to the new customer's detail page

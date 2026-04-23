@@ -16,8 +16,15 @@
         <q-input
           filled
           autofocus
-          v-model="newEmployee.name"
-          label="Full name"
+          v-model="newEmployee.firstName"
+          label="First Name"
+          lazy-rules
+          :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
+        />
+        <q-input
+          filled
+          v-model="newEmployee.lastName"
+          label="Last Name"
           lazy-rules
           :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
         />
@@ -78,41 +85,24 @@
             </q-icon>
           </template>
         </q-input>
-        <q-field filled label="Upload Resume / CV" stack-label style="padding-bottom: 20px">
-          <template v-slot:control>
-            <q-uploader
-              flat
-              bordered
-              auto-upload
-              label="Select a PDF file to upload"
-              accept="application/pdf"
-              url="http://localhost:4444/upload"
-              style="width: 100%"
-            />
-          </template>
-        </q-field>
-        <q-field filled label="Upload Personnel Agreement" stack-label style="padding-bottom: 20px">
-          <template v-slot:control>
-            <q-uploader
-              flat
-              bordered
-              auto-upload
-              label="Select a PDF file to upload"
-              accept="application/pdf"
-              url="http://localhost:4444/upload"
-              style="width: 100%"
-            />
-          </template>
-        </q-field>
-        <q-select
-          filled
-          v-model="newEmployee.selectedRole"
-          :options="roles"
-          label="Select the Primary Role"
-          hint="Additional roles can be assigned later"
-          lazy-rules
-          :rules="[(val) => (val && val.length > 0) || 'Please select a role']"
-        />
+        <div class="row items-center q-gutter-sm q-pa-sm">
+          <q-icon name="attach_file" size="sm" :color="resumeFile ? 'teal' : 'grey'" />
+          <div class="col">
+            <div class="text-caption text-grey-7">Resume / CV (optional)</div>
+            <div class="text-body2">{{ resumeFile ? resumeFile.name : 'No file selected' }}</div>
+          </div>
+          <q-btn outline color="primary" label="Attach File" @click="resumeInputRef?.click()" />
+        </div>
+        <div class="row items-center q-gutter-sm q-pa-sm">
+          <q-icon name="attach_file" size="sm" :color="agreementFile ? 'teal' : 'grey'" />
+          <div class="col">
+            <div class="text-caption text-grey-7">Personnel Agreement (optional)</div>
+            <div class="text-body2">{{ agreementFile ? agreementFile.name : 'No file selected' }}</div>
+          </div>
+          <q-btn outline color="primary" label="Attach File" @click="agreementInputRef?.click()" />
+        </div>
+        <input ref="resumeInputRef" type="file" accept=".pdf" style="display: none" @change="onResumeSelected" />
+        <input ref="agreementInputRef" type="file" accept=".pdf" style="display: none" @change="onAgreementSelected" />
         <q-separator />
         <div>
           <q-btn label="Add Employee" type="submit" color="teal" />
@@ -125,26 +115,37 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { usePersonnelStore } from 'src/stores/personnel-store';
+import type { Employee } from 'src/components/Personnel/models';
+
+const router = useRouter();
+const store = usePersonnelStore();
 
 const newEmployee = ref({
-  name: null,
-  homeAddress: null,
-  homePhone: null,
-  emergencyContact: null,
-  emergencyPhone: null,
-  hireDate: null,
-  selectedRole: null,
+  firstName: '',
+  lastName: '',
+  homeAddress: '',
+  homePhone: '',
+  emergencyContact: '',
+  emergencyPhone: '',
+  hireDate: '',
 });
 
-const roles = [
-  'Listing Compliance Engineer',
-  'Quality Manager',
-  'Executive Director - TEi-TS',
-  'President and CEO',
-  'Lab Technician - TEi-TS Stone & Tile',
-];
+const resumeInputRef = ref<HTMLInputElement | null>(null);
+const resumeFile = ref<File | null>(null);
+const agreementInputRef = ref<HTMLInputElement | null>(null);
+const agreementFile = ref<File | null>(null);
+
+const onResumeSelected = (e: Event) => {
+  resumeFile.value = (e.target as HTMLInputElement).files?.[0] ?? null;
+};
+const onAgreementSelected = (e: Event) => {
+  agreementFile.value = (e.target as HTMLInputElement).files?.[0] ?? null;
+};
 
 const submitForm = () => {
-  console.log('Form submitted');
+  const id = store.addEmployee({ id: 0, ...newEmployee.value } as Employee);
+  void router.push({ name: 'personnel-detail', params: { employeeId: id } });
 };
 </script>

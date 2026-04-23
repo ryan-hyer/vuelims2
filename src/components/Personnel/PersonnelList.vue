@@ -24,18 +24,6 @@
           </q-btn>
         </q-toolbar>
       </template>
-      <template v-slot:body-cell="props">
-        <q-td>
-          <q-item>
-            <q-item-section>
-              <q-item-label>{{ props.row.name }}</q-item-label>
-              <q-item-label caption v-for="role in props.row.roles" :key="role">
-                {{ role }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-td>
-      </template>
     </q-table>
   </q-page>
 </template>
@@ -68,13 +56,13 @@ const columns: QTableColumn[] = [
   {
     name: 'employeeName',
     label: 'Employee',
-    field: 'name',
+    field: (row: Employee) => `${row.firstName} ${row.lastName}`,
     align: 'left',
   },
 ];
 
 const pagination = ref({
-  sortBy: 'name',
+  sortBy: 'lastName',
   descending: false,
   page: 1,
   rowsPerPage: 10,

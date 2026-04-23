@@ -5,7 +5,7 @@
     <div class="page-subheader q-pa-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el label="Personnel List" :to="{ name: 'personnel-list' }" />
-        <q-breadcrumbs-el :label="employee?.name" />
+        <q-breadcrumbs-el :label="employee ? `${employee.firstName} ${employee.lastName}` : ''" />
       </q-breadcrumbs>
     </div>
 
@@ -20,15 +20,15 @@
       narrow-indicator
       mobile-arrows
     >
-      <q-tab name="identity" label="Basic Info" />
-      <q-tab name="roles" label="Roles & Authorizations" />
-      <q-tab name="training" label="Competency & Training" />
+      <q-tab name="identity" label="Employee Info" />
+      <q-tab name="roles" label="Roles & Competency" />
+      <q-tab name="training" label="Training" />
       <q-tab name="reviews" label="Performance Reviews" />
     </q-tabs>
     <q-separator />
 
     <q-tab-panels v-if="employee" v-model="tab" animated>
-      <q-tab-panel name="identity"> <PersonnelInfo :employee="employee" /></q-tab-panel>
+      <q-tab-panel name="identity"> <PersonnelInfo /></q-tab-panel>
       <q-tab-panel name="roles"> <PersonnelRoles :employee="employee" /></q-tab-panel>
       <q-tab-panel name="training"> <PersonnelTraining :employee="employee" /></q-tab-panel>
       <q-tab-panel name="reviews"> <PersonnelReviews :employee="employee" /></q-tab-panel>
@@ -58,10 +58,10 @@ onMounted(() => {
   store
     .fetchEmployee(parseInt(props.employeeId))
     .then(() => {
-      employee.value = store.employee;
+      employee.value = store.employee ?? undefined;
     })
     .catch((error) => {
-      console.log('Error fetching customer:', error);
+      console.log('Error fetching employee:', error);
     });
 });
 </script>

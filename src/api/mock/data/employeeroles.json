@@ -1,0 +1,101 @@
+[
+  {
+    "id": 1,
+    "employeeId": 1,
+    "roleId": 2,
+    "startDate": "2007-02-26",
+    "endDate": null,
+    "qualifications_verified_date": null,
+    "qualifications_verified_by": null,
+    "probation_verified_date": null,
+    "probation_verified_by": null
+  },
+  {
+    "id": 2,
+    "employeeId": 1,
+    "roleId": 11,
+    "startDate": "2007-02-26",
+    "endDate": null,
+    "qualifications_verified_date": null,
+    "qualifications_verified_by": null,
+    "probation_verified_date": null,
+    "probation_verified_by": null
+  },
+  {
+    "id": 3,
+    "employeeId": 2,
+    "roleId": 7,
+    "startDate": "2007-02-26",
+    "endDate": null,
+    "qualifications_verified_date": null,
+    "qualifications_verified_by": null,
+    "probation_verified_date": null,
+    "probation_verified_by": null
+  },
+  {
+    "id": 4,
+    "employeeId": 3,
+    "roleId": 9,
+    "startDate": "2007-02-26",
+    "endDate": null,
+    "qualifications_verified_date": null,
+    "qualifications_verified_by": null,
+    "probation_verified_date": null,
+    "probation_verified_by": null
+  },
+  {
+    "id": 5,
+    "employeeId": 3,
+    "roleId": 6,
+    "startDate": "2007-02-26",
+    "endDate": null,
+    "qualifications_verified_date": null,
+    "qualifications_verified_by": null,
+    "probation_verified_date": null,
+    "probation_verified_by": null
+  },
+  {
+    "id": 6,
+    "employeeId": 3,
+    "roleId": 8,
+    "startDate": "2007-02-26",
+    "endDate": null,
+    "qualifications_verified_date": null,
+    "qualifications_verified_by": null,
+    "probation_verified_date": null,
+    "probation_verified_by": null
+  },
+  {
+    "id": 7,
+    "employeeId": 4,
+    "roleId": 1,
+    "startDate": "2007-02-26",
+    "endDate": null,
+    "qualifications_verified_date": null,
+    "qualifications_verified_by": null,
+    "probation_verified_date": null,
+    "probation_verified_by": null
+  },
+  {
+    "id": 8,
+    "employeeId": 4,
+    "roleId": 3,
+    "startDate": "2007-02-26",
+    "endDate": null,
+    "qualifications_verified_date": null,
+    "qualifications_verified_by": null,
+    "probation_verified_date": null,
+    "probation_verified_by": null
+  },
+  {
+    "id": 9,
+    "employeeId": 5,
+    "roleId": 10,
+    "startDate": "2007-02-26",
+    "endDate": null,
+    "qualifications_verified_date": null,
+    "qualifications_verified_by": null,
+    "probation_verified_date": null,
+    "probation_verified_by": null
+  }
+]

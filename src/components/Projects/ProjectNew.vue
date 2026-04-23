@@ -46,7 +46,6 @@
             </q-card>
           </div>
           <div v-else>
-            <!-- TODO: Need to check job number uniqueness before allowing form submit -->
             <q-input
               filled
               v-model="newProject.number"
@@ -57,18 +56,14 @@
             <q-input
               filled
               v-model="newProject.startDate"
+              mask="date"
               label="Start Date (yyyy/mm/dd)"
               lazy-rules
               :rules="[(val) => !!val || 'Cannot be blank']"
             >
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy
-                    ref="qDateProxy"
-                    cover
-                    transition-show="scale"
-                    transition-hide="scale"
-                  >
+                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                     <q-date v-model="newProject.startDate">
                       <div class="row items-center justify-end">
                         <q-btn v-close-popup label="Close" color="primary" flat />
@@ -81,18 +76,22 @@
 
             <q-select
               filled
-              v-model="newProject.customer"
+              v-model="newProject.customerId"
               use-input
               options-dense
+              emit-value
+              map-options
               input-debounce="200"
               label="Customer"
-              :options="dummyCustomersRef"
+              :options="filteredCustomers"
+              option-value="id"
+              option-label="name"
               @filter="filterCustomers"
               :rules="[(val) => !!val || 'Cannot be blank']"
             >
               <template v-slot:no-option>
                 <q-item>
-                  <q-item-section class="text-grey"> No results </q-item-section>
+                  <q-item-section class="text-grey">No results</q-item-section>
                 </q-item>
               </template>
             </q-select>
@@ -108,27 +107,15 @@
 
             <q-select
               filled
-              v-model="newProject.assignedTo"
+              v-model="newProject.assignedEmployeeId"
+              emit-value
+              map-options
               label="Assign Project To"
-              :options="dummyEmployees"
-              option-value="employeeId"
+              :options="store.allEmployees"
+              option-value="id"
               option-label="name"
               class="q-mb-md"
             />
-
-            <q-field filled label="Supporting Documents (optional)" stack-label>
-              <!-- Might be cleaner to do the actual upload along with form submit, and just stage files here -->
-              <template v-slot:control>
-                <q-uploader
-                  flat
-                  bordered
-                  multiple
-                  label="Select file(s) for upload, press Upload when ready"
-                  url="http://localhost:4444/upload"
-                  style="width: 100%"
-                />
-              </template>
-            </q-field>
 
             <div class="row justify-end q-gutter-sm q-mt-md">
               <q-btn flat label="Cancel" color="red" :to="{ name: 'project-list' }" />
@@ -136,7 +123,8 @@
                 type="submit"
                 label="Create Project"
                 color="primary"
-                :disable="!newProject.number || !newProject.customer || !newProject.description"
+                :loading="submitting"
+                :disable="!newProject.number || !newProject.customerId || !newProject.description"
               />
             </div>
           </div>
@@ -147,21 +135,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { date } from 'quasar';
-import type { Project } from './models';
 import type { QSelect } from 'quasar';
 import { useRouter } from 'vue-router';
-const router = useRouter();
+import { useProjectStore } from 'src/stores/project-store';
 
-const newProject = ref<Project>({
-  id: Date.now(),
+const router = useRouter();
+const store = useProjectStore();
+
+const newProject = ref({
   number: '',
-  customer: '',
+  customerId: null as number | null,
   description: '',
   startDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
-  assignedTo: '',
+  assignedEmployeeId: null as number | null,
+  purchaseOrder: '', // Do we REALLY need to record these? I have it just because it's on some of the Job Number Logs. Ask Alona.
 });
+
+const projectType = ref<{ label: string; value: string } | null>(null);
+const submitting = ref(false);
 
 const newNumber = computed<string>(() => {
   if (projectType.value) {
@@ -173,8 +166,7 @@ const newNumber = computed<string>(() => {
   return '';
 });
 
-const projectType = ref();
-
+// TODO: This list should be in a database table, and editable
 const jobTypes = [
   { label: '(A) Testing - Analytical', value: 'A' },
   { label: '(E) Testing - Electrical', value: 'E' },
@@ -186,27 +178,7 @@ const jobTypes = [
   { label: '(LS) Certification', value: 'LS' },
 ];
 
-const filterCustomers = (
-  val: string,
-  update: (callbackFn: () => void, afterFn?: (ref: QSelect) => void) => void,
-) => {
-  update(() => {
-    const needle: string = val.toLowerCase();
-    dummyCustomersRef.value = dummyCustomers.filter(
-      (v) => v.label.toLowerCase().indexOf(needle) > -1,
-    );
-  });
-};
-
-const submitForm = () => {
-  console.log('Form submitted: ', newProject.value);
-  /* eslint-disable-next-line @typescript-eslint/no-floating-promises */
-  router.push({ name: 'project-list', query: { flash: 1 } });
-};
-
-//
-// In production, everything below here should come from the backend
-//
+// TODO: In production these sequence numbers come from the backend (max of each prefix + 1)
 const nextNumbers = {
   A: 1367,
   E: 311,
@@ -218,38 +190,39 @@ const nextNumbers = {
   LS: 851,
 };
 
-const dummyCustomers = [
-  { value: 1, label: 'Alpha Systems, LLC' },
-  { value: 2, label: 'Camco Manufacturing, LLC' },
-  { value: 3, label: 'Elwell Corporation' },
-  { value: 4, label: 'Expion360' },
-  { value: 5, label: 'Icon Technologies Limited' },
-  { value: 6, label: 'N.P.S. Plastics LLC' },
-  { value: 7, label: 'Rixens Enterprises' },
-  { value: 8, label: 'Seaflo Marine & RV North America, LLC' },
-  { value: 9, label: 'Valterra Products Inc.' },
-  { value: 10, label: 'Winnebago Industries' },
-];
+const filteredCustomers = ref(store.allCustomers);
 
-const dummyCustomersRef = ref(dummyCustomers);
+const filterCustomers = (
+  val: string,
+  update: (callbackFn: () => void, afterFn?: (ref: QSelect) => void) => void,
+) => {
+  update(() => {
+    const needle = val.toLowerCase();
+    filteredCustomers.value = store.allCustomers.filter((c) =>
+      c.name.toLowerCase().includes(needle),
+    );
+  });
+};
 
-const dummyEmployees = ref([
-  {
-    employeeId: 1,
-    name: 'Merrill Gee',
-  },
-  { employeeId: 2, name: 'Ryan Hyer' },
-  {
-    employeeId: 3,
-    name: 'Alona MacGregor',
-  },
-  {
-    employeeId: 4,
-    name: 'Matthew MacGregor',
-  },
-  {
-    employeeId: 5,
-    name: 'Frank Strickland',
-  },
-]);
+const submitForm = async () => {
+  submitting.value = true;
+  const projectData = {
+    number: newProject.value.number,
+    customerId: newProject.value.customerId!,
+    description: newProject.value.description,
+    startDate: newProject.value.startDate,
+    assignedEmployeeId: newProject.value.assignedEmployeeId,
+    ...(newProject.value.purchaseOrder ? { purchaseOrder: newProject.value.purchaseOrder } : {}),
+  };
+  const newId = await store.addProject(projectData);
+  submitting.value = false;
+  void router.push({ name: 'project-detail', params: { projectId: newId } });
+};
+
+onMounted(async () => {
+  if (store.allCustomers.length === 0 || store.allEmployees.length === 0) {
+    await store.fetchProjectLookups();
+  }
+  filteredCustomers.value = store.allCustomers;
+});
 </script>

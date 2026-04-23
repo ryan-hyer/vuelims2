@@ -3,14 +3,34 @@
     <q-list separator>
       <q-item>
         <q-item-section>
-          <q-item-label overline>Full Name</q-item-label>
-          <q-item-label class="q-pl-md">{{ employee.name }}</q-item-label>
+          <q-item-label overline>First Name</q-item-label>
+          <q-item-label class="q-pl-md">{{ employee.firstName }}</q-item-label>
         </q-item-section>
         <q-item-section side bottom>
           <q-btn flat round color="grey" icon="edit">
             <q-popup-edit
               buttons
-              v-model="employee.name"
+              v-model="employee.firstName"
+              auto-save
+              v-slot="scope"
+              anchor="center end"
+              self="center start"
+            >
+              <q-input v-model="scope.value" dense autofocus @keyup.enter="scope.set" />
+            </q-popup-edit>
+          </q-btn>
+        </q-item-section>
+      </q-item>
+      <q-item>
+        <q-item-section>
+          <q-item-label overline>Last Name</q-item-label>
+          <q-item-label class="q-pl-md">{{ employee.lastName }}</q-item-label>
+        </q-item-section>
+        <q-item-section side bottom>
+          <q-btn flat round color="grey" icon="edit">
+            <q-popup-edit
+              buttons
+              v-model="employee.lastName"
               auto-save
               v-slot="scope"
               anchor="center end"
@@ -141,15 +161,31 @@
         </q-item-section>
       </q-item>
 
-      <q-item clickable v-ripple>
-        <q-item-section>
-          <q-item-label overline>Resume / CV</q-item-label>
-          <q-item-label caption class="text-italic q-pl-md"> Click to view </q-item-label>
-        </q-item-section>
-        <q-item-section avatar>
-          <q-icon color="red" name="fas fa-file-pdf"></q-icon>
-        </q-item-section>
-      </q-item>
+      <!-- TODO: Expand the next two sections to either display the "not found" label and upload field, or if the file exists, an icon to view it (and maybe overwrite it with a new file?) -->
+      <q-expansion-item header-class="bg-red-1">
+        <template v-slot:header>
+          <q-item-section>
+            <q-item-label overline>Resume / CV</q-item-label>
+            <q-item-label caption class="q-pl-md text-weight-bold text-red">
+              File not found! Expand to upload.
+            </q-item-label>
+          </q-item-section>
+        </template>
+        <q-separator />
+        <q-card>
+          <q-card-section>
+            <div class="row items-center q-gutter-sm q-pa-sm">
+              <q-icon name="attach_file" size="sm" :color="resumeFile ? 'teal' : 'grey'" />
+              <div class="col">
+                <div class="text-body2">{{ resumeFile ? resumeFile.name : 'No file selected' }}</div>
+                <div class="text-caption text-grey">PDF files only</div>
+              </div>
+              <q-btn outline color="primary" label="Choose File" @click="resumeInputRef?.click()" />
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+
       <q-expansion-item header-class="bg-red-1">
         <template v-slot:header>
           <q-item-section>
@@ -162,18 +198,19 @@
         <q-separator />
         <q-card>
           <q-card-section>
-            <q-uploader
-              flat
-              bordered
-              auto-upload
-              label="Select a PDF file to upload"
-              accept="application/pdf"
-              url="http://localhost:4444/upload"
-              style="width: 100%"
-            />
+            <div class="row items-center q-gutter-sm q-pa-sm">
+              <q-icon name="attach_file" size="sm" :color="agreementFile ? 'teal' : 'grey'" />
+              <div class="col">
+                <div class="text-body2">{{ agreementFile ? agreementFile.name : 'No file selected' }}</div>
+                <div class="text-caption text-grey">PDF files only</div>
+              </div>
+              <q-btn outline color="primary" label="Choose File" @click="agreementInputRef?.click()" />
+            </div>
           </q-card-section>
         </q-card>
       </q-expansion-item>
+      <input ref="resumeInputRef" type="file" accept=".pdf" style="display: none" @change="onResumeSelected" />
+      <input ref="agreementInputRef" type="file" accept=".pdf" style="display: none" @change="onAgreementSelected" />
       <q-item>
         <q-item-section>
           <q-item-label overline>Termination Date</q-item-label>
@@ -215,6 +252,9 @@
         </q-item-section>
       </q-item>
     </q-list>
+    <q-card-actions class="q-mt-sm">
+      <q-btn color="primary" label="Save Changes" :loading="saving" @click="saveEmployee" />
+    </q-card-actions>
   </q-card>
 </template>
 
@@ -223,12 +263,38 @@
 TODO:
 - The dateLastUpdated should be displayed somewhere, to meet ISO requirements
 */
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { usePersonnelStore } from 'src/stores/personnel-store';
 import type { Employee } from './models';
 
-const props = defineProps<{
-  employee: Employee;
-}>();
+const resumeInputRef = ref<HTMLInputElement | null>(null);
+const resumeFile = ref<File | null>(null);
+const agreementInputRef = ref<HTMLInputElement | null>(null);
+const agreementFile = ref<File | null>(null);
 
-const employee = ref(props.employee || {});
+const onResumeSelected = (e: Event) => {
+  resumeFile.value = (e.target as HTMLInputElement).files?.[0] ?? null;
+};
+const onAgreementSelected = (e: Event) => {
+  agreementFile.value = (e.target as HTMLInputElement).files?.[0] ?? null;
+};
+
+const store = usePersonnelStore();
+const saving = ref(false);
+
+const employee = ref<Employee | null>(store.employee ? { ...store.employee } : null);
+
+watch(
+  () => store.employee,
+  (val) => {
+    if (val) employee.value = { ...val };
+  },
+);
+
+const saveEmployee = async () => {
+  if (!employee.value) return;
+  saving.value = true;
+  await store.updateEmployee({ ...employee.value });
+  saving.value = false;
+};
 </script>

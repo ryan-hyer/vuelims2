@@ -26,7 +26,7 @@
   <div>
     If changes need to be made, there needs to be a data revision process, which will record the
     user and date related to the change, and then enable generation of a revised deliverable. No
-    casual edits past a certain point.
+    casual edits after a deliverable has been generated.
   </div>
 </template>
 

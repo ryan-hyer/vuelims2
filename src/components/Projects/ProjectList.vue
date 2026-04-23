@@ -34,32 +34,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-//import type { Project } from './models';
+import { ref, computed, onMounted } from 'vue';
 import type { QTableColumn } from 'quasar';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useProjectStore } from 'src/stores/project-store';
 
 const router = useRouter();
-const route = useRoute();
 const store = useProjectStore();
 
-const projects = ref([]);
 const filter = ref('');
 const loading = ref(false);
 
-onMounted(() => {
+const projects = computed(() => store.projects);
+
+onMounted(async () => {
   loading.value = true;
-  store
-    .fetchProjects()
-    .then(() => {
-      projects.value = store.projects;
-      loading.value = false;
-    })
-    .catch(() => {
-      console.log('Houston, we have a problem');
-      loading.value = false;
-    });
+  await store.fetchProjects();
+  loading.value = false;
 });
 
 const columns: QTableColumn[] = [
@@ -80,7 +71,7 @@ const columns: QTableColumn[] = [
   {
     name: 'customer',
     label: 'Customer',
-    field: 'customer',
+    field: 'customerName',
     align: 'left',
   },
   {
@@ -98,34 +89,11 @@ const columns: QTableColumn[] = [
   },
 ];
 
-const onRowClick = (evt: Event, row: { [key: string]: string }) => {
+const onRowClick = (_evt: Event, row: { [key: string]: string }) => {
   void router.push({ name: 'project-detail', params: { projectId: row.id } });
 };
 
 const rowClassFn = (row: { [key: string]: string }) => {
-  // Make a newly added row flash yellow for a couple of seconds
-  // TODO: Make this actually work; for some reason the background-color property doesn't work on tr, even though it does on td?
-  if (route.query.flash && row.id == route.query.flash) {
-    setTimeout(() => {
-      void router.replace({ name: 'project-list', query: {} });
-    }, 2000);
-    return 'flash';
-  }
   return row.completeDate ? 'text-weight-light text-italic' : '';
 };
 </script>
-
-<style scoped>
-@keyframes highlight-new {
-  from {
-    background-color: #fafa5c;
-  }
-  to {
-    background-color: inherit;
-  }
-}
-
-.flash {
-  animation: highlight-new 2s ease;
-}
-</style>

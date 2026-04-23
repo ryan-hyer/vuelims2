@@ -22,6 +22,20 @@
       </q-item>
       <q-item>
         <q-item-section>
+          <q-item-label overline>Supervisor:</q-item-label>
+          <q-select
+            dense
+            filled
+            hide-bottom-space
+            v-model="role.supervisor"
+            :options="supervisors"
+            emit-value
+            map-options
+          />
+        </q-item-section>
+      </q-item>
+      <q-item>
+        <q-item-section>
           <q-item-label overline>Role Description:</q-item-label>
           <q-input type="textarea" dense filled v-model="role.roleDescription" />
         </q-item-section>
@@ -29,13 +43,7 @@
       <q-item>
         <q-item-section>
           <q-item-label overline>Key Duties:</q-item-label>
-          <q-input
-            type="textarea"
-            dense
-            filled
-            v-model="role.roleDescription"
-            hint="One item per line"
-          />
+          <q-input type="textarea" dense filled v-model="keyDutiesText" hint="One item per line" />
         </q-item-section>
       </q-item>
       <q-item>
@@ -45,7 +53,7 @@
             type="textarea"
             dense
             filled
-            v-model="role.roleDescription"
+            v-model="authorizationsText"
             hint="One item per line"
           />
         </q-item-section>
@@ -57,7 +65,7 @@
             type="textarea"
             dense
             filled
-            v-model="role.roleDescription"
+            v-model="hiringQualificationsText"
             hint="One item per line"
           />
         </q-item-section>
@@ -69,19 +77,7 @@
             type="textarea"
             dense
             filled
-            v-model="role.roleDescription"
-            hint="One item per line"
-          />
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section>
-          <q-item-label overline>Ongoing Training Focus Areas:</q-item-label>
-          <q-input
-            type="textarea"
-            dense
-            filled
-            v-model="role.roleDescription"
+            v-model="probationTargetsText"
             hint="One item per line"
           />
         </q-item-section>
@@ -89,7 +85,9 @@
 
       <q-card-actions>
         <q-btn label="Submit" type="submit" color="teal" />
-        <q-btn label="Cancel" flat class="q-ml-sm" @click="formIsVisible = false" />
+        <q-btn label="Cancel" flat class="q-ml-sm" @click="cancelForm" />
+        <q-space />
+        <q-btn v-if="!isNew" color="red" label="Delete Role" @click="deleteRole" />
       </q-card-actions>
     </q-form>
 
@@ -142,59 +140,101 @@
           </q-item-label>
         </q-item-section>
       </q-item>
-      <q-item>
-        <q-item-section>
-          <q-item-label overline>Ongoing Training Focus Areas:</q-item-label>
-          <q-item-label>
-            <ul>
-              <li v-for="item in role.trainingFocusAreas" v-bind:key="item">
-                {{ item }}
-              </li>
-            </ul>
-          </q-item-label>
-        </q-item-section>
-      </q-item>
     </q-list>
   </q-card>
 </template>
 
 <script setup lang="ts">
-/*
-TODO:
-It might be better to structure my role model as giant strings with newlines instead of arrays
-*/
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import type { Role } from './models';
+import { usePersonnelStore } from 'src/stores/personnel-store';
+const store = usePersonnelStore();
 
 const props = defineProps({
   role: {
     type: Object as () => Role,
     required: false,
   },
+  isNew: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-defineEmits<{
+const emit = defineEmits<{
   close: [];
+  update: [role: Role];
+  delete: [roleId: number];
 }>();
 
 const role = ref<Role>(
   props.role || {
     id: Date.now(),
     title: '',
-    supervisor: -1,
+    supervisor: 0,
     roleDescription: '',
     keyDuties: [],
     authorizations: [],
     hiringQualifications: [],
     probationTargets: [],
-    trainingFocusAreas: [],
   },
 );
 
-const formIsVisible = ref(false);
+const supervisors = ref<{ label: string; value: number }[]>([]);
+
+const formIsVisible = ref(props.isNew);
+
+const toText = (arr: string[]) => arr.join('\n');
+const toArray = (text: string) => text.split('\n').filter((s) => s.trim() !== '');
+
+const keyDutiesText = computed({
+  get: () => toText(role.value.keyDuties),
+  set: (val) => {
+    role.value.keyDuties = toArray(val);
+  },
+});
+const authorizationsText = computed({
+  get: () => toText(role.value.authorizations),
+  set: (val) => {
+    role.value.authorizations = toArray(val);
+  },
+});
+const hiringQualificationsText = computed({
+  get: () => toText(role.value.hiringQualifications),
+  set: (val) => {
+    role.value.hiringQualifications = toArray(val);
+  },
+});
+const probationTargetsText = computed({
+  get: () => toText(role.value.probationTargets),
+  set: (val) => {
+    role.value.probationTargets = toArray(val);
+  },
+});
 
 const submitForm = () => {
-  // Update the database
+  emit('update', { ...role.value });
   formIsVisible.value = false;
 };
+
+const deleteRole = () => {
+  if (confirm('Are you sure you want to delete this role? This action cannot be undone.')) {
+    emit('delete', role.value.id);
+  }
+};
+
+const cancelForm = () => {
+  if (props.isNew) {
+    emit('close');
+  } else {
+    formIsVisible.value = false;
+  }
+};
+
+onMounted(async () => {
+  if (store.allRoles.length === 0) await store.fetchOrg();
+  supervisors.value = store.allRoles
+    .filter((r) => r.id !== role.value.id)
+    .map((r) => ({ label: r.title, value: r.id }));
+});
 </script>

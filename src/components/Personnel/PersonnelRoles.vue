@@ -1,148 +1,235 @@
 <template>
-  <q-card bordered class="q-mb-md" v-for="role in roles" :key="role.id">
-    <q-list separator>
-      <q-expansion-item>
-        <template v-slot:header>
-          <q-item-section>
-            <q-item-label class="text-h6">
-              {{ role.title }}
-            </q-item-label>
-            <q-item-label caption>Expand to view all details</q-item-label>
-          </q-item-section>
-        </template>
-        <q-card>
-          <q-list separator>
-            <q-item>
-              <q-item-section>
-                <q-item-label overline>Supervisor</q-item-label>
-                <q-item-label class="q-pl-md">{{ role.supervisor }}</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label overline>Role Description</q-item-label>
-                <q-item-label class="q-pl-md">{{ role.roleDescription }}</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>
-                <q-item-label overline>Key Duties</q-item-label>
-                <q-item-label>{{ role.keyDuties }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-card>
-      </q-expansion-item>
-      <q-item>
-        <q-item-section>
-          <q-item-label overline>Authorizations</q-item-label>
-          <q-item-label>{{ role.authorizations }}</q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
-    <q-separator />
-    <q-card-actions align="right">
-      <q-btn flat rounded color="red" size="sm" @click="confirmRemoveRole(role)">
-        Unassign this role
-      </q-btn>
-    </q-card-actions>
-  </q-card>
-  <div v-if="addRoleFormIsVisible">
-    <q-select
-      filled
-      v-model="selectedNewRole"
-      :options="allRoles"
-      label="Select an Additional Role"
-      class="q-pb-md"
-    />
-    <q-btn label="Assign Role" type="submit" color="teal" @click="addRole" />
-    <q-btn label="Cancel" flat class="q-ml-sm" @click="addRoleFormIsVisible = false" />
-  </div>
-  <q-btn
-    v-else
-    rounded
-    color="green"
-    icon="add_box"
-    label="Assign New Role"
-    @click="addRoleFormIsVisible = true"
-  />
+  <div>
+    <q-card bordered class="q-mb-md" v-for="ar in props.employee.assignedRoles" :key="ar.id">
+      <q-list separator>
+        <q-expansion-item>
+          <template v-slot:header>
+            <q-item-section>
+              <q-item-label class="text-h6">{{ ar.role?.title ?? '(Unknown role)' }}</q-item-label>
+              <q-item-label caption>Role Assigned {{ ar.startDate }}</q-item-label>
+              <q-item-label caption>Expand to view role information</q-item-label>
+            </q-item-section>
+          </template>
+          <q-card>
+            <q-list separator>
+              <q-item>
+                <q-item-section>
+                  <q-item-label overline>Reports To</q-item-label>
+                  <q-item-label class="q-pl-md">{{
+                    supervisorTitle(ar.role?.supervisor ?? null)
+                  }}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>
+                  <q-item-label overline>Role Description</q-item-label>
+                  <q-item-label class="q-pl-md">{{ ar.role?.roleDescription }}</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>
+                  <q-item-label overline>Key Duties</q-item-label>
+                  <q-item-label>
+                    <ul>
+                      <li v-for="item in ar.role?.keyDuties" :key="item">{{ item }}</li>
+                    </ul>
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>
+                  <q-item-label overline>Authorizations</q-item-label>
+                  <q-item-label>
+                    <ul>
+                      <li v-for="item in ar.role?.authorizations" :key="item">{{ item }}</li>
+                    </ul>
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card>
+        </q-expansion-item>
+        <q-expansion-item expand-icon-toggle expand-separator>
+          <template v-slot:header>
+            <q-item-section avatar>
+              <q-icon
+                :color="ar.qualifications_verified_date ? 'green' : 'orange'"
+                :name="ar.qualifications_verified_date ? 'check_circle' : 'warning'"
+                size="lg"
+              />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>Hiring Qualifications</q-item-label>
+              <q-item-label caption>Expand to view details</q-item-label>
+              <q-item-label v-if="ar.qualifications_verified_date" caption class="text-green">
+                Verified {{ ar.qualifications_verified_date }} by
+                {{ ar.qualifications_verified_by }}
+              </q-item-label>
+              <q-item-label v-else caption>
+                <span class="text-red">Not Yet Verified!</span>
+                <!-- TODO: Limit visibility/access for this button to only this person's supervisor (or above, e.g. Quality Manager?) -->
+                <q-btn
+                  label="Verify Now"
+                  size="xs"
+                  color="primary"
+                  class="q-ml-sm"
+                  @click.stop="openVerifyQualifications(ar.id)"
+                />
+              </q-item-label>
+            </q-item-section>
+          </template>
+          <q-item>
+            <ul>
+              <li v-for="item in ar.role?.hiringQualifications" :key="item">{{ item }}</li>
+            </ul>
+          </q-item>
+        </q-expansion-item>
 
-  <!--     <q-dialog v-model="removeRoleConfirmation" persistent>
-      <q-card>
-        <q-item>
-          <q-item-section avatar>
-            <q-avatar color="primary" text-color="white" class="float-left">?</q-avatar>
-          </q-item-section>
-          <q-item-section>
-            Are you sure you want unassign the role
-            {{ roleToRemove.title }} from Ryan Hyer?
-          </q-item-section>
-        </q-item>
-        <q-card-actions align="right">
-          <q-btn flat label="Cancel" v-close-popup @click="roleToRemove.value = null" />
-          <q-btn flat label="Confirm" color="primary" v-close-popup @click="removeRole" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog> -->
+        <q-expansion-item expand-icon-toggle expand-separator>
+          <template v-slot:header>
+            <q-item-section avatar>
+              <q-icon
+                :color="ar.probation_verified_date ? 'green' : 'orange'"
+                :name="ar.probation_verified_date ? 'check_circle' : 'warning'"
+                size="lg"
+              />
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>90-Day Probation Targets</q-item-label>
+              <q-item-label caption>Expand to view details</q-item-label>
+              <q-item-label v-if="ar.probation_verified_date" caption class="text-green">
+                Verified {{ ar.probation_verified_date }} by {{ ar.probation_verified_by }}
+              </q-item-label>
+              <q-item-label v-else caption>
+                <span class="text-red">Not Yet Verified!</span>
+                <!-- TODO: Limit visibility/access for this button to only this person's supervisor (or above, e.g. Quality Manager?) -->
+                <q-btn
+                  label="Verify Now"
+                  size="xs"
+                  color="primary"
+                  class="q-ml-sm"
+                  @click.stop="openVerifyProbation(ar.id)"
+                />
+              </q-item-label>
+            </q-item-section>
+          </template>
+          <q-item>
+            <ul>
+              <li v-for="item in ar.role?.probationTargets" :key="item">{{ item }}</li>
+            </ul>
+          </q-item>
+        </q-expansion-item>
+      </q-list>
+      <q-separator />
+      <q-card-actions align="right">
+        <q-btn flat rounded color="red" size="sm" @click="confirmRemoveRole(ar)">
+          Unassign this role
+        </q-btn>
+      </q-card-actions>
+    </q-card>
+
+    <div v-if="addRoleFormIsVisible" class="q-mt-md">
+      <q-select
+        filled
+        v-model="selectedRoleId"
+        :options="availableRoles"
+        option-value="id"
+        option-label="title"
+        emit-value
+        map-options
+        label="Select a Role to Assign"
+        class="q-pb-md"
+      />
+      <q-btn label="Assign Role" color="teal" :disable="selectedRoleId === null" @click="addRole" />
+      <q-btn label="Cancel" flat class="q-ml-sm" @click="addRoleFormIsVisible = false" />
+    </div>
+    <!-- TODO: Limit visibility/access for this button to only this person's supervisor (or above, e.g. Quality Manager?) -->
+    <q-btn
+      v-else
+      rounded
+      color="green"
+      icon="add_box"
+      label="Assign New Role"
+      class="q-mt-md"
+      @click="addRoleFormIsVisible = true"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-
-const roles = ref([
-  {
-    id: 1,
-    title: 'Listing Compliance Engineer',
-    supervisor: 'Alona MacGregor',
-    roleDescription:
-      'The Listing Compliance Engineer (LCE) supplies the basic technical knowledge of the products and standards involved in the TEi-LS certification programs, coordinates certification evaluation activities, and performs the evaluation review and certification decision.',
-    keyDuties:
-      '<ul><li>Monitors and manages the day-to-day operations of certification files, including reviewing applications, reports, manuals, standards, codes and other documents in accordance with TEi-LS policies and procedures.</li><li>Plans and coordinates the evaluation of certification applications and amendments. Selects applicable standards for evaluation of products. Creates and manages certification projects. Schedules and arranges periodic surveillance activities of certification clients.</li><li>Reviews standards and codes as they apply to TEi-LS, its clients, and supported regulatory bodies and industry organizations. Maintains up-to-date knowledge of applicable standards and revisions of standards.</li><li>Assists in development and implementation of TEi-LS policies and procedures. Recommends revisions to the TEi Quality Management System documents as appropriate.</li><li>Participates in industry events and standards-writing bodies, in order to stay on the forefront of upcoming information as well as to build and maintain relationships with key players in those organizations.</li></ul>',
-    authorizations:
-      '<ul><li>Arrange for certification evaluation activities to take place, and review the results</li><li>Perform evaluation review</li><li>Make certification decisions</li></ul>',
-  },
-  {
-    id: 2,
-    title: 'Quality Manager',
-    supervisor: 'Matthew MacGregor',
-    roleDescription:
-      'The TEi corporate Quality Manager is responsible for the TEi Quality Management System and reports directly to TEi top management.',
-    keyDuties:
-      '<ul><li>Performs Internal Audits of all TEi operations in accordance with policies and procedures. Performs follow-up and miscellaneous audits as necessary.</li><li>Ensures good customer relations by tracking and acting to resolve customer complaints and appeals.</li><li>Approves new quality system documents and forms, and revisions to the same.</li><li>Plans, coordinates, tracks, and implements quality improvement projects, including corrective and preventive actions.</li></ul>',
-    authorizations:
-      '<ul><li>Establish, implement, maintain, and improve the TEi Quality Management System process and procedures</li><li>Identify deviations from the Quality Management System or from established procedures</li><li>Initiate actions to prevent or minimize deviations</li><li>Report to TEi top management on the performance of the Quality Management System and any need for improvement</li><li>Ensure the effectiveness of all TEi activities</li><li>Ensure that the integrity of the Quality Management System is maintained even when changes are planned and implemented</li></ul>',
-  },
-]);
-
-const allRoles = [
-  'Listing Compliance Engineer',
-  'Quality Manager',
-  'Executive Director - TEi-TS',
-  'President and CEO',
-  'Lab Technician - TEi-TS Stone & Tile',
-];
-
-const roleToRemove = ref({});
-
-const confirmRemoveRole = (role: object) => {
-  roleToRemove.value = role;
-  removeRoleConfirmation.value = true;
-};
-/* TODO: Fix this
-const removeRole = () => {
-  roles.value = roles.value.filter((role) => role.id !== roleToRemove.value.id);
-  roleToRemove.value = null;
-};
+/*
+TODO:
+- Decide whether I prefer unassignment and archiving of roles, or whether it's fine to just remove roles from people without keeping a record of it.
+- If the former, create a section below the New button for "Former Roles" or something.
 */
-const removeRoleConfirmation = ref(false);
+import { ref, computed, onMounted } from 'vue';
+import { useQuasar } from 'quasar';
+import { usePersonnelStore } from 'src/stores/personnel-store';
+import type { Employee, EmployeeRoleWithDetails } from './models';
+
+const props = defineProps<{ employee: Employee }>();
+
+const $q = useQuasar();
+const store = usePersonnelStore();
 
 const addRoleFormIsVisible = ref(false);
+const selectedRoleId = ref<number | null>(null);
 
-const selectedNewRole = ref('');
+const supervisorTitle = (supervisorId: number | null | undefined) => {
+  if (supervisorId == null) return 'None';
+  return store.allRoles.find((r) => r.id === supervisorId)?.title ?? 'Unknown';
+};
 
-const addRole = () => {
-  alert('Adding role: ' + selectedNewRole.value);
-  selectedNewRole.value = '';
+const openVerifyQualifications = (assignmentId: number) => {
+  // After authentication is set up, the person doing the verifying will be the current user, who presumably is this employee's supervisor, so we won't need to ask for their name. For now, though, we'll just ask for it in a dialog.
+  $q.dialog({
+    title: 'Verify Hiring Qualifications',
+    message: 'Enter the name of the person verifying these qualifications:',
+    prompt: { model: '', type: 'text', isValid: (val: string) => val.trim().length > 0 },
+    cancel: true,
+  }).onOk((name: string) => {
+    void store.verifyQualifications(assignmentId, name.trim());
+  });
+};
+
+const openVerifyProbation = (assignmentId: number) => {
+  // Same as above, eventually change the name to the current authenticated user
+  $q.dialog({
+    title: 'Verify 90-Day Probation Targets',
+    message: 'Enter the name of the person verifying these targets:',
+    prompt: { model: '', type: 'text', isValid: (val: string) => val.trim().length > 0 },
+    cancel: true,
+  }).onOk((name: string) => {
+    void store.verifyProbation(assignmentId, name.trim());
+  });
+};
+
+const availableRoles = computed(() => {
+  const assignedIds = new Set((props.employee.assignedRoles ?? []).map((ar) => ar.roleId));
+  return store.allRoles.filter((r) => !assignedIds.has(r.id));
+});
+
+const addRole = async () => {
+  if (selectedRoleId.value === null) return;
+  await store.addEmployeeRole(props.employee.id, selectedRoleId.value);
+  selectedRoleId.value = null;
   addRoleFormIsVisible.value = false;
 };
+
+const confirmRemoveRole = (ar: EmployeeRoleWithDetails) => {
+  $q.dialog({
+    title: 'Unassign Role',
+    message: `Unassign "${ar.role?.title ?? 'this role'}" from ${props.employee.firstName} ${props.employee.lastName}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    void store.removeEmployeeRole(ar.id);
+  });
+};
+
+onMounted(async () => {
+  if (store.allRoles.length === 0) {
+    await store.fetchOrg();
+  }
+});
 </script>

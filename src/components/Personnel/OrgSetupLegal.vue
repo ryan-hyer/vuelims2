@@ -1,162 +1,113 @@
 <template>
   <q-page padding>
+    <q-inner-loading :showing="loading" label="Loading documents..." />
     <div class="page-header">Legal Documents</div>
     <q-list bordered separator>
-      <q-item class="bg-grey-3">
-        <q-item-section>
-          <q-item-label class="text-h6">Evidence of Legal Entity</q-item-label>
-          <q-item-label caption>(e.g. Articles of Incorporation)</q-item-label>
-          <q-item-label caption>Last Uploaded: 3/14/2006</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn round icon="picture_as_pdf" color="red" @click="viewDoc('legal-20060314.pdf')">
-            <q-tooltip>View Document</q-tooltip>
-          </q-btn>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn round icon="upload_file" color="green" @click="legalUpload = true">
-            <q-tooltip>Upload New</q-tooltip>
-          </q-btn>
-        </q-item-section>
-      </q-item>
-      <q-item v-if="legalUpload">
-        <q-card flat>
-          <q-field filled>
-            <template v-slot:control>
-              <q-uploader
-                flat
-                bordered
-                multiple
-                label="Select file(s) for upload, press Upload when ready"
-                url="http://localhost:4444/upload"
-                style="width: 100%"
+      <template v-for="doc in docs" :key="doc.id">
+        <q-item class="bg-grey-3">
+          <q-item-section>
+            <q-item-label class="text-h6">{{ doc.title }}</q-item-label>
+            <q-item-label caption>{{ doc.description }}</q-item-label>
+            <q-item-label caption :class="doc.uploadDate ? '' : 'text-red'">
+              {{ doc.uploadDate ? `Last Uploaded: ${formatDate(doc.uploadDate)}` : 'Last Uploaded: Never' }}
+            </q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-btn round icon="picture_as_pdf" color="red" :disable="!doc.url" @click="viewDoc(doc)">
+              <q-tooltip>
+                {{ doc.url ? 'View Document' : doc.filename ? 'Not available — please re-upload' : 'No document uploaded' }}
+              </q-tooltip>
+            </q-btn>
+          </q-item-section>
+          <q-item-section side>
+            <q-btn round icon="upload_file" color="green" @click="openUpload(doc.id)">
+              <q-tooltip>{{ doc.filename ? 'Upload New Version' : 'Upload Document' }}</q-tooltip>
+            </q-btn>
+          </q-item-section>
+        </q-item>
+        <q-item v-if="uploadingId === doc.id" class="bg-grey-1">
+          <q-item-section>
+            <div class="row items-center q-gutter-sm q-pa-sm">
+              <q-icon name="insert_drive_file" size="md" :color="pendingFile ? 'teal' : 'grey'" />
+              <div class="col">
+                <div class="text-body2">{{ pendingFile ? pendingFile.name : 'No file selected' }}</div>
+                <div class="text-caption text-grey">PDF, PNG, or JPG</div>
+              </div>
+              <q-btn outline color="primary" label="Choose File" @click="fileInputRef?.click()" />
+              <q-btn
+                color="teal"
+                label="Upload"
+                :disable="!pendingFile"
+                :loading="uploading"
+                @click="confirmUpload(doc.id)"
               />
-            </template>
-          </q-field>
-          <q-btn flat color="red" label="Cancel" @click="legalUpload = false"></q-btn>
-        </q-card>
-      </q-item>
-      <q-item class="bg-grey-3">
-        <q-item-section>
-          <q-item-label class="text-h6">Evidence of Financial Stability</q-item-label>
-          <q-item-label caption>(e.g. Profit & Loss Statement)</q-item-label>
-          <q-item-label caption class="text-red">Last Uploaded: NEVER!</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn round icon="picture_as_pdf" color="red" disable>
-            <q-tooltip>No Document Uploaded!</q-tooltip>
-          </q-btn>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn round icon="upload_file" color="green" @click="financialUpload = true">
-            <q-tooltip>Upload New</q-tooltip>
-          </q-btn>
-        </q-item-section>
-      </q-item>
-      <q-item v-if="financialUpload">
-        <q-card flat>
-          <q-field filled>
-            <template v-slot:control>
-              <q-uploader
-                flat
-                bordered
-                multiple
-                label="Select file(s) for upload, press Upload when ready"
-                url="http://localhost:4444/upload"
-                style="width: 100%"
-              />
-            </template>
-          </q-field>
-          <q-btn flat color="red" label="Cancel" @click="financialUpload = false"></q-btn>
-        </q-card>
-      </q-item>
-      <q-item class="bg-grey-3">
-        <q-item-section>
-          <q-item-label class="text-h6">Evidence of Liability Insurance</q-item-label>
-          <q-item-label caption>(e.g. Insurance Certificate)</q-item-label>
-          <q-item-label caption class="text-red">Last Uploaded: NEVER!</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn round icon="picture_as_pdf" color="red" disable>
-            <q-tooltip>No Document Uploaded!</q-tooltip>
-          </q-btn>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn round icon="upload_file" color="green" @click="insuranceUpload = true">
-            <q-tooltip>Upload New</q-tooltip>
-          </q-btn>
-        </q-item-section>
-      </q-item>
-      <q-item v-if="insuranceUpload">
-        <q-card flat>
-          <q-field filled>
-            <template v-slot:control>
-              <q-uploader
-                flat
-                bordered
-                multiple
-                label="Select file(s) for upload, press Upload when ready"
-                url="http://localhost:4444/upload"
-                style="width: 100%"
-              />
-            </template>
-          </q-field>
-          <q-btn flat color="red" label="Cancel" @click="insuranceUpload = false"></q-btn>
-        </q-card>
-      </q-item>
-      <q-item class="bg-grey-3">
-        <q-item-section>
-          <q-item-label class="text-h6">Evidence of Certification Mark Protection</q-item-label>
-          <q-item-label caption>(e.g. Trademark Registration)</q-item-label>
-          <q-item-label caption class="text-red">Last Uploaded: NEVER!</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn round icon="picture_as_pdf" color="red" disable>
-            <q-tooltip>No Document Uploaded!</q-tooltip>
-          </q-btn>
-        </q-item-section>
-        <q-item-section side>
-          <q-btn round icon="upload_file" color="green" @click="trademarkUpload = true">
-            <q-tooltip>Upload New</q-tooltip>
-          </q-btn>
-        </q-item-section>
-      </q-item>
-      <q-item v-if="trademarkUpload">
-        <q-card flat>
-          <q-field filled>
-            <template v-slot:control>
-              <q-uploader
-                flat
-                bordered
-                multiple
-                label="Select file(s) for upload, press Upload when ready"
-                url="http://localhost:4444/upload"
-                style="width: 100%"
-              />
-            </template>
-          </q-field>
-          <q-btn flat color="red" label="Cancel" @click="trademarkUpload = false"></q-btn>
-        </q-card>
-      </q-item>
+              <q-btn flat color="red" label="Cancel" @click="cancelUpload" />
+            </div>
+          </q-item-section>
+        </q-item>
+      </template>
     </q-list>
+    <input
+      ref="fileInputRef"
+      type="file"
+      accept=".pdf,.png,.jpg,.jpeg"
+      style="display: none"
+      @change="onFileSelected"
+    />
   </q-page>
 </template>
 
 <script setup lang="ts">
-/*
-TODO:
-This is fine for now, but it would be even better if each section could contain a list of uploads, sorted by most recent first. Unnecessary, but would be nice.
-Finish this up as soon as I learn how to upload/view attachments
-*/
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { usePersonnelStore } from 'src/stores/personnel-store';
+import type { LegalDocument } from './models';
 
-const legalUpload = ref(false);
-const financialUpload = ref(false);
-const insuranceUpload = ref(false);
-const trademarkUpload = ref(false);
+const store = usePersonnelStore();
 
-const viewDoc = (filename: string) => {
-  alert('Nothing to see yet, but it works!');
-  console.log(filename);
+const loading = ref(false);
+const uploading = ref(false);
+const uploadingId = ref<number | null>(null);
+const pendingFile = ref<File | null>(null);
+const fileInputRef = ref<HTMLInputElement | null>(null);
+
+const docs = computed(() => store.legalDocs);
+
+const formatDate = (dateStr: string) => {
+  const parts = dateStr.split(/[-/]/);
+  return `${parseInt(parts[1] ?? '1')}/${parseInt(parts[2] ?? '1')}/${parts[0]}`;
 };
+
+const viewDoc = (doc: LegalDocument) => {
+  if (doc.url) window.open(doc.url, '_blank');
+};
+
+const openUpload = (id: number) => {
+  uploadingId.value = id;
+  pendingFile.value = null;
+  if (fileInputRef.value) fileInputRef.value.value = '';
+};
+
+const onFileSelected = (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  pendingFile.value = input.files?.[0] ?? null;
+};
+
+const confirmUpload = async (id: number) => {
+  if (!pendingFile.value) return;
+  uploading.value = true;
+  await store.uploadLegalDoc(id, pendingFile.value);
+  uploading.value = false;
+  cancelUpload();
+};
+
+const cancelUpload = () => {
+  uploadingId.value = null;
+  pendingFile.value = null;
+};
+
+onMounted(async () => {
+  loading.value = true;
+  await store.fetchLegalDocs();
+  loading.value = false;
+});
 </script>

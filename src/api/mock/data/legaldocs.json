@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "title": "Evidence of Legal Entity",
+    "description": "e.g. Articles of Incorporation",
+    "filename": null,
+    "uploadDate": null
+  },
+  {
+    "id": 2,
+    "title": "Evidence of Financial Stability",
+    "description": "e.g. Profit & Loss Statement",
+    "filename": null,
+    "uploadDate": null
+  },
+  {
+    "id": 3,
+    "title": "Evidence of Liability Insurance",
+    "description": "e.g. Insurance Certificate",
+    "filename": null,
+    "uploadDate": null
+  },
+  {
+    "id": 4,
+    "title": "Evidence of Certification Mark Protection",
+    "description": "e.g. Trademark Registration",
+    "filename": null,
+    "uploadDate": null
+  }
+]

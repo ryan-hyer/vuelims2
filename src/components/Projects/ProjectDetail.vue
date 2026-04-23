@@ -4,18 +4,20 @@
     <div class="page-subheader q-pa-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el label="Project List" :to="{ name: 'project-list' }" />
-        <q-breadcrumbs-el :label="props.projectId" />
-        <!-- TODO: Replace this with the job number once data is coming from the backend -->
+        <q-breadcrumbs-el :label="store.project?.number ?? props.projectId" />
       </q-breadcrumbs>
     </div>
 
     <q-separator />
+
+    <!-- TODO: Not entirely sure I like this layout, but it does need to be an ordered flow. Think on it more. -->
 
     <q-expansion-item
       expand-separator
       icon="looks_one"
       label="Project Information"
       class="bg-grey-3 q-my-md"
+      default-opened
     >
       <q-card>
         <q-card-section>
@@ -24,7 +26,6 @@
       </q-card>
     </q-expansion-item>
 
-    <!-- TODO: There needs to be some logic here to disable this tab if project info is missing, particularly a checklist or standards -->
     <q-expansion-item
       expand-separator
       icon="looks_two"
@@ -42,8 +43,7 @@
       expand-separator
       icon="looks_3"
       label="Generate Deliverables"
-      caption="Cannot generate deliverables - Data not yet entered"
-      class="bg-red-1 q-my-md"
+      class="bg-grey-3 q-my-md"
     >
       <q-card>
         <q-card-section>
@@ -56,8 +56,7 @@
       expand-separator
       icon="looks_4"
       label="Record Invoice"
-      caption="Cannot be invoiced - Project not yet complete"
-      class="bg-red-1 q-my-md"
+      class="bg-grey-3 q-my-md"
     >
       <q-card>
         <q-card-section>
@@ -69,12 +68,21 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
+import { useProjectStore } from 'src/stores/project-store';
 import ProjectInfo from './ProjectInfo.vue';
 import ProjectData from './ProjectData.vue';
 import ProjectDeliverables from './ProjectDeliverables.vue';
 import ProjectInvoicing from './ProjectInvoicing.vue';
 
-const props = defineProps<{
-  projectId: string;
-}>();
+const props = defineProps<{ projectId: string }>();
+
+const store = useProjectStore();
+
+onMounted(async () => {
+  await store.fetchProject(Number(props.projectId));
+  if (store.allCustomers.length === 0 || store.allEmployees.length === 0) {
+    await store.fetchProjectLookups();
+  }
+});
 </script>
