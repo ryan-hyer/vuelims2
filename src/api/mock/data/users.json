@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "email": "admin@tei-test.com",
+    "password": "Admin123!",
+    "firstName": "Admin",
+    "lastName": "User",
+    "role": "admin",
+    "employeeId": null,
+    "active": true
+  },
+  {
+    "id": 2,
+    "email": "ryan@tei-test.com",
+    "password": "Password1!",
+    "firstName": "Ryan",
+    "lastName": "Hyer",
+    "role": "user",
+    "employeeId": 2,
+    "active": true
+  },
+  {
+    "id": 3,
+    "email": "auditor@external-accreditation.org",
+    "password": "Audit123!",
+    "firstName": "Sandra",
+    "lastName": "Voss",
+    "role": "auditor",
+    "employeeId": null,
+    "active": true
+  }
+]

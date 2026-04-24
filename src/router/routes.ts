@@ -1,5 +1,11 @@
 import type { RouteRecordRaw } from 'vue-router';
 
+declare module 'vue-router' {
+  interface RouteMeta {
+    requiresAuth?: boolean;
+  }
+}
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/login',
@@ -9,6 +15,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -20,6 +27,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/user',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'profile',
@@ -36,6 +44,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/projects',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -59,6 +68,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/customers',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',
@@ -81,6 +91,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/org',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'legal',
@@ -97,6 +108,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/personnel',
     component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: '',

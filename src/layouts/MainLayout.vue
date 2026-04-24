@@ -42,7 +42,7 @@
                   <q-item-section avatar>
                     <q-icon color="grey-8" name="face"></q-icon>
                   </q-item-section>
-                  <q-item-section>My Employee Info</q-item-section>
+                  <q-item-section>My Profile</q-item-section>
                 </q-item>
                 <q-item clickable v-ripple v-close-popup :to="{ name: 'change-password' }">
                   <q-item-section avatar>
@@ -66,6 +66,12 @@
                   </q-item-section>
                   <q-item-section>User Settings</q-item-section>
                 </q-item>
+                <q-item v-if="authStore.isAdmin" clickable v-ripple v-close-popup :to="{ name: 'change-password' }">
+                  <q-item-section avatar>
+                    <q-icon color="grey-8" name="admin_panel_settings"></q-icon>
+                  </q-item-section>
+                  <q-item-section>Admin</q-item-section>
+                </q-item>
                 <q-item clickable v-ripple v-close-popup :to="{ name: 'change-password' }">
                   <q-item-section avatar>
                     <q-icon color="grey-8" name="help"></q-icon>
@@ -73,8 +79,7 @@
                   <q-item-section>Help</q-item-section>
                 </q-item>
                 <q-separator />
-                <q-item clickable v-ripple v-close-popup :to="{ name: 'login' }">
-                  <!-- TODO: Actually log out the user when this is clicked, then navigate back to the login screen -->
+                <q-item clickable v-ripple v-close-popup @click="onLogout">
                   <q-item-section avatar>
                     <q-icon color="grey-8" name="logout"></q-icon>
                   </q-item-section>
@@ -82,11 +87,15 @@
                 </q-item>
               </q-list>
             </q-menu>
-            <q-avatar size="26px">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-              <q-badge rounded floating color="red" text-color="white">6,954</q-badge>
+            <q-avatar
+              size="26px"
+              color="primary"
+              text-color="white"
+              class="text-caption text-weight-bold"
+            >
+              {{ authStore.initials }}
             </q-avatar>
-            <q-tooltip>Account</q-tooltip>
+            <q-tooltip>{{ authStore.fullName }}</q-tooltip>
           </q-btn>
         </div>
       </q-toolbar>
@@ -116,10 +125,19 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import MenuLink, { type MenuLinkProps } from 'src/components/MenuLink.vue';
 import MenuLinkSection, { type MenuLinkSectionProps } from 'src/components/MenuLinkSection.vue';
+import { useAuthStore } from 'src/stores/auth-store';
 
+const authStore = useAuthStore();
+const router = useRouter();
 const search = ref('');
+
+async function onLogout() {
+  authStore.logout();
+  await router.push({ name: 'login' });
+}
 
 const linksList: MenuLinkProps[] = [
   {

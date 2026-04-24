@@ -4,6 +4,7 @@ import type {
   Employee,
   Role,
   LegalDocument,
+  EmployeeDocument,
   EmployeeRoleWithDetails,
   Training,
   PerformanceReview,
@@ -19,6 +20,7 @@ export const usePersonnelStore = defineStore('personnel', {
     allRoles: [] as Role[],
     employee: null as Employee | null,
     legalDocs: [] as LegalDocument[],
+    employeeDocs: [] as EmployeeDocument[],
     trainingRecords: [] as Training[],
     reviews: [] as PerformanceReview[],
   }),
@@ -101,6 +103,26 @@ export const usePersonnelStore = defineStore('personnel', {
         })
         .catch((error) => {
           console.error('Error removing role assignment:', error);
+        });
+    },
+    async fetchEmployeeDocs(employeeId: number) {
+      await api
+        .fetchEmployeeDocs(employeeId)
+        .then((response) => {
+          this.employeeDocs = response as EmployeeDocument[];
+        })
+        .catch((error) => {
+          console.error('Error fetching employee documents:', error);
+        });
+    },
+    async addEmployeeDoc(doc: Omit<EmployeeDocument, 'id'>) {
+      await api
+        .addEmployeeDoc(doc)
+        .then((created) => {
+          this.employeeDocs.unshift(created as EmployeeDocument);
+        })
+        .catch((error) => {
+          console.error('Error adding employee document:', error);
         });
     },
     async fetchTraining(employeeId: number) {

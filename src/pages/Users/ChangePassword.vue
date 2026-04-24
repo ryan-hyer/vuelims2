@@ -6,10 +6,10 @@
         <q-input
           outlined
           type="password"
-          v-model="oldPassword"
+          v-model="currentPassword"
           label="Current Password"
           lazy-rules
-          :rules="[(val: string | any[]) => (val && val.length > 0) || 'Must not be blank']"
+          :rules="[(val: string) => !!val || 'Must not be blank']"
         />
 
         <q-input
@@ -18,63 +18,58 @@
           v-model="newPassword"
           label="New Password"
           lazy-rules
-          :rules="[(val: string | any[]) => (val && val.length > 0) || 'Must not be blank']"
+          :rules="[
+            (val: string) => !!val || 'Must not be blank',
+            (val: string) => val.length >= 8 || 'Password must be at least 8 characters',
+          ]"
         />
 
         <q-input
           outlined
           type="password"
-          v-model="newPasswordConfirm"
+          v-model="confirmPassword"
           label="New Password Again"
           lazy-rules
-          :rules="[(val: string | any[]) => (val && val.length > 0) || 'Must not be blank']"
+          :rules="[(val: string) => val === newPassword || 'Passwords do not match']"
         />
 
         <div>
-          <q-btn label="Submit" type="submit" color="primary" />
+          <q-btn label="Change Password" type="submit" color="primary" :loading="loading" />
         </div>
       </q-form>
     </div>
   </q-page>
 </template>
 
-<script lang="ts">
-import { useQuasar } from 'quasar';
+<script setup lang="ts">
 import { ref } from 'vue';
+import { useQuasar } from 'quasar';
+import { useAuthStore } from 'src/stores/auth-store';
 
-export default {
-  name: 'ChangePassword',
-  setup() {
-    const $q = useQuasar();
+const $q = useQuasar();
+const authStore = useAuthStore();
 
-    const oldPassword = ref(null);
-    const newPassword = ref(null);
-    const newPasswordConfirm = ref(null);
+const loading = ref(false);
+const currentPassword = ref('');
+const newPassword = ref('');
+const confirmPassword = ref('');
 
-    return {
-      oldPassword,
-      newPassword,
-      newPasswordConfirm,
-
-      onSubmit() {
-        // TODO: Change this from a Notify popup to a validation alert on the field itself
-        if (newPassword.value !== newPasswordConfirm.value) {
-          $q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'warning',
-            message: 'Passwords do not match',
-          });
-        } else {
-          $q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Done!',
-          });
-        }
-      },
-    };
-  },
-};
+async function onSubmit() {
+  loading.value = true;
+  try {
+    await authStore.changePassword(currentPassword.value, newPassword.value);
+    $q.notify({ type: 'positive', icon: 'check', message: 'Password changed successfully.' });
+    currentPassword.value = '';
+    newPassword.value = '';
+    confirmPassword.value = '';
+  } catch (err) {
+    $q.notify({
+      type: 'negative',
+      icon: 'warning',
+      message: err instanceof Error ? err.message : 'Password change failed.',
+    });
+  } finally {
+    loading.value = false;
+  }
+}
 </script>

@@ -9,9 +9,11 @@ import projectsJson from './data/projects.json';
 import personnel from './data/personnel.json';
 import rolesJson from './data/roles.json';
 import legalDocsJson from './data/legaldocs.json';
+import employeeDocsJson from './data/employeedocs.json';
 import employeeRolesJson from './data/employeeroles.json';
 import trainingJson from './data/training.json';
 import reviewsJson from './data/reviews.json';
+import usersJson from './data/users.json';
 
 // Mutable in-memory copies so write operations work within the session
 const projectsData = projectsJson.map((p) => ({ ...p }));
@@ -19,8 +21,13 @@ const rolesData = JSON.parse(JSON.stringify(rolesJson));
 const legalDocsData = legalDocsJson.map((doc) => ({ ...doc, url: null }));
 const employeeRolesData = employeeRolesJson.map((er) => ({ ...er }));
 const trainingData = trainingJson.map((t) => ({ ...t, url: null }));
+const employeeDocsData = employeeDocsJson.map((d) => ({ ...d, url: null }));
 const reviewsData = reviewsJson.map((r) => ({ ...r }));
 const personnelData = personnel.map((e) => ({ ...e }));
+const usersData = usersJson.map((u) => ({ ...u }));
+
+// In-memory password reset tokens keyed by lowercase email
+const resetTokens = {};
 
 const joinProject = (p) => ({
   ...p,
@@ -239,6 +246,15 @@ export default {
     if (index !== -1) legalDocsData[index] = { ...legalDocsData[index], filename, uploadDate, url };
     return Promise.resolve();
   },
+  fetchEmployeeDocs(employeeId) {
+    return fetch(employeeDocsData.filter((d) => d.employeeId === employeeId), 500);
+  },
+  addEmployeeDoc(doc) {
+    const id = employeeDocsData.length ? Math.max(...employeeDocsData.map((d) => d.id)) + 1 : 1;
+    const entry = { ...doc, id };
+    employeeDocsData.unshift(entry);
+    return Promise.resolve(entry);
+  },
   fetchTraining(employeeId) {
     return fetch(
       trainingData.filter((t) => t.employeeId === employeeId),
@@ -299,6 +315,65 @@ export default {
   deleteRole(roleId) {
     const index = rolesData.findIndex((r) => r.id === roleId);
     if (index !== -1) rolesData.splice(index, 1);
+    return Promise.resolve();
+  },
+
+  login(email, password) {
+    return fetch(usersData, 500).then((users) => {
+      const user = users.find(
+        (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password && u.active,
+      );
+      if (!user) throw new Error('Invalid email or password');
+      const safeUser = { ...user };
+      delete safeUser.password;
+      return safeUser;
+    });
+  },
+
+  fetchEmployeeRoleIds(employeeId) {
+    const ids = employeeRolesData
+      .filter((er) => er.employeeId === employeeId)
+      .map((er) => er.roleId);
+    return Promise.resolve(ids);
+  },
+
+  getCurrentUser(userId) {
+    const user = usersData.find((u) => u.id === userId && u.active);
+    if (!user) return Promise.resolve(null);
+    const safeUser = { ...user };
+    delete safeUser.password;
+    return Promise.resolve(safeUser);
+  },
+
+  async requestPasswordReset(email) {
+    const users = await fetch(usersData, 500);
+    const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase() && u.active);
+    // Don't reveal whether the email exists — always return success
+    if (!user) return { sent: true };
+    const token = Math.random().toString(36).slice(2, 10).toUpperCase();
+    resetTokens[email.toLowerCase()] = token;
+    // In production this token would be emailed; expose it here for mock use only
+    return { sent: true, _mockToken: token };
+  },
+
+  async resetPassword(email, token, newPassword) {
+    const key = email.toLowerCase();
+    if (!resetTokens[key] || resetTokens[key] !== token) {
+      throw new Error('Invalid or expired reset token');
+    }
+    const index = usersData.findIndex((u) => u.email.toLowerCase() === key);
+    if (index === -1) throw new Error('User not found');
+    usersData[index] = { ...usersData[index], password: newPassword };
+    delete resetTokens[key];
+  },
+
+  changePassword(userId, currentPassword, newPassword) {
+    const index = usersData.findIndex((u) => u.id === userId);
+    if (index === -1) return Promise.reject(new Error('User not found'));
+    if (usersData[index].password !== currentPassword) {
+      return Promise.reject(new Error('Current password is incorrect'));
+    }
+    usersData[index] = { ...usersData[index], password: newPassword };
     return Promise.resolve();
   },
 };

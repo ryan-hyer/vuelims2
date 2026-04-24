@@ -67,8 +67,8 @@
               </q-item-label>
               <q-item-label v-else caption>
                 <span class="text-red">Not Yet Verified!</span>
-                <!-- TODO: Limit visibility/access for this button to only this person's supervisor (or above, e.g. Quality Manager?) -->
                 <q-btn
+                  v-if="authStore.isSupervisorOf(ar.role?.supervisor)"
                   label="Verify Now"
                   size="xs"
                   color="primary"
@@ -102,8 +102,8 @@
               </q-item-label>
               <q-item-label v-else caption>
                 <span class="text-red">Not Yet Verified!</span>
-                <!-- TODO: Limit visibility/access for this button to only this person's supervisor (or above, e.g. Quality Manager?) -->
                 <q-btn
+                  v-if="authStore.isSupervisorOf(ar.role?.supervisor)"
                   label="Verify Now"
                   size="xs"
                   color="primary"
@@ -121,7 +121,7 @@
         </q-expansion-item>
       </q-list>
       <q-separator />
-      <q-card-actions align="right">
+      <q-card-actions v-if="authStore.isAdmin" align="right">
         <q-btn flat rounded color="red" size="sm" @click="confirmRemoveRole(ar)">
           Unassign this role
         </q-btn>
@@ -143,9 +143,8 @@
       <q-btn label="Assign Role" color="teal" :disable="selectedRoleId === null" @click="addRole" />
       <q-btn label="Cancel" flat class="q-ml-sm" @click="addRoleFormIsVisible = false" />
     </div>
-    <!-- TODO: Limit visibility/access for this button to only this person's supervisor (or above, e.g. Quality Manager?) -->
     <q-btn
-      v-else
+      v-else-if="authStore.isAdmin"
       rounded
       color="green"
       icon="add_box"
@@ -165,12 +164,14 @@ TODO:
 import { ref, computed, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import { usePersonnelStore } from 'src/stores/personnel-store';
+import { useAuthStore } from 'src/stores/auth-store';
 import type { Employee, EmployeeRoleWithDetails } from './models';
 
 const props = defineProps<{ employee: Employee }>();
 
 const $q = useQuasar();
 const store = usePersonnelStore();
+const authStore = useAuthStore();
 
 const addRoleFormIsVisible = ref(false);
 const selectedRoleId = ref<number | null>(null);

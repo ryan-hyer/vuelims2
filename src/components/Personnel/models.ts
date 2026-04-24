@@ -52,6 +52,16 @@ export interface Training {
   url: string | null;
 }
 
+export interface EmployeeDocument {
+  id: number;
+  employeeId: number;
+  title: string;
+  description: string;
+  filename: string | null;
+  uploadDate: string | null;
+  url: string | null;
+}
+
 export interface LegalDocument {
   id: number;
   title: string;
