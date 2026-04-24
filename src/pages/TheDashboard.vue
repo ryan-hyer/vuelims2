@@ -27,6 +27,7 @@
           <li>
             Almost every component has something that needs to be hidden behind user authorizations
           </li>
+          <li>So this should probably be done next</li>
         </ul>
         <li>Projects: 80% complete</li>
         <ul>
@@ -35,6 +36,7 @@
             to accept data and generate reports
           </li>
           <li>The basic data collection and editing is done, though</li>
+          <li>I'm not sure I like the project workflow, though -- rethink it a bit</li>
         </ul>
         <li>Customers: 90% complete</li>
         <ul>
@@ -45,13 +47,14 @@
         <li>Invoicing: 0% complete</li>
         <li>Organization (including Personnel): 75% complete</li>
         <ul>
-          <li>Legal Documents: need working upload functionality</li>
           <li>
-            Org Structure: need a way to edit position in the org chart (e.g. change supervisor)
+            Legal Documents: need working upload functionality as soon as I have a backend and file
+            storage
           </li>
+          <li>Org Structure: Complete! (I think)</li>
           <li>
-            Personnel: fix fields for CV and Personnel Agreement, make decision on unassign vs
-            delete roles
+            Personnel: fix fields for CV and Personnel Agreement to view the file when one is
+            uploaded, make decision on unassign vs delete roles
           </li>
         </ul>
         <li>Quality System: 0% complete</li>
