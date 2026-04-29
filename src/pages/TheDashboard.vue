@@ -14,14 +14,12 @@
       <ul>
         <li>Just need to make sure role guards are implemented where needed</li>
         <li>
-          Also need to change some of the existing role guards to allow edits by admins too, not
-          just supervisors
+          Some functions should be available to any of an employee's supervisors, as well as admins
+          (e.g. performance reviews)
         </li>
         <li>
-          And some functions should be available to any of an employee's supervisors, as well as
-          admins
+          And also flesh out the user Profile page, notifications, messages and stuff like that
         </li>
-        <li>And also flesh out the user Profile page and stuff like that</li>
       </ul>
 
       <div class="text-bold">Projects</div>
@@ -32,11 +30,14 @@
       </q-linear-progress>
       <ul>
         <li>
-          The bulk of what's incomplete cannot be finished until the datasheet templates are ready
-          to accept data and generate reports
+          Can't do much more until the datasheet templates are ready to accept data and generate
+          reports
         </li>
-        <li>The basic data collection and editing is done, though</li>
-        <li>I'm not sure I like the project workflow, though -- rethink it a bit</li>
+        <li>
+          I'm not sure I like the project workflow overall -- rethink it a bit.
+          <span class="text-bold">Do this next after Standards</span> since this is one of the most
+          important parts of this app
+        </li>
       </ul>
 
       <div class="text-bold">Customers</div>
@@ -47,10 +48,9 @@
       </q-linear-progress>
       <ul>
         <li>Once Projects module is finished, hook up the Projects/Invoices tab</li>
-        <li>Might be better to separate Projects and Invoices</li>
         <li>
-          Or leave it as is since Projects and Invoices are interdependent? Maybe not always, e.g.
-          listing fees
+          Maybe separate Projects and Invoices? Or leave it as is since Projects and Invoices are
+          interdependent? Maybe not always, e.g. listing fees
         </li>
       </ul>
 
@@ -60,6 +60,12 @@
           <q-badge color="white" text-color="accent" :label="complete.invoicing + '%'" />
         </div>
       </q-linear-progress>
+      <ul>
+        <li>
+          Most of this data will come from other places, e.g. Projects, but I can still make the
+          basics of list, search, etc.
+        </li>
+      </ul>
 
       <div class="text-bold">Organization / Personnel</div>
       <q-linear-progress size="25px" color="accent" :value="complete.organization / 100">
@@ -69,6 +75,14 @@
       </q-linear-progress>
       <ul>
         <li>Personnel: make decision on unassign vs delete roles</li>
+        <li>
+          Also try to put the personnel agreement in the system rather than have it as a document
+          that needs to be uploaded
+        </li>
+        <li>
+          If I can do that, then I might be able to include the CV in the Info tab like before, and
+          remove the Documentation tab again. But where to handle the agreement?
+        </li>
       </ul>
 
       <div class="text-bold">Quality System</div>
@@ -114,24 +128,22 @@
       </q-linear-progress>
       <ul>
         <li>
-          Let's work on this next. Give a standards spreadsheet to Claude and let it change it into
-          a mock data table
-        </li>
-        <li>
-          We'll want a list, ordered by organization then number; and functionality for uploading
-          and viewing the actual documents
-        </li>
-        <li>
-          A standard can have multiple revisions, but only the most recent should be displayed
-          unless requested -- maybe a button that opens an expansion item
-        </li>
-        <li>
-          Uploading new standard revisions should eventually be linked to a certification review
+          Adding new standard revisions should eventually be linked to a certification review
           process, if the standard is used for certifications
         </li>
         <li>
+          And if it's a test method standard, it needs to be validated and technicians need to be
+          passed off, so another process
+        </li>
+        <li>
           Also eventually, there should be a way to see all projects, certifications, etc associated
-          with a standard
+          with a given standard
+        </li>
+        <li>And we need a workflow and annual reminder for standards review</li>
+        <li>
+          Maybe we can integrate library check-out and check-in records somehow too? A separate menu
+          item if so. <span class="text-bold">Do this next</span> so we can close out the Standards
+          git branch
         </li>
       </ul>
     </div>
@@ -165,9 +177,9 @@
 
 <script setup lang="ts">
 const complete = {
-  auth: 90,
-  projects: 80,
-  customers: 90,
+  auth: 70,
+  projects: 30,
+  customers: 80,
   invoicing: 0,
   organization: 75,
   qualitySystem: 0,
@@ -175,6 +187,6 @@ const complete = {
   testing: 0,
   certification: 0,
   inspection: 0,
-  library: 0,
+  library: 80,
 };
 </script>

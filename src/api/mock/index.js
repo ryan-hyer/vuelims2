@@ -14,8 +14,10 @@ import employeeRolesJson from './data/employeeroles.json';
 import trainingJson from './data/training.json';
 import reviewsJson from './data/reviews.json';
 import usersJson from './data/users.json';
+import standardsJson from './data/standards.json';
 
 // Mutable in-memory copies so write operations work within the session
+const standardsData = standardsJson.map((s) => ({ ...s, url: null }));
 const projectsData = projectsJson.map((p) => ({ ...p }));
 const rolesData = JSON.parse(JSON.stringify(rolesJson));
 const legalDocsData = legalDocsJson.map((doc) => ({ ...doc, url: null }));
@@ -32,7 +34,10 @@ const resetTokens = {};
 const joinProject = (p) => ({
   ...p,
   customerName: customers.find((c) => c.id === p.customerId)?.name ?? 'Unknown',
-  assignedEmployeeName: (() => { const e = personnelData.find((e) => e.id === p.assignedEmployeeId); return e ? `${e.firstName} ${e.lastName}` : null; })(),
+  assignedEmployeeName: (() => {
+    const e = personnelData.find((e) => e.id === p.assignedEmployeeId);
+    return e ? `${e.firstName} ${e.lastName}` : null;
+  })(),
 });
 
 const fetch = (mockData, time = 0) => {
@@ -45,7 +50,9 @@ const fetch = (mockData, time = 0) => {
 
 const findChildren = (parent, roleData) => {
   // iterate through the roleData object to transform the flat JSON into a hierarchy usable by the Quasar Tree component
-  parent.children = roleData.filter((role) => parseInt(role.supervisor) === parseInt(parent.id));
+  parent.children = roleData
+    .filter((role) => parseInt(role.supervisor) === parseInt(parent.id))
+    .sort((a, b) => a.title.localeCompare(b.title));
   parent.children.forEach((child) => {
     findChildren(child, roleData);
   });
@@ -152,7 +159,31 @@ export default {
     return Promise.resolve(customers.map((c) => ({ id: c.id, name: c.name })));
   },
   fetchAllPersonnel() {
-    return Promise.resolve(personnelData.map((e) => ({ id: e.id, name: `${e.firstName} ${e.lastName}` })));
+    return Promise.resolve(
+      personnelData.map((e) => ({ id: e.id, name: `${e.firstName} ${e.lastName}` })),
+    );
+  },
+  async fetchAllStandardNames() {
+    const extractYear = (revision) => {
+      const match = revision.match(/\d{4}/);
+      return match ? parseInt(match[0]) : 0;
+    };
+    const latest = new Map();
+    for (const s of standardsData) {
+      const existing = latest.get(s.number);
+      if (!existing || extractYear(s.revision) > extractYear(existing.revision)) {
+        latest.set(s.number, s);
+      }
+    }
+    const options = Array.from(latest.values()).map((s) => ({
+      value: `${s.number} (${s.revision})`,
+      label: `${s.number} (${s.revision}) — ${s.title}`,
+      title: s.title,
+    }));
+    options.sort((a, b) =>
+      a.value.localeCompare(b.value, undefined, { numeric: true, sensitivity: 'base' }),
+    );
+    return options;
   },
 
   async fetchPersonnel(startRow, fetchCount, filter, sortBy, descending) {
@@ -162,7 +193,9 @@ export default {
         const employeeArray = response;
         const fullName = (e) => `${e.lastName} ${e.firstName}`;
         const data = filter
-          ? employeeArray.filter((row) => `${row.firstName} ${row.lastName}`.toLowerCase().includes(filter.toLowerCase()))
+          ? employeeArray.filter((row) =>
+              `${row.firstName} ${row.lastName}`.toLowerCase().includes(filter.toLowerCase()),
+            )
           : employeeArray.slice();
         if (sortBy) {
           const sortFn = descending
@@ -204,10 +237,14 @@ export default {
     if (index !== -1) personnelData[index] = { ...employee };
     return Promise.resolve();
   },
+  addPersonnel(employee) {
+    const id = personnelData.length ? Math.max(...personnelData.map((e) => e.id)) + 1 : 1;
+    const entry = { ...employee, id };
+    personnelData.push(entry);
+    return Promise.resolve(entry);
+  },
   addEmployeeRole(newAssignment) {
-    const id = employeeRolesData.length
-      ? Math.max(...employeeRolesData.map((er) => er.id)) + 1
-      : 1;
+    const id = employeeRolesData.length ? Math.max(...employeeRolesData.map((er) => er.id)) + 1 : 1;
     const entry = { ...newAssignment, id };
     employeeRolesData.push(entry);
     return Promise.resolve(entry);
@@ -222,7 +259,9 @@ export default {
     return fetch(personnelData).then((response) => {
       const employeeArray = response;
       const data = filter
-        ? employeeArray.filter((row) => `${row.firstName} ${row.lastName}`.toLowerCase().includes(filter.toLowerCase()))
+        ? employeeArray.filter((row) =>
+            `${row.firstName} ${row.lastName}`.toLowerCase().includes(filter.toLowerCase()),
+          )
         : employeeArray.slice();
       return data.length;
     });
@@ -234,6 +273,17 @@ export default {
       if (!root) throw new Error('No root role found in org data');
       const treeRoot = { ...root, children: [] };
       findChildren(treeRoot, roleArray);
+      const annotate = (node) => {
+        const assignedIds = employeeRolesData
+          .filter((er) => er.roleId === node.id && !er.endDate)
+          .map((er) => er.employeeId);
+        node.assignedPersonnel = personnelData
+          .filter((p) => assignedIds.includes(p.id))
+          .map((p) => `${p.firstName} ${p.lastName}`)
+          .sort((a, b) => a.localeCompare(b));
+        node.children.forEach(annotate);
+      };
+      annotate(treeRoot);
       const roleList = roleArray.map((r) => r.id);
       return [[treeRoot], roleList, roleArray];
     });
@@ -247,13 +297,21 @@ export default {
     return Promise.resolve();
   },
   fetchEmployeeDocs(employeeId) {
-    return fetch(employeeDocsData.filter((d) => d.employeeId === employeeId), 500);
+    return fetch(
+      employeeDocsData.filter((d) => d.employeeId === employeeId),
+      500,
+    );
   },
   addEmployeeDoc(doc) {
     const id = employeeDocsData.length ? Math.max(...employeeDocsData.map((d) => d.id)) + 1 : 1;
     const entry = { ...doc, id };
     employeeDocsData.unshift(entry);
     return Promise.resolve(entry);
+  },
+  deleteEmployeeDoc(id) {
+    const index = employeeDocsData.findIndex((d) => d.id === id);
+    if (index !== -1) employeeDocsData.splice(index, 1);
+    return Promise.resolve();
   },
   fetchTraining(employeeId) {
     return fetch(
@@ -374,6 +432,35 @@ export default {
       return Promise.reject(new Error('Current password is incorrect'));
     }
     usersData[index] = { ...usersData[index], password: newPassword };
+    return Promise.resolve();
+  },
+
+  fetchStandards(filter) {
+    const data = filter
+      ? standardsData.filter((s) => s.number.toLowerCase().includes(filter.toLowerCase()))
+      : standardsData.slice();
+    data.sort((a, b) => {
+      b.number.localeCompare(a.number);
+    });
+    return fetch(data, 500);
+  },
+
+  updateStandard(standard) {
+    const index = standardsData.findIndex((s) => s.id === standard.id);
+    if (index !== -1) standardsData[index] = { ...standardsData[index], ...standard };
+    return Promise.resolve();
+  },
+
+  addStandard(standard) {
+    const id = standardsData.length ? Math.max(...standardsData.map((s) => s.id)) + 1 : 1;
+    const entry = { ...standard, id, url: null };
+    standardsData.push(entry);
+    return Promise.resolve(entry);
+  },
+
+  uploadStandardDoc(id, filename, url) {
+    const index = standardsData.findIndex((s) => s.id === id);
+    if (index !== -1) standardsData[index] = { ...standardsData[index], filename, url };
     return Promise.resolve();
   },
 };

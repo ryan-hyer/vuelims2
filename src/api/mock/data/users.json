@@ -15,7 +15,7 @@
     "password": "Password1!",
     "firstName": "Ryan",
     "lastName": "Hyer",
-    "role": "user",
+    "role": "admin",
     "employeeId": 2,
     "active": true
   },

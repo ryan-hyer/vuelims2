@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <q-inner-loading :showing="!employee" label="Loading employee data..." />
+    <q-inner-loading :showing="loading" label="Loading employee data..." />
     <div class="page-header">Personnel</div>
     <div class="page-subheader q-pa-sm">
       <q-breadcrumbs>
@@ -21,14 +21,33 @@
       mobile-arrows
     >
       <q-tab name="identity" label="Employee Info" />
-      <q-tab name="roles" label="Roles & Competency" />
+      <q-tab name="roles">
+        <div class="row items-center q-gutter-xs no-wrap">
+          <span>Roles &amp; Competency</span>
+          <q-icon v-if="hasUnverifiedRoles" name="warning" color="warning" size="xs" />
+        </div>
+      </q-tab>
       <q-tab name="training" label="Training" />
       <q-tab name="reviews" label="Performance Reviews" />
-      <q-tab name="docs" label="Documentation" />
+      <q-tab name="docs">
+        <div class="row items-center q-gutter-xs no-wrap">
+          <span>Documentation</span>
+          <q-icon v-if="hasNoDocs" name="warning" color="warning" size="xs" />
+        </div>
+      </q-tab>
     </q-tabs>
     <q-separator />
 
-    <q-tab-panels v-if="employee" v-model="tab" animated>
+    <q-banner v-if="notFound" rounded class="bg-negative text-white q-ma-md">
+      <template v-slot:avatar>
+        <q-icon name="error" />
+      </template>
+      Employee record not found.
+      <template v-slot:action>
+        <q-btn flat label="Back to Personnel List" :to="{ name: 'personnel-list' }" />
+      </template>
+    </q-banner>
+    <q-tab-panels v-else-if="employee" v-model="tab" animated>
       <q-tab-panel name="identity"> <PersonnelInfo /></q-tab-panel>
       <q-tab-panel name="roles"> <PersonnelRoles :employee="employee" /></q-tab-panel>
       <q-tab-panel name="training"> <PersonnelTraining :employee="employee" /></q-tab-panel>
@@ -39,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import type { Employee } from './models';
 import { usePersonnelStore } from 'src/stores/personnel-store';
 import PersonnelInfo from './PersonnelInfo.vue';
@@ -50,6 +69,8 @@ import PersonnelDocs from './PersonnelDocs.vue';
 
 const store = usePersonnelStore();
 const employee = ref<Employee>();
+const loading = ref(true);
+const notFound = ref(false);
 
 const props = defineProps<{
   employeeId: string;
@@ -57,14 +78,27 @@ const props = defineProps<{
 
 const tab = ref('identity');
 
+const hasUnverifiedRoles = computed(() =>
+  (employee.value?.assignedRoles ?? []).some(
+    (ar) => !ar.qualifications_verified_date || !ar.probation_verified_date,
+  ),
+);
+
+const hasNoDocs = computed(() => store.employeeDocs.length === 0);
+
 onMounted(() => {
   store
     .fetchEmployee(parseInt(props.employeeId))
     .then(() => {
       employee.value = store.employee ?? undefined;
+      if (!employee.value) notFound.value = true;
     })
     .catch((error) => {
       console.log('Error fetching employee:', error);
+      notFound.value = true;
+    })
+    .finally(() => {
+      loading.value = false;
     });
 });
 </script>

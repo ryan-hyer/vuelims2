@@ -23,6 +23,9 @@
         <q-card-section>
           <ProjectInfo />
         </q-card-section>
+        <q-inner-loading :showing="loading">
+          <q-spinner size="50px" color="primary" />
+        </q-inner-loading>
       </q-card>
     </q-expansion-item>
 
@@ -68,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useProjectStore } from 'src/stores/project-store';
 import ProjectInfo from './ProjectInfo.vue';
 import ProjectData from './ProjectData.vue';
@@ -78,11 +81,15 @@ import ProjectInvoicing from './ProjectInvoicing.vue';
 const props = defineProps<{ projectId: string }>();
 
 const store = useProjectStore();
+const loading = ref(false);
 
 onMounted(async () => {
+  loading.value = true;
+  store.$patch({ project: null });
   await store.fetchProject(Number(props.projectId));
   if (store.allCustomers.length === 0 || store.allEmployees.length === 0) {
     await store.fetchProjectLookups();
   }
+  loading.value = false;
 });
 </script>

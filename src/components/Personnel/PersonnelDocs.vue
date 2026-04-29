@@ -25,18 +25,21 @@
           <q-form @submit="submitDoc" class="q-gutter-sm">
             <q-input
               filled
+              autofocus
               v-model="newDoc.title"
-              label="Document Title"
+              label="Document Title *"
+              lazy-rules
               :rules="[(val) => !!val || 'Cannot be blank']"
             />
-            <q-input filled type="textarea" rows="2" v-model="newDoc.description" label="Notes" />
+            <q-input filled type="textarea" rows="2" v-model="newDoc.description" label="Notes (optional)" />
             <div class="row items-center q-gutter-sm q-pa-sm">
               <q-icon name="attach_file" size="sm" :color="pendingFile ? 'teal' : 'grey'" />
               <div class="col">
                 <div class="text-body2">
                   {{ pendingFile ? pendingFile.name : 'No file attached' }}
                 </div>
-                <div class="text-caption text-grey">PDF, PNG, or JPG</div>
+                <div v-if="fileError" class="text-caption text-negative">A file is required</div>
+                <div v-else class="text-caption text-grey">PDF, PNG, or JPG *</div>
               </div>
               <q-btn outline color="primary" label="Attach File" @click="fileInputRef?.click()" />
             </div>
@@ -50,7 +53,7 @@
 
       <q-item v-for="doc in store.employeeDocs" :key="doc.id">
         <q-item-section>
-          <q-item-label overline>{{ doc.title }}</q-item-label>
+          <q-item-label class="text-h6">{{ doc.title }}</q-item-label>
           <q-item-label caption>{{ doc.description }}</q-item-label>
           <q-item-label caption v-if="doc.uploadDate">Uploaded {{ doc.uploadDate }}</q-item-label>
         </q-item-section>
@@ -64,10 +67,18 @@
             <q-tooltip>File not available — please re-upload</q-tooltip>
           </q-btn>
         </q-item-section>
+        <q-item-section side>
+          <q-btn flat round color="negative" icon="delete" @click="confirmDeleteDoc(doc.id, doc.title)">
+            <q-tooltip>Delete Document</q-tooltip>
+          </q-btn>
+        </q-item-section>
       </q-item>
 
       <q-item v-if="store.employeeDocs.length === 0">
-        <q-item-section class="text-grey text-italic">No documents on file.</q-item-section>
+        <q-icon name="warning" color="warning" size="lg" />
+        <q-item-section>
+          No documents on file! Upload at least a CV and the signed Personnel Agreement!
+        </q-item-section>
       </q-item>
     </q-list>
 
@@ -83,11 +94,13 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useQuasar } from 'quasar';
 import { usePersonnelStore } from 'src/stores/personnel-store';
 import type { Employee } from './models';
 
 const props = defineProps<{ employee: Employee }>();
 
+const $q = useQuasar();
 const store = usePersonnelStore();
 
 const newFormVisible = ref(false);
@@ -96,6 +109,7 @@ const fileInputRef = ref<HTMLInputElement | null>(null);
 const pendingFile = ref<File | null>(null);
 
 const newDoc = ref({ title: '', description: '' });
+const fileError = ref(false);
 
 const viewFile = (url: string | null) => {
   if (url) window.open(url, '_blank');
@@ -103,16 +117,22 @@ const viewFile = (url: string | null) => {
 
 const onFileSelected = (e: Event) => {
   pendingFile.value = (e.target as HTMLInputElement).files?.[0] ?? null;
+  if (pendingFile.value) fileError.value = false;
 };
 
 const cancelNew = () => {
   newFormVisible.value = false;
   newDoc.value = { title: '', description: '' };
   pendingFile.value = null;
+  fileError.value = false;
   if (fileInputRef.value) fileInputRef.value.value = '';
 };
 
 const submitDoc = async () => {
+  if (!pendingFile.value) {
+    fileError.value = true;
+    return;
+  }
   adding.value = true;
   const url = pendingFile.value ? URL.createObjectURL(pendingFile.value) : null;
   const uploadDate = pendingFile.value ? new Date().toISOString().substring(0, 10) : null;
@@ -126,6 +146,17 @@ const submitDoc = async () => {
   });
   adding.value = false;
   cancelNew();
+};
+
+const confirmDeleteDoc = (id: number, title: string) => {
+  $q.dialog({
+    title: 'Delete Document',
+    message: `Delete "${title}"? This cannot be undone.`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    void store.deleteEmployeeDoc(id);
+  });
 };
 
 onMounted(async () => {

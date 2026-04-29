@@ -66,7 +66,13 @@
                   </q-item-section>
                   <q-item-section>User Settings</q-item-section>
                 </q-item>
-                <q-item v-if="authStore.isAdmin" clickable v-ripple v-close-popup :to="{ name: 'change-password' }">
+                <q-item
+                  v-if="authStore.isAdmin"
+                  clickable
+                  v-ripple
+                  v-close-popup
+                  :to="{ name: 'change-password' }"
+                >
                   <q-item-section avatar>
                     <q-icon color="grey-8" name="admin_panel_settings"></q-icon>
                   </q-item-section>
@@ -216,7 +222,7 @@ const linkSectionList: MenuLinkSectionProps[] = [
     title: 'Library',
     icon: 'local_library',
     linksList: [
-      { icon: 'library_books', title: 'Standards', link: 'home' },
+      { icon: 'library_books', title: 'Standards', link: 'standard-list' },
       { icon: 'help', title: 'TBD-LibSvcs', link: 'home' },
     ],
   },

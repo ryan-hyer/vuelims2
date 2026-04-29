@@ -128,6 +128,23 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/standards',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'standard-list',
+        component: () => import('components/Standards/StandardList.vue'),
+      },
+      {
+        path: 'new',
+        name: 'standard-new',
+        component: () => import('components/Standards/StandardNew.vue'),
+      },
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

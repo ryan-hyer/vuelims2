@@ -1,0 +1,10 @@
+{
+  "@context": "https://isoics.org/ics/ns/subgroup.jsonld",
+  "code": "21.120.10",
+  "description": "Shafts",
+  "descriptionFull": "Mechanical systems and components for general use. Shafts and couplings. Shafts.",
+  "edition": 7,
+  "fieldcode": "21",
+  "groupcode": "120",
+  "subgroupcode": "10"
+}

@@ -62,7 +62,7 @@
   },
   {
     "id": 3,
-    "title": "TEi-TS - Executive Director",
+    "title": "TEi-Testing Services - Executive Director",
     "supervisor": 1,
     "roleDescription": "The TEi-TS Executive Director is responsible for the administrative oversight and overall operation of TEi-TS as well as the supervision of all TEi-TS personnel.",
     "keyDuties": [
@@ -90,7 +90,7 @@
   },
   {
     "id": 4,
-    "title": "TEi-TS - Laboratory Director",
+    "title": "TEi-TS - Analytical Director",
     "supervisor": 3,
     "roleDescription": "A TEi-TS laboratory Director is responsible for managing the operations of a specific laboratory, e.g. electrical, plumbing, mechanical. Each laboratory Director reports to the TEi-TS Executive Director.",
     "keyDuties": [
@@ -114,7 +114,7 @@
   },
   {
     "id": 5,
-    "title": "TEi-TS - Laboratory Technician",
+    "title": "TEi-TS - Analytical Technician",
     "supervisor": 4,
     "roleDescription": "A TEi-TS laboratory technician is responsible for performing the actual laboratory testing. Laboratory technicians report to their respective laboratory Director.",
     "keyDuties": [
@@ -138,7 +138,295 @@
   },
   {
     "id": 6,
-    "title": "TEi-LS - Director",
+    "title": "TEi-TS - Electrical Director",
+    "supervisor": 3,
+    "roleDescription": "A TEi-TS laboratory Director is responsible for managing the operations of a specific laboratory, e.g. electrical, plumbing, mechanical. Each laboratory Director reports to the TEi-TS Executive Director.",
+    "keyDuties": [
+      "Responsible for the day-to-day operation of the laboratory.",
+      "Ensures the quality of work, documentation, records, reports, and other activities performed by the laboratory and its technicians.",
+      "Supervises all technical employees of the laboratory, to include training, performance evaluations, and recommending remedial action.",
+      "Assures that test samples are accepted and handled in accordance with requirements."
+    ],
+    "authorizations": ["Supervise technicians"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Five years of office management experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures",
+      "Understanding of duties and responsibilities of other laboratory positions"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "TEi-TS - Electrical Technician",
+    "supervisor": 6,
+    "roleDescription": "A TEi-TS laboratory technician is responsible for performing the actual laboratory testing. Laboratory technicians report to their respective laboratory Director.",
+    "keyDuties": [
+      "Performs laboratory testing in accordance with specified test methods and TEi-TS procedures.",
+      "Maintains equipment, supplies, glassware, etc in a good operating and interference-free condition.",
+      "Reports problems that are not immediately remediable to his or her supervisor.",
+      "Operates equipment correctly and safely.",
+      "Maintains his or her work environment clean and organized."
+    ],
+    "authorizations": ["Perform testing and record data"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A high school diploma",
+      "- Some documented or demonstrated work experience in a technical field",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures"
+    ]
+  },
+  {
+    "id": 8,
+    "title": "TEi-TS - Fire Director",
+    "supervisor": 3,
+    "roleDescription": "A TEi-TS laboratory Director is responsible for managing the operations of a specific laboratory, e.g. electrical, plumbing, mechanical. Each laboratory Director reports to the TEi-TS Executive Director.",
+    "keyDuties": [
+      "Responsible for the day-to-day operation of the laboratory.",
+      "Ensures the quality of work, documentation, records, reports, and other activities performed by the laboratory and its technicians.",
+      "Supervises all technical employees of the laboratory, to include training, performance evaluations, and recommending remedial action.",
+      "Assures that test samples are accepted and handled in accordance with requirements."
+    ],
+    "authorizations": ["Supervise technicians"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Five years of office management experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures",
+      "Understanding of duties and responsibilities of other laboratory positions"
+    ]
+  },
+  {
+    "id": 9,
+    "title": "TEi-TS - Fire Technician",
+    "supervisor": 8,
+    "roleDescription": "A TEi-TS laboratory technician is responsible for performing the actual laboratory testing. Laboratory technicians report to their respective laboratory Director.",
+    "keyDuties": [
+      "Performs laboratory testing in accordance with specified test methods and TEi-TS procedures.",
+      "Maintains equipment, supplies, glassware, etc in a good operating and interference-free condition.",
+      "Reports problems that are not immediately remediable to his or her supervisor.",
+      "Operates equipment correctly and safely.",
+      "Maintains his or her work environment clean and organized."
+    ],
+    "authorizations": ["Perform testing and record data"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A high school diploma",
+      "- Some documented or demonstrated work experience in a technical field",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures"
+    ]
+  },
+  {
+    "id": 10,
+    "title": "TEi-TS - Mechanical Director",
+    "supervisor": 3,
+    "roleDescription": "A TEi-TS laboratory Director is responsible for managing the operations of a specific laboratory, e.g. electrical, plumbing, mechanical. Each laboratory Director reports to the TEi-TS Executive Director.",
+    "keyDuties": [
+      "Responsible for the day-to-day operation of the laboratory.",
+      "Ensures the quality of work, documentation, records, reports, and other activities performed by the laboratory and its technicians.",
+      "Supervises all technical employees of the laboratory, to include training, performance evaluations, and recommending remedial action.",
+      "Assures that test samples are accepted and handled in accordance with requirements."
+    ],
+    "authorizations": ["Supervise technicians"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Five years of office management experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures",
+      "Understanding of duties and responsibilities of other laboratory positions"
+    ]
+  },
+  {
+    "id": 11,
+    "title": "TEi-TS - Mechanical Technician",
+    "supervisor": 10,
+    "roleDescription": "A TEi-TS laboratory technician is responsible for performing the actual laboratory testing. Laboratory technicians report to their respective laboratory Director.",
+    "keyDuties": [
+      "Performs laboratory testing in accordance with specified test methods and TEi-TS procedures.",
+      "Maintains equipment, supplies, glassware, etc in a good operating and interference-free condition.",
+      "Reports problems that are not immediately remediable to his or her supervisor.",
+      "Operates equipment correctly and safely.",
+      "Maintains his or her work environment clean and organized."
+    ],
+    "authorizations": ["Perform testing and record data"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A high school diploma",
+      "- Some documented or demonstrated work experience in a technical field",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "TEi-TS - Plumbing Director",
+    "supervisor": 3,
+    "roleDescription": "A TEi-TS laboratory Director is responsible for managing the operations of a specific laboratory, e.g. electrical, plumbing, mechanical. Each laboratory Director reports to the TEi-TS Executive Director.",
+    "keyDuties": [
+      "Responsible for the day-to-day operation of the laboratory.",
+      "Ensures the quality of work, documentation, records, reports, and other activities performed by the laboratory and its technicians.",
+      "Supervises all technical employees of the laboratory, to include training, performance evaluations, and recommending remedial action.",
+      "Assures that test samples are accepted and handled in accordance with requirements."
+    ],
+    "authorizations": ["Supervise technicians"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Five years of office management experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures",
+      "Understanding of duties and responsibilities of other laboratory positions"
+    ]
+  },
+  {
+    "id": 13,
+    "title": "TEi-TS - Plumbing Technician",
+    "supervisor": 12,
+    "roleDescription": "A TEi-TS laboratory technician is responsible for performing the actual laboratory testing. Laboratory technicians report to their respective laboratory Director.",
+    "keyDuties": [
+      "Performs laboratory testing in accordance with specified test methods and TEi-TS procedures.",
+      "Maintains equipment, supplies, glassware, etc in a good operating and interference-free condition.",
+      "Reports problems that are not immediately remediable to his or her supervisor.",
+      "Operates equipment correctly and safely.",
+      "Maintains his or her work environment clean and organized."
+    ],
+    "authorizations": ["Perform testing and record data"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A high school diploma",
+      "- Some documented or demonstrated work experience in a technical field",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures"
+    ]
+  },
+  {
+    "id": 14,
+    "title": "TEi-TS - Roofing Director",
+    "supervisor": 3,
+    "roleDescription": "A TEi-TS laboratory Director is responsible for managing the operations of a specific laboratory, e.g. electrical, plumbing, mechanical. Each laboratory Director reports to the TEi-TS Executive Director.",
+    "keyDuties": [
+      "Responsible for the day-to-day operation of the laboratory.",
+      "Ensures the quality of work, documentation, records, reports, and other activities performed by the laboratory and its technicians.",
+      "Supervises all technical employees of the laboratory, to include training, performance evaluations, and recommending remedial action.",
+      "Assures that test samples are accepted and handled in accordance with requirements."
+    ],
+    "authorizations": ["Supervise technicians"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Five years of office management experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures",
+      "Understanding of duties and responsibilities of other laboratory positions"
+    ]
+  },
+  {
+    "id": 15,
+    "title": "TEi-TS - Roofing Technician",
+    "supervisor": 14,
+    "roleDescription": "A TEi-TS laboratory technician is responsible for performing the actual laboratory testing. Laboratory technicians report to their respective laboratory Director.",
+    "keyDuties": [
+      "Performs laboratory testing in accordance with specified test methods and TEi-TS procedures.",
+      "Maintains equipment, supplies, glassware, etc in a good operating and interference-free condition.",
+      "Reports problems that are not immediately remediable to his or her supervisor.",
+      "Operates equipment correctly and safely.",
+      "Maintains his or her work environment clean and organized."
+    ],
+    "authorizations": ["Perform testing and record data"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A high school diploma",
+      "- Some documented or demonstrated work experience in a technical field",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures"
+    ]
+  },
+  {
+    "id": 16,
+    "title": "TEi-TS - Stone & Tile Director",
+    "supervisor": 3,
+    "roleDescription": "A TEi-TS laboratory Director is responsible for managing the operations of a specific laboratory, e.g. electrical, plumbing, mechanical. Each laboratory Director reports to the TEi-TS Executive Director.",
+    "keyDuties": [
+      "Responsible for the day-to-day operation of the laboratory.",
+      "Ensures the quality of work, documentation, records, reports, and other activities performed by the laboratory and its technicians.",
+      "Supervises all technical employees of the laboratory, to include training, performance evaluations, and recommending remedial action.",
+      "Assures that test samples are accepted and handled in accordance with requirements."
+    ],
+    "authorizations": ["Supervise technicians"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A college or university degree in an Engineering or Business Administration field",
+      "- Five years of office management experience",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures",
+      "Understanding of duties and responsibilities of other laboratory positions"
+    ]
+  },
+  {
+    "id": 17,
+    "title": "TEi-TS - Stone & Tile Technician",
+    "supervisor": 16,
+    "roleDescription": "A TEi-TS laboratory technician is responsible for performing the actual laboratory testing. Laboratory technicians report to their respective laboratory Director.",
+    "keyDuties": [
+      "Performs laboratory testing in accordance with specified test methods and TEi-TS procedures.",
+      "Maintains equipment, supplies, glassware, etc in a good operating and interference-free condition.",
+      "Reports problems that are not immediately remediable to his or her supervisor.",
+      "Operates equipment correctly and safely.",
+      "Maintains his or her work environment clean and organized."
+    ],
+    "authorizations": ["Perform testing and record data"],
+    "hiringQualifications": [
+      "Education/Experience - The following, or a demonstrated equivalent combination:",
+      "- A high school diploma",
+      "- Some documented or demonstrated work experience in a technical field",
+      "Physical Requirements - Must possess mobility to work in a standard office setting and to use standard office equipment, including a computer, and to attend meetings at various sites within and away from the company; strength to lift and carry materials weighing up to 20 pounds; vision to read printed materials and a computer screen; and hearing and speech to communicate in person and over the telephone."
+    ],
+    "probationTargets": [
+      "Understanding of the TEi Quality Management System",
+      "Understanding of good laboratory testing procedures"
+    ]
+  },
+  {
+    "id": 18,
+    "title": "TEi-Listing Services - Director",
     "supervisor": 1,
     "roleDescription": "The TEi-LS Director has overall responsibility for the management of TEi-LS operations.",
     "keyDuties": [
@@ -179,9 +467,9 @@
     ]
   },
   {
-    "id": 7,
-    "title": "Listing Compliance Engineer",
-    "supervisor": 6,
+    "id": 19,
+    "title": "TEi-LS Listing Compliance Engineer",
+    "supervisor": 18,
     "roleDescription": "The Listing Compliance Engineer (LCE) supplies the basic technical knowledge of the products and standards involved in the TEi-LS certification programs, coordinates certification evaluation activities, and performs the evaluation review and certification decision.",
     "keyDuties": [
       "Monitors and manages the day-to-day operations of certification files, including reviewing applications, reports, manuals, standards, codes and other documents in accordance with TEi-LS policies and procedures.",
@@ -211,39 +499,19 @@
     ]
   },
   {
-    "id": 9,
-    "title": "Human Resources Director",
+    "id": 20,
+    "title": "TEi-Inspection Services - Director",
     "supervisor": 1,
-    "roleDescription": "The Human Resources Director manages the human resources function for Testing Engineers International, supporting recruitment, onboarding, employee relations, and compliance across all divisions.",
+    "roleDescription": "",
     "keyDuties": [],
     "authorizations": [],
     "hiringQualifications": [],
     "probationTargets": []
   },
   {
-    "id": 10,
-    "title": "TEi-TS - Stone & Tile Director",
-    "supervisor": 3,
-    "roleDescription": "The TEi-TS Stone & Tile Director manages the operations of the Stone & Tile laboratory, overseeing all testing activities, personnel, equipment, and compliance within that laboratory.",
-    "keyDuties": [],
-    "authorizations": [],
-    "hiringQualifications": [],
-    "probationTargets": []
-  },
-  {
-    "id": 11,
-    "title": "TEi-TS - Analytical Technician",
-    "supervisor": 3,
-    "roleDescription": "The TEi-TS Analytical Technician performs analytical laboratory testing and reports directly to the TEi-TS Executive Director.",
-    "keyDuties": [],
-    "authorizations": [],
-    "hiringQualifications": [],
-    "probationTargets": []
-  },
-  {
-    "id": 8,
+    "id": 21,
     "title": "TEi-IS - Inspector",
-    "supervisor": 1,
+    "supervisor": 20,
     "roleDescription": "An Inspector performs the actual inspection work done by TEi-IS. This may involve traveling to client sites, collecting samples, recording data, and compiling and reporting results. Most inspections done at TEi are in support of TEi-LS certification work, but some inspections are independent third-party inspections for external clients.",
     "keyDuties": [
       "Plans and schedules travel arrangements. Travels to clients' facilities and accomplishes inspections in accordance with client needs and TEi-IS policies and procedures.",
@@ -272,5 +540,65 @@
       "Basic understanding of the standards used in the TEi-LS certification programs",
       "Successful completion of at least five inspections under the supervision of the Director, the Listing Compliance Engineer, and the Quality Manager"
     ]
+  },
+  {
+    "id": 22,
+    "title": "TEi-Support Services - Director",
+    "supervisor": 1,
+    "roleDescription": "",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": []
+  },
+  {
+    "id": 23,
+    "title": "TEi-Calibration Services - Director",
+    "supervisor": 1,
+    "roleDescription": "",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": []
+  },
+  {
+    "id": 24,
+    "title": "TEi-Administrative Services - Director",
+    "supervisor": 1,
+    "roleDescription": "",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": []
+  },
+  {
+    "id": 25,
+    "title": "TEi-AS - Librarian",
+    "supervisor": 24,
+    "roleDescription": "",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": []
+  },
+  {
+    "id": 26,
+    "title": "TEi-AS - Human Resources",
+    "supervisor": 24,
+    "roleDescription": "",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": []
+  },
+  {
+    "id": 27,
+    "title": "TEi-AS - Accounting",
+    "supervisor": 24,
+    "roleDescription": "",
+    "keyDuties": [],
+    "authorizations": [],
+    "hiringQualifications": [],
+    "probationTargets": []
   }
 ]

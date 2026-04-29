@@ -18,7 +18,20 @@
         v-model:selected="selected"
         v-model:expanded="expanded"
         default-expand-all
-      />
+      >
+        <template v-slot:default-header="prop">
+          <div>
+            <div>{{ prop.node.title }}</div>
+            <div
+              v-for="name in prop.node.assignedPersonnel"
+              :key="name"
+              class="text-caption text-grey-7"
+            >
+              {{ name }}
+            </div>
+          </div>
+        </template>
+      </q-tree>
     </div>
   </q-page>
 

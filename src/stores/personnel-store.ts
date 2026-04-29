@@ -125,6 +125,16 @@ export const usePersonnelStore = defineStore('personnel', {
           console.error('Error adding employee document:', error);
         });
     },
+    async deleteEmployeeDoc(id: number) {
+      await api
+        .deleteEmployeeDoc(id)
+        .then(() => {
+          this.employeeDocs = this.employeeDocs.filter((d) => d.id !== id);
+        })
+        .catch((error) => {
+          console.error('Error deleting employee document:', error);
+        });
+    },
     async fetchTraining(employeeId: number) {
       await api
         .fetchTraining(employeeId)
@@ -274,13 +284,20 @@ export const usePersonnelStore = defineStore('personnel', {
           console.error('Error updating employee:', error);
         });
     },
-    addEmployee(newEmployee: Employee) {
-      newEmployee.id = this.employees.length
-        ? Math.max(...this.employees.map((e) => e.id)) + 1
-        : 1;
-      this.employees.push(newEmployee);
-      this.employees.sort((a, b) => a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName));
-      return newEmployee.id; // so that we can immediately navigate to the new employee's detail page
+    async addEmployee(newEmployee: Employee): Promise<number> {
+      let newId = 0;
+      await api
+        .addPersonnel(newEmployee)
+        .then((created) => {
+          const employee = created as Employee;
+          this.employees.push(employee);
+          this.employees.sort((a, b) => a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName));
+          newId = employee.id;
+        })
+        .catch((error) => {
+          console.error('Error adding employee:', error);
+        });
+      return newId;
     },
   },
 });

@@ -4,18 +4,19 @@
     <q-table
       flat
       bordered
-      dense
       :rows="projects"
       :columns="columns"
       row-key="id"
       :loading="loading"
       :filter="filter"
+      :pagination="{ sortBy: 'startDate' }"
       :table-row-class-fn="rowClassFn"
       @row-click="onRowClick"
     >
       <template v-slot:top>
         <q-toolbar>
           <q-input v-model="filter" placeholder="Search projects..." dense outlined clearable />
+          <q-toggle v-model="hideCompleted" label="Hide completed" class="q-ml-md" />
           <q-space />
           <q-btn round color="green" icon="add" class="q-ma-sm" :to="{ name: 'project-new' }">
             <q-tooltip>Add New Project</q-tooltip>
@@ -44,8 +45,11 @@ const store = useProjectStore();
 
 const filter = ref('');
 const loading = ref(false);
+const hideCompleted = ref(false);
 
-const projects = computed(() => store.projects);
+const projects = computed(() =>
+  hideCompleted.value ? store.projects.filter((p) => !p.completeDate) : store.projects,
+);
 
 onMounted(async () => {
   loading.value = true;
@@ -67,6 +71,12 @@ const columns: QTableColumn[] = [
     field: 'startDate',
     align: 'left',
     sortable: true,
+    sort: (a: string, b: string, rowA: { number: string }, rowB: { number: string }) => {
+      const byDate = a.localeCompare(b);
+      return byDate !== 0
+        ? byDate
+        : rowA.number.localeCompare(rowB.number, undefined, { numeric: true, sensitivity: 'base' });
+    },
   },
   {
     name: 'customer',

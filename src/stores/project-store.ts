@@ -7,12 +7,19 @@ interface LookupItem {
   name: string;
 }
 
+interface StandardOption {
+  value: string;
+  label: string;
+  title: string;
+}
+
 export const useProjectStore = defineStore('projects', {
   state: () => ({
     projects: [] as ProjectWithDetails[],
     project: null as ProjectWithDetails | null,
     allCustomers: [] as LookupItem[],
     allEmployees: [] as LookupItem[],
+    allStandards: [] as StandardOption[],
   }),
 
   actions: {
@@ -68,10 +75,15 @@ export const useProjectStore = defineStore('projects', {
         });
     },
     async fetchProjectLookups() {
-      await Promise.all([api.fetchAllCustomers(), api.fetchAllPersonnel()])
-        .then(([customers, employees]) => {
+      await Promise.all([
+        api.fetchAllCustomers(),
+        api.fetchAllPersonnel(),
+        api.fetchAllStandardNames(),
+      ])
+        .then(([customers, employees, standards]) => {
           this.allCustomers = customers as LookupItem[];
           this.allEmployees = employees as LookupItem[];
+          this.allStandards = standards as StandardOption[];
         })
         .catch((error) => {
           console.error('Error fetching project lookups:', error);

@@ -4,7 +4,6 @@
     <q-table
       flat
       bordered
-      dense
       ref="employeeTable"
       :rows="employees"
       :columns="columns"

@@ -68,7 +68,7 @@
               <q-item-label v-else caption>
                 <span class="text-red">Not Yet Verified!</span>
                 <q-btn
-                  v-if="authStore.isSupervisorOf(ar.role?.supervisor)"
+                  v-if="authStore.isSupervisorOf(ar.role?.supervisor) || authStore.isAdmin"
                   label="Verify Now"
                   size="xs"
                   color="primary"
@@ -103,7 +103,7 @@
               <q-item-label v-else caption>
                 <span class="text-red">Not Yet Verified!</span>
                 <q-btn
-                  v-if="authStore.isSupervisorOf(ar.role?.supervisor)"
+                  v-if="authStore.isSupervisorOf(ar.role?.supervisor) || authStore.isAdmin"
                   label="Verify Now"
                   size="xs"
                   color="primary"
@@ -182,32 +182,18 @@ const supervisorTitle = (supervisorId: number | null | undefined) => {
 };
 
 const openVerifyQualifications = (assignmentId: number) => {
-  // After authentication is set up, the person doing the verifying will be the current user, who presumably is this employee's supervisor, so we won't need to ask for their name. For now, though, we'll just ask for it in a dialog.
-  $q.dialog({
-    title: 'Verify Hiring Qualifications',
-    message: 'Enter the name of the person verifying these qualifications:',
-    prompt: { model: '', type: 'text', isValid: (val: string) => val.trim().length > 0 },
-    cancel: true,
-  }).onOk((name: string) => {
-    void store.verifyQualifications(assignmentId, name.trim());
-  });
+  void store.verifyQualifications(assignmentId, authStore.fullName);
 };
 
 const openVerifyProbation = (assignmentId: number) => {
-  // Same as above, eventually change the name to the current authenticated user
-  $q.dialog({
-    title: 'Verify 90-Day Probation Targets',
-    message: 'Enter the name of the person verifying these targets:',
-    prompt: { model: '', type: 'text', isValid: (val: string) => val.trim().length > 0 },
-    cancel: true,
-  }).onOk((name: string) => {
-    void store.verifyProbation(assignmentId, name.trim());
-  });
+  void store.verifyProbation(assignmentId, authStore.fullName);
 };
 
 const availableRoles = computed(() => {
   const assignedIds = new Set((props.employee.assignedRoles ?? []).map((ar) => ar.roleId));
-  return store.allRoles.filter((r) => !assignedIds.has(r.id));
+  return store.allRoles
+    .filter((r) => !assignedIds.has(r.id))
+    .sort((a, b) => a.title.localeCompare(b.title));
 });
 
 const addRole = async () => {

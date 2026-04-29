@@ -85,24 +85,6 @@
             </q-icon>
           </template>
         </q-input>
-        <div class="row items-center q-gutter-sm q-pa-sm">
-          <q-icon name="attach_file" size="sm" :color="resumeFile ? 'teal' : 'grey'" />
-          <div class="col">
-            <div class="text-caption text-grey-7">Resume / CV (optional)</div>
-            <div class="text-body2">{{ resumeFile ? resumeFile.name : 'No file selected' }}</div>
-          </div>
-          <q-btn outline color="primary" label="Attach File" @click="resumeInputRef?.click()" />
-        </div>
-        <div class="row items-center q-gutter-sm q-pa-sm">
-          <q-icon name="attach_file" size="sm" :color="agreementFile ? 'teal' : 'grey'" />
-          <div class="col">
-            <div class="text-caption text-grey-7">Personnel Agreement (optional)</div>
-            <div class="text-body2">{{ agreementFile ? agreementFile.name : 'No file selected' }}</div>
-          </div>
-          <q-btn outline color="primary" label="Attach File" @click="agreementInputRef?.click()" />
-        </div>
-        <input ref="resumeInputRef" type="file" accept=".pdf" style="display: none" @change="onResumeSelected" />
-        <input ref="agreementInputRef" type="file" accept=".pdf" style="display: none" @change="onAgreementSelected" />
         <q-separator />
         <div>
           <q-btn label="Add Employee" type="submit" color="teal" />
@@ -132,20 +114,9 @@ const newEmployee = ref({
   hireDate: '',
 });
 
-const resumeInputRef = ref<HTMLInputElement | null>(null);
-const resumeFile = ref<File | null>(null);
-const agreementInputRef = ref<HTMLInputElement | null>(null);
-const agreementFile = ref<File | null>(null);
 
-const onResumeSelected = (e: Event) => {
-  resumeFile.value = (e.target as HTMLInputElement).files?.[0] ?? null;
-};
-const onAgreementSelected = (e: Event) => {
-  agreementFile.value = (e.target as HTMLInputElement).files?.[0] ?? null;
-};
-
-const submitForm = () => {
-  const id = store.addEmployee({ id: 0, ...newEmployee.value } as Employee);
+const submitForm = async () => {
+  const id = await store.addEmployee({ id: 0, ...newEmployee.value } as Employee);
   void router.push({ name: 'personnel-detail', params: { employeeId: id } });
 };
 </script>
