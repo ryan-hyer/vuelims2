@@ -7,19 +7,11 @@ interface LookupItem {
   name: string;
 }
 
-interface StandardOption {
-  value: string;
-  label: string;
-  title: string;
-}
-
 export const useProjectStore = defineStore('projects', {
   state: () => ({
     projects: [] as ProjectWithDetails[],
     project: null as ProjectWithDetails | null,
     allCustomers: [] as LookupItem[],
-    allEmployees: [] as LookupItem[],
-    allStandards: [] as StandardOption[],
   }),
 
   actions: {
@@ -63,9 +55,7 @@ export const useProjectStore = defineStore('projects', {
         .then(() => {
           const customerName =
             this.allCustomers.find((c) => c.id === project.customerId)?.name ?? 'Unknown';
-          const assignedEmployeeName =
-            this.allEmployees.find((e) => e.id === project.assignedEmployeeId)?.name ?? null;
-          const updated: ProjectWithDetails = { ...project, customerName, assignedEmployeeName };
+          const updated: ProjectWithDetails = { ...project, customerName };
           this.project = updated;
           const index = this.projects.findIndex((p) => p.id === project.id);
           if (index !== -1) this.projects[index] = updated;
@@ -75,15 +65,10 @@ export const useProjectStore = defineStore('projects', {
         });
     },
     async fetchProjectLookups() {
-      await Promise.all([
-        api.fetchAllCustomers(),
-        api.fetchAllPersonnel(),
-        api.fetchAllStandardNames(),
-      ])
-        .then(([customers, employees, standards]) => {
+      await api
+        .fetchAllCustomers()
+        .then((customers) => {
           this.allCustomers = customers as LookupItem[];
-          this.allEmployees = employees as LookupItem[];
-          this.allStandards = standards as StandardOption[];
         })
         .catch((error) => {
           console.error('Error fetching project lookups:', error);

@@ -26,8 +26,8 @@
       </template>
       <template v-slot:body-cell-description="props">
         <q-td :props="props" style="max-width: fit-content">
-          {{ props.row.description.substring(0, 30) }}
-          <span v-if="props.row.description.length > 30">...</span>
+          {{ props.row.description?.substring(0, 30) }}
+          <span v-if="(props.row.description?.length ?? 0) > 30">...</span>
         </q-td>
       </template>
     </q-table>
@@ -61,7 +61,7 @@ const columns: QTableColumn[] = [
   {
     name: 'jobNumber',
     label: 'Job Number',
-    field: 'number',
+    field: 'jobNumber',
     align: 'left',
     sortable: true,
   },
@@ -71,11 +71,11 @@ const columns: QTableColumn[] = [
     field: 'startDate',
     align: 'left',
     sortable: true,
-    sort: (a: string, b: string, rowA: { number: string }, rowB: { number: string }) => {
+    sort: (a: string, b: string, rowA: { jobNumber: string }, rowB: { jobNumber: string }) => {
       const byDate = a.localeCompare(b);
       return byDate !== 0
         ? byDate
-        : rowA.number.localeCompare(rowB.number, undefined, { numeric: true, sensitivity: 'base' });
+        : rowA.jobNumber.localeCompare(rowB.jobNumber, undefined, { numeric: true, sensitivity: 'base' });
     },
   },
   {

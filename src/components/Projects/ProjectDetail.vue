@@ -4,7 +4,7 @@
     <div class="page-subheader q-pa-sm">
       <q-breadcrumbs>
         <q-breadcrumbs-el label="Project List" :to="{ name: 'project-list' }" />
-        <q-breadcrumbs-el :label="store.project?.number ?? props.projectId" />
+        <q-breadcrumbs-el :label="store.project?.jobNumber ?? props.projectId" />
       </q-breadcrumbs>
     </div>
 
@@ -87,7 +87,7 @@ onMounted(async () => {
   loading.value = true;
   store.$patch({ project: null });
   await store.fetchProject(Number(props.projectId));
-  if (store.allCustomers.length === 0 || store.allEmployees.length === 0) {
+  if (store.allCustomers.length === 0) {
     await store.fetchProjectLookups();
   }
   loading.value = false;

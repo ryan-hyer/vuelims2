@@ -5,6 +5,24 @@
     <div>
       <p class="text-h6 q-pt-md">App Completion Status:</p>
 
+      <div class="text-bold">Overall</div>
+      <q-linear-progress size="25px" color="accent" :value="complete.overall / 100">
+        <div class="absolute-full flex flex-center">
+          <q-badge color="white" text-color="accent" :label="complete.overall + '%'" />
+        </div>
+      </q-linear-progress>
+      <ul>
+        <li>
+          Also think about how this all might integrate with a new public site, things like library
+          check-out and return, access to completed reports, application process, submitting
+          payments, etc.
+        </li>
+        <li>
+          Might be helpful to have each module have its own color, then use that as the accent color
+          throughout those pages, kind of like the internal audit
+        </li>
+      </ul>
+
       <div class="text-bold">Authentication and Authorization</div>
       <q-linear-progress size="25px" color="accent" :value="complete.auth / 100">
         <div class="absolute-full flex flex-center">
@@ -30,13 +48,26 @@
       </q-linear-progress>
       <ul>
         <li>
-          Can't do much more until the datasheet templates are ready to accept data and generate
-          reports
+          Maybe the best way is to not have a consolidated Projects menu item, but instead have
+          separate lists, each with their own New Project button, all of which go to the same route
+          with a different query param or something to determine the project type? Or try both?
+          Maybe even separate models and tables for different project types, back to the modular
+          idea.
         </li>
         <li>
-          I'm not sure I like the project workflow overall -- rethink it a bit.
-          <span class="text-bold">Do this next after Standards</span> since this is one of the most
-          important parts of this app
+          Redo the Project model based on recent notes. Create models for different project types
+          that extend Project. Might be best to completely separate project tracking and logic by
+          company.
+        </li>
+        <li>
+          Redo the new project form, have the New Project button pull down a list of project types
+          to pick from, which will get sent to the New Project form and populate the job number,
+          determine which fields get displayed, and also determine who gets assigned to the project.
+        </li>
+        <li>
+          For this to work, we'll need some logic that assigns an employee based on their role.
+          Maybe a lab code field attached to Director roles. Supervisors can then delegate to
+          technicians? Maybe too complicated at this point.
         </li>
       </ul>
 
@@ -112,6 +143,18 @@
           <q-badge color="white" text-color="accent" :label="complete.certification + '%'" />
         </div>
       </q-linear-progress>
+      <ul>
+        <li>Do next: create models for Categories (data from fee schedule) and Certifications</li>
+        <li>
+          Need a section for QRC and a way to generate the prior year's project list along with PDF
+          datasheets
+        </li>
+        <li>
+          Ooh ooh, make the model numbers in a listing be clickable and bring up a dialog with
+          drawings and documents for that model (might mean a large table with an entry for every
+          single model listed by all clients)
+        </li>
+      </ul>
 
       <div class="text-bold">Inspection</div>
       <q-linear-progress size="25px" color="accent" :value="complete.inspection / 100">
@@ -140,11 +183,6 @@
           with a given standard
         </li>
         <li>And we need a workflow and annual reminder for standards review</li>
-        <li>
-          Maybe we can integrate library check-out and check-in records somehow too? A separate menu
-          item if so. <span class="text-bold">Do this next</span> so we can close out the Standards
-          git branch
-        </li>
       </ul>
     </div>
 
@@ -177,6 +215,7 @@
 
 <script setup lang="ts">
 const complete = {
+  overall: 10,
   auth: 70,
   projects: 30,
   customers: 80,

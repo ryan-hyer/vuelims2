@@ -13,7 +13,7 @@
     <div class="q-pa-md">
       <q-form @submit.prevent="submitForm">
         <Transition name="fade" mode="out-in">
-          <div v-if="!newProject.number">
+          <div v-if="!newProject.jobNumber">
             <q-select
               filled
               options-dense
@@ -33,7 +33,7 @@
                 label="Yes"
                 icon="check"
                 size="xs"
-                @click="newProject.number = newNumber"
+                @click="newProject.jobNumber = newNumber"
               />
               <q-btn
                 color="red"
@@ -41,14 +41,14 @@
                 icon="close"
                 size="xs"
                 class="q-ml-sm"
-                @click="newProject.number = projectType.value"
+                @click="newProject.jobNumber = projectType.value"
               />
             </q-card>
           </div>
           <div v-else>
             <q-input
               filled
-              v-model="newProject.number"
+              v-model="newProject.jobNumber"
               label="Job Number"
               lazy-rules
               :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
@@ -105,18 +105,6 @@
               :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
             />
 
-            <q-select
-              filled
-              v-model="newProject.assignedEmployeeId"
-              emit-value
-              map-options
-              label="Assign Project To"
-              :options="store.allEmployees"
-              option-value="id"
-              option-label="name"
-              class="q-mb-md"
-            />
-
             <div class="row justify-end q-gutter-sm q-mt-md">
               <q-btn flat label="Cancel" color="red" :to="{ name: 'project-list' }" />
               <q-btn
@@ -124,7 +112,7 @@
                 label="Create Project"
                 color="primary"
                 :loading="submitting"
-                :disable="!newProject.number || !newProject.customerId || !newProject.description"
+                :disable="!newProject.jobNumber || !newProject.customerId || !newProject.description"
               />
             </div>
           </div>
@@ -145,12 +133,10 @@ const router = useRouter();
 const store = useProjectStore();
 
 const newProject = ref({
-  number: '',
+  jobNumber: '',
   customerId: null as number | null,
   description: '',
   startDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
-  assignedEmployeeId: null as number | null,
-  purchaseOrder: '', // Do we REALLY need to record these? I have it just because it's on some of the Job Number Logs. Ask Alona.
 });
 
 const projectType = ref<{ label: string; value: string } | null>(null);
@@ -206,21 +192,18 @@ const filterCustomers = (
 
 const submitForm = async () => {
   submitting.value = true;
-  const projectData = {
-    number: newProject.value.number,
+  const newId = await store.addProject({
+    jobNumber: newProject.value.jobNumber,
     customerId: newProject.value.customerId!,
     description: newProject.value.description,
     startDate: newProject.value.startDate,
-    assignedEmployeeId: newProject.value.assignedEmployeeId,
-    ...(newProject.value.purchaseOrder ? { purchaseOrder: newProject.value.purchaseOrder } : {}),
-  };
-  const newId = await store.addProject(projectData);
+  });
   submitting.value = false;
   void router.push({ name: 'project-detail', params: { projectId: newId } });
 };
 
 onMounted(async () => {
-  if (store.allCustomers.length === 0 || store.allEmployees.length === 0) {
+  if (store.allCustomers.length === 0) {
     await store.fetchProjectLookups();
   }
   filteredCustomers.value = store.allCustomers;

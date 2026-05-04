@@ -15,9 +15,11 @@ import trainingJson from './data/training.json';
 import reviewsJson from './data/reviews.json';
 import usersJson from './data/users.json';
 import standardsJson from './data/standards.json';
+import libraryCheckoutsJson from './data/librarycheckouts.json';
 
 // Mutable in-memory copies so write operations work within the session
 const standardsData = standardsJson.map((s) => ({ ...s, url: null }));
+const libraryCheckoutsData = libraryCheckoutsJson.map((c) => ({ ...c }));
 const projectsData = projectsJson.map((p) => ({ ...p }));
 const rolesData = JSON.parse(JSON.stringify(rolesJson));
 const legalDocsData = legalDocsJson.map((doc) => ({ ...doc, url: null }));
@@ -34,10 +36,6 @@ const resetTokens = {};
 const joinProject = (p) => ({
   ...p,
   customerName: customers.find((c) => c.id === p.customerId)?.name ?? 'Unknown',
-  assignedEmployeeName: (() => {
-    const e = personnelData.find((e) => e.id === p.assignedEmployeeId);
-    return e ? `${e.firstName} ${e.lastName}` : null;
-  })(),
 });
 
 const fetch = (mockData, time = 0) => {
@@ -123,7 +121,7 @@ export default {
     const data = filter
       ? withDetails.filter(
           (p) =>
-            p.number.toLowerCase().includes(filter.toLowerCase()) ||
+            p.jobNumber.toLowerCase().includes(filter.toLowerCase()) ||
             p.customerName.toLowerCase().includes(filter.toLowerCase()) ||
             p.description.toLowerCase().includes(filter.toLowerCase()),
         )
@@ -150,7 +148,6 @@ export default {
     if (index !== -1) {
       const raw = { ...project };
       delete raw.customerName;
-      delete raw.assignedEmployeeName;
       projectsData[index] = raw;
     }
     return Promise.resolve();
@@ -423,6 +420,41 @@ export default {
     if (index === -1) throw new Error('User not found');
     usersData[index] = { ...usersData[index], password: newPassword };
     delete resetTokens[key];
+  },
+
+  fetchAllStandardOptions() {
+    const options = standardsData.map((s) => ({
+      id: s.id,
+      label: `${s.number} (${s.revision})`,
+    }));
+    options.sort((a, b) =>
+      a.label.localeCompare(b.label, undefined, { numeric: true, sensitivity: 'base' }),
+    );
+    return Promise.resolve(options);
+  },
+
+  fetchCheckouts(filter) {
+    const data = filter
+      ? libraryCheckoutsData.filter((c) =>
+          customers.find((cu) => cu.id === c.customerId)?.name.toLowerCase().includes(filter.toLowerCase()),
+        )
+      : libraryCheckoutsData.slice();
+    data.sort((a, b) => b.checkoutDate.localeCompare(a.checkoutDate));
+    return fetch(data, 500);
+  },
+  fetchCheckout(id) {
+    return fetch(libraryCheckoutsData.find((c) => c.id === id) ?? null, 300);
+  },
+  addCheckout(checkout) {
+    const id = libraryCheckoutsData.length ? Math.max(...libraryCheckoutsData.map((c) => c.id)) + 1 : 1;
+    const entry = { ...checkout, id };
+    libraryCheckoutsData.unshift(entry);
+    return Promise.resolve(entry);
+  },
+  updateCheckout(checkout) {
+    const index = libraryCheckoutsData.findIndex((c) => c.id === checkout.id);
+    if (index !== -1) libraryCheckoutsData[index] = { ...checkout };
+    return Promise.resolve();
   },
 
   changePassword(userId, currentPassword, newPassword) {

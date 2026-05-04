@@ -145,6 +145,23 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/library',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'checkout-list',
+        component: () => import('components/Standards/CheckoutList.vue'),
+      },
+      {
+        path: 'new',
+        name: 'checkout-new',
+        component: () => import('components/Standards/CheckoutNew.vue'),
+      },
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

@@ -8,7 +8,7 @@
         <q-item>
           <q-item-section>
             <q-item-label overline>Job Number</q-item-label>
-            <q-item-label class="q-pl-md">{{ project.number }}</q-item-label>
+            <q-item-label class="q-pl-md">{{ project.jobNumber }}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item>
@@ -31,25 +31,6 @@
         </q-item>
         <q-item>
           <q-item-section>
-            <q-item-label overline>Standards</q-item-label>
-            <q-item-label class="q-pl-md" v-for="s in project.standards" :key="s">{{ s }}</q-item-label>
-            <q-item-label class="q-pl-md" v-if="!project.standards?.length">None</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section>
-            <q-item-label overline>Purchase Order</q-item-label>
-            <q-item-label class="q-pl-md">{{ project.purchaseOrder || 'None' }}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section>
-            <q-item-label overline>Assigned To</q-item-label>
-            <q-item-label class="q-pl-md">{{ assignedEmployeeName }}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section>
             <q-item-label overline>Completed Date</q-item-label>
             <q-item-label class="q-pl-md">{{ project.completeDate || 'Not Complete' }}</q-item-label>
           </q-item-section>
@@ -61,7 +42,7 @@
     <template v-else>
       <q-card-section>
         <q-form class="q-gutter-sm">
-          <q-input filled v-model="project.number" label="Job Number" />
+          <q-input filled v-model="project.jobNumber" label="Job Number" />
           <q-input filled v-model="project.startDate" mask="date" label="Start Date (yyyy/mm/dd)">
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
@@ -86,43 +67,6 @@
             label="Customer"
           />
           <q-input filled type="textarea" rows="3" v-model="project.description" label="Description" />
-          <!-- TODO: Eventually we'll want a database table for standards, and a place to add/edit/delete them. For now, hardcoding a list of common standards to choose from. -->
-          <q-select
-            filled
-            v-model="project.standards"
-            use-chips
-            use-input
-            multiple
-            emit-value
-            map-options
-            options-dense
-            label="Standards"
-            :options="standardsFiltered"
-            option-value="value"
-            option-label="value"
-            input-debounce="200"
-            @filter="filterStandards"
-          >
-            <template v-slot:option="scope">
-              <q-item v-bind="scope.itemProps">
-                <q-item-section>
-                  <q-item-label>{{ scope.opt.value }}</q-item-label>
-                  <q-item-label caption lines="2">{{ scope.opt.title }}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
-          <q-input filled v-model="project.purchaseOrder" label="Purchase Order" />
-          <q-select
-            filled
-            v-model="project.assignedEmployeeId"
-            :options="store.allEmployees"
-            option-value="id"
-            option-label="name"
-            emit-value
-            map-options
-            label="Assigned To"
-          />
           <q-input
             filled
             v-model="project.completeDate"
@@ -186,27 +130,11 @@ const customerName = computed(
   () => store.allCustomers.find((c) => c.id === project.value?.customerId)?.name ?? 'Unknown',
 );
 
-const assignedEmployeeName = computed(
-  () => store.allEmployees.find((e) => e.id === project.value?.assignedEmployeeId)?.name ?? 'None',
-);
-
-const standardsFiltered = ref(store.allStandards);
-
-function filterStandards(val: string, update: (fn: () => void) => void) {
-  update(() => {
-    const needle = val.toLowerCase();
-    standardsFiltered.value = needle
-      ? store.allStandards.filter((s) => s.label.toLowerCase().includes(needle))
-      : store.allStandards;
-  });
-}
-
 const clearCompleteDate = () => {
   if (project.value) delete project.value.completeDate;
 };
 
 const startEdit = () => {
-  standardsFiltered.value = store.allStandards;
   editing.value = true;
 };
 

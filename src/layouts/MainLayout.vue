@@ -223,7 +223,7 @@ const linkSectionList: MenuLinkSectionProps[] = [
     icon: 'local_library',
     linksList: [
       { icon: 'library_books', title: 'Standards', link: 'standard-list' },
-      { icon: 'help', title: 'TBD-LibSvcs', link: 'home' },
+      { icon: 'shopping_basket', title: 'Library Checkout', link: 'checkout-list' },
     ],
   },
 ];

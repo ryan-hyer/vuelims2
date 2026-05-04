@@ -4,7 +4,7 @@
     <q-list separator>
       <q-item v-for="project in projects" :key="project.id">
         <q-item-section>
-          <q-item-label class="text-bold">{{ project.number }}</q-item-label>
+          <q-item-label class="text-bold">{{ project.jobNumber }}</q-item-label>
           <q-item-label>{{ project.description }}</q-item-label>
           <q-item-label caption>
             Start: {{ project.startDate }} | Complete: {{ project.completeDate }} | Invoice:
@@ -24,7 +24,7 @@ import { ref } from 'vue';
 const projects = ref([
   {
     id: 3,
-    number: 'LS2500347',
+    jobNumber: 'LS2500347',
     description: 'Listing Addition - Composite Sinks, models 6, 7, 8',
     startDate: '2023-11-01',
     completeDate: '2023-12-01',
@@ -34,7 +34,7 @@ const projects = ref([
   },
   {
     id: 2,
-    number: 'LS2500346',
+    jobNumber: 'LS2500346',
     description: 'Listing Addition - Metal Sinks, models 1, 2',
     startDate: '2023-10-01',
     completeDate: '2023-11-01',
@@ -44,7 +44,7 @@ const projects = ref([
   },
   {
     id: 1,
-    number: 'LS2500345',
+    jobNumber: 'LS2500345',
     description: 'Listing Addition - Plastic Sinks, models 3, 4, 5',
     startDate: '2023-09-15',
     completeDate: '2023-10-15',

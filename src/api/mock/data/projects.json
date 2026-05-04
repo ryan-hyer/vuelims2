@@ -1,47 +1,38 @@
 [
   {
     "id": 5,
-    "number": "LS2500315",
+    "jobNumber": "LS2500315",
     "customerId": 5,
     "description": "Energy Efficiency Upgrade",
-    "startDate": "2024/03/05",
-    "purchaseOrder": "PO54321",
-    "assignedEmployeeId": 5
+    "startDate": "2024/03/05"
   },
   {
     "id": 4,
-    "number": "I2500314",
+    "jobNumber": "I2500314",
     "customerId": 4,
     "description": "RFI 2024",
     "startDate": "2024/02/10",
-    "completeDate": "2024/04/15",
-    "assignedEmployeeId": 3
+    "completeDate": "2024/04/15"
   },
   {
     "id": 3,
-    "number": "P2500313",
+    "jobNumber": "P2500313",
     "customerId": 3,
     "description": "Plastic shower pans",
-    "startDate": "2024/01/20",
-    "standards": ["ANSI Z124 / CSA B45.5 (2017)"],
-    "assignedEmployeeId": 4
+    "startDate": "2024/01/20"
   },
   {
     "id": 2,
-    "number": "A2500312",
+    "jobNumber": "A2500312",
     "customerId": 2,
     "description": "Flow",
-    "startDate": "2023/11/15",
-    "standards": ["CSA C22.2 No. 107.1 (2021)"],
-    "purchaseOrder": "PO12345",
-    "assignedEmployeeId": 1
+    "startDate": "2023/11/15"
   },
   {
     "id": 1,
-    "number": "LS2500311",
+    "jobNumber": "LS2500311",
     "customerId": 1,
     "description": "Listing Addition",
-    "startDate": "2023/10/01",
-    "assignedEmployeeId": 2
+    "startDate": "2023/10/01"
   }
 ]
