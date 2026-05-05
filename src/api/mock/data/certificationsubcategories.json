@@ -1,0 +1,114 @@
+[
+  {
+    "id": 1,
+    "categoryId": 1,
+    "code": "1",
+    "description": "Appliances",
+    "fee": 1500
+  },
+  {
+    "id": 2,
+    "categoryId": 1,
+    "code": "2",
+    "description": "Power Sources",
+    "fee": 1500
+  },
+  {
+    "id": 3,
+    "categoryId": 1,
+    "code": "3",
+    "description": "Lighting Fixtures",
+    "fee": 1500
+  },
+  {
+    "id": 4,
+    "categoryId": 1,
+    "code": "4",
+    "description": "Hardware",
+    "fee": 1500
+  },
+  {
+    "id": 5,
+    "categoryId": 1,
+    "code": "5",
+    "description": "Resistance Heaters",
+    "fee": 1500
+  },
+  {
+    "id": 6,
+    "categoryId": 2,
+    "code": "1",
+    "description": "Appurtenances",
+    "fee": 1500
+  },
+  {
+    "id": 7,
+    "categoryId": 2,
+    "code": "2",
+    "description": "Fuel-Burning Appliances",
+    "fee": 1500
+  },
+  {
+    "id": 8,
+    "categoryId": 3,
+    "code": "1",
+    "description": "Detection Equipment",
+    "fee": 1500
+  },
+  {
+    "id": 9,
+    "categoryId": 3,
+    "code": "2",
+    "description": "Safety Equipment",
+    "fee": 1500
+  },
+  {
+    "id": 10,
+    "categoryId": 4,
+    "code": "1",
+    "description": "Plumbing Appliances",
+    "fee": 1500
+  },
+  {
+    "id": 11,
+    "categoryId": 4,
+    "code": "2",
+    "description": "Plumbing Fixtures",
+    "fee": 1500
+  },
+  {
+    "id": 12,
+    "categoryId": 4,
+    "code": "3",
+    "description": "Plumbing Fittings",
+    "fee": 1500
+  },
+  {
+    "id": 13,
+    "categoryId": 4,
+    "code": "4",
+    "description": "Systems and Devices",
+    "fee": 1500
+  },
+  {
+    "id": 14,
+    "categoryId": 4,
+    "code": "5",
+    "description": "Holding Tanks",
+    "fee": 1500
+  },
+  {
+    "id": 15,
+    "categoryId": 4,
+    "code": "6",
+    "description": "Piping / Tubing",
+    "fee": 1500
+  },
+  {
+    "id": 16,
+    "categoryId": 5,
+    "code": "1",
+    "description": "Exterior",
+    "fee": 1500
+  }
+]

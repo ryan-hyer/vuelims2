@@ -1,5 +1,5 @@
 <template>
-  <q-expansion-item>
+  <q-expansion-item :class="color ? color : ''">
     <template v-slot:header>
       <q-item-section avatar>
         <q-icon color="grey" :name="icon" />
@@ -21,6 +21,7 @@ import MenuLink, { type MenuLinkProps } from 'src/components/MenuLink.vue';
 export interface MenuLinkSectionProps {
   title: string;
   icon?: string;
+  color?: string;
   linksList: Array<MenuLinkProps>;
 }
 

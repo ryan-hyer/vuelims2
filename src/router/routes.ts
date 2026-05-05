@@ -129,6 +129,34 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/certification',
+    component: () => import('layouts/MainLayout.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'certification-project-list',
+        component: () => import('components/Certification/CertificationProjectList.vue'),
+      },
+      {
+        path: 'new',
+        name: 'certification-project-new',
+        component: () => import('components/Certification/CertificationProjectNew.vue'),
+      },
+      {
+        path: ':projectId',
+        name: 'certification-project-detail',
+        component: () => import('components/Certification/CertificationProjectDetail.vue'),
+        props: true,
+      },
+      {
+        path: 'category-list',
+        name: 'certification-category-list',
+        component: () => import('components/Certification/CertificationCategoryList.vue'),
+      },
+    ],
+  },
+  {
     path: '/standards',
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },

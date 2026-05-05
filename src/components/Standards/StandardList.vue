@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div class="page-header">Standards</div>
+    <div class="page-header bg-purple-2">Standards</div>
     <q-table
       :grid="$q.screen.xs"
       flat
@@ -36,7 +36,9 @@
               :color="expandedId === props.row.id ? 'red' : 'blue-5'"
               @click="toggleExpand(props.row.id)"
             >
-              <q-tooltip>{{ expandedId === props.row.id ? 'Close Details' : 'Open Details' }}</q-tooltip>
+              <q-tooltip>{{
+                expandedId === props.row.id ? 'Close Details' : 'Open Details'
+              }}</q-tooltip>
             </q-btn>
           </q-td>
           <q-td key="standardNumber" :props="props">{{ props.row.number }}</q-td>
@@ -116,7 +118,9 @@
                     :color="expandedId === props.row.id ? 'red' : 'blue-5'"
                     @click="toggleExpand(props.row.id)"
                   >
-                    <q-tooltip>{{ expandedId === props.row.id ? 'Close Details' : 'Open Details' }}</q-tooltip>
+                    <q-tooltip>{{
+                      expandedId === props.row.id ? 'Close Details' : 'Open Details'
+                    }}</q-tooltip>
                   </q-btn>
                   <q-btn
                     v-if="props.row.url"
