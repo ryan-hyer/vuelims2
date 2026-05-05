@@ -16,6 +16,13 @@ import reviewsJson from './data/reviews.json';
 import usersJson from './data/users.json';
 import standardsJson from './data/standards.json';
 import libraryCheckoutsJson from './data/librarycheckouts.json';
+import certCategoriesJson from './data/certificationcategories.json';
+import certSubcategoriesJson from './data/certificationsubcategories.json';
+import certProductTypesJson from './data/certificationproducttypes.json';
+
+const certCategoriesData = certCategoriesJson.map((c) => ({ ...c }));
+const certSubcategoriesData = certSubcategoriesJson.map((s) => ({ ...s }));
+const certProductTypesData = certProductTypesJson.map((p) => ({ ...p }));
 
 // Mutable in-memory copies so write operations work within the session
 const standardsData = standardsJson.map((s) => ({ ...s, url: null }));
@@ -455,6 +462,53 @@ export default {
     const index = libraryCheckoutsData.findIndex((c) => c.id === checkout.id);
     if (index !== -1) libraryCheckoutsData[index] = { ...checkout };
     return Promise.resolve();
+  },
+
+  fetchCertificationCategories() {
+    return fetch(certCategoriesData.slice(), 300);
+  },
+  fetchCertificationSubcategories() {
+    return fetch(certSubcategoriesData.slice(), 300);
+  },
+  fetchCertificationProductTypes() {
+    return fetch(certProductTypesData.slice(), 300);
+  },
+  updateCertificationCategory(category) {
+    const index = certCategoriesData.findIndex((c) => c.id === category.id);
+    if (index !== -1) certCategoriesData[index] = { ...category };
+    return Promise.resolve();
+  },
+  updateCertificationSubcategory(subcategory) {
+    const index = certSubcategoriesData.findIndex((s) => s.id === subcategory.id);
+    if (index !== -1) certSubcategoriesData[index] = { ...subcategory };
+    return Promise.resolve();
+  },
+  updateCertificationProductType(productType) {
+    const index = certProductTypesData.findIndex((p) => p.id === productType.id);
+    if (index !== -1) certProductTypesData[index] = { ...productType };
+    return Promise.resolve();
+  },
+  addCertificationCategory(category) {
+    const id = certCategoriesData.length ? Math.max(...certCategoriesData.map((c) => c.id)) + 1 : 1;
+    const entry = { ...category, id };
+    certCategoriesData.push(entry);
+    return Promise.resolve(entry);
+  },
+  addCertificationSubcategory(subcategory) {
+    const id = certSubcategoriesData.length
+      ? Math.max(...certSubcategoriesData.map((s) => s.id)) + 1
+      : 1;
+    const entry = { ...subcategory, id };
+    certSubcategoriesData.push(entry);
+    return Promise.resolve(entry);
+  },
+  addCertificationProductType(productType) {
+    const id = certProductTypesData.length
+      ? Math.max(...certProductTypesData.map((p) => p.id)) + 1
+      : 1;
+    const entry = { ...productType, id };
+    certProductTypesData.push(entry);
+    return Promise.resolve(entry);
   },
 
   changePassword(userId, currentPassword, newPassword) {

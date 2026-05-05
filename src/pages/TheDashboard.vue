@@ -144,7 +144,7 @@
         </div>
       </q-linear-progress>
       <ul>
-        <li>Do next: create models for Categories (data from fee schedule) and Certifications</li>
+        <li>Do next: create models for Certifications</li>
         <li>
           Need a section for QRC and a way to generate the prior year's project list along with PDF
           datasheets
@@ -170,6 +170,10 @@
         </div>
       </q-linear-progress>
       <ul>
+        <li>
+          The data structure is quickly becoming unwieldy, so separate standard revisions into a
+          separate table
+        </li>
         <li>
           Adding new standard revisions should eventually be linked to a certification review
           process, if the standard is used for certifications
@@ -224,7 +228,7 @@ const complete = {
   qualitySystem: 0,
   qualityControl: 0,
   testing: 0,
-  certification: 0,
+  certification: 10,
   inspection: 0,
   library: 80,
 };

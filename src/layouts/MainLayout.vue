@@ -203,6 +203,7 @@ const linkSectionList: MenuLinkSectionProps[] = [
   {
     title: 'Testing',
     icon: 'science',
+    color: 'bg-green-2',
     linksList: [
       { icon: 'construction', title: 'Equipment', link: 'home' },
       { icon: 'help', title: 'TBD-TS', link: 'home' },
@@ -211,16 +212,23 @@ const linkSectionList: MenuLinkSectionProps[] = [
   {
     title: 'Certification',
     icon: 'verified',
-    linksList: [{ icon: 'help', title: 'TBD-LS', link: 'home' }],
+    color: 'bg-cyan-2',
+    linksList: [
+      { icon: 'work', title: 'Projects', link: 'certification-project-list' },
+      { icon: 'category', title: 'Categories', link: 'certification-category-list' },
+      { icon: 'groups_3', title: 'QRC', link: 'home' },
+    ],
   },
   {
     title: 'Inspection',
     icon: 'badge',
+    color: 'bg-orange-2',
     linksList: [{ icon: 'help', title: 'TBD-IS', link: 'home' }],
   },
   {
     title: 'Library',
     icon: 'local_library',
+    color: 'bg-purple-2',
     linksList: [
       { icon: 'library_books', title: 'Standards', link: 'standard-list' },
       { icon: 'shopping_basket', title: 'Library Checkout', link: 'checkout-list' },

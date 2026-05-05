@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "code": "E",
+    "description": "Electrical",
+    "fee": 1500
+  },
+  {
+    "id": 2,
+    "code": "F",
+    "description": "Fuel Systems and Equipment",
+    "fee": 1500
+  },
+  {
+    "id": 3,
+    "code": "S",
+    "description": "Fire and Life Safety",
+    "fee": 1500
+  },
+  {
+    "id": 4,
+    "code": "P",
+    "description": "Plumbing",
+    "fee": 1500
+  },
+  {
+    "id": 5,
+    "code": "C",
+    "description": "Vehicular Components",
+    "fee": 1500
+  }
+]
