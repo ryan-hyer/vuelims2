@@ -1,30 +1,35 @@
 [
   {
     "id": 1,
+    "schemeId": 1,
     "code": "E",
     "description": "Electrical",
     "fee": 1500
   },
   {
     "id": 2,
+    "schemeId": 1,
     "code": "F",
     "description": "Fuel Systems and Equipment",
     "fee": 1500
   },
   {
     "id": 3,
+    "schemeId": 1,
     "code": "S",
     "description": "Fire and Life Safety",
     "fee": 1500
   },
   {
     "id": 4,
+    "schemeId": 1,
     "code": "P",
     "description": "Plumbing",
     "fee": 1500
   },
   {
     "id": 5,
+    "schemeId": 1,
     "code": "C",
     "description": "Vehicular Components",
     "fee": 1500

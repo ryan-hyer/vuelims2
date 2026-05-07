@@ -21,6 +21,18 @@
             @update:model-value="form.parentId = null"
           />
           <q-select
+            v-if="form.type === 'category'"
+            filled
+            v-model="form.schemeId"
+            :options="schemeOptions"
+            label="Scheme *"
+            emit-value
+            map-options
+            :rules="[(val) => !!val || 'Required']"
+            lazy-rules
+            :disable="isEditing"
+          />
+          <q-select
             v-if="form.type === 'subcategory'"
             filled
             v-model="form.parentId"
@@ -114,6 +126,7 @@ const isEditing = computed(() => editingId.value !== null);
 
 const emptyForm = () => ({
   type: null as 'category' | 'subcategory' | 'product' | null,
+  schemeId: null as number | null,
   parentId: null as number | null,
   code: '',
   description: '',
@@ -146,14 +159,22 @@ function filterStandards(val: string, update: (fn: () => void) => void) {
   });
 }
 
+const schemeOptions = computed(() =>
+  store.schemes.map((s) => ({ label: s.description, value: s.id })),
+);
+
 const categoryOptions = computed(() =>
-  store.categories.map((c) => ({ label: `${c.code} — ${c.description}`, value: c.id })),
+  store.categories.map((c) => {
+    const scheme = store.schemes.find((s) => s.id === c.schemeId);
+    return { label: `(${scheme?.code ?? '?'}) ${c.code} — ${c.description}`, value: c.id };
+  }),
 );
 
 const subcategoryOptions = computed(() =>
   store.subcategories.map((s) => {
     const cat = store.categories.find((c) => c.id === s.categoryId);
-    return { label: `${cat?.code ?? ''}${s.code} — ${s.description}`, value: s.id };
+    const scheme = store.schemes.find((sc) => sc.id === cat?.schemeId);
+    return { label: `(${scheme?.code ?? '?'}) ${cat?.code ?? ''}${s.code} — ${s.description}`, value: s.id };
   }),
 );
 
@@ -168,13 +189,13 @@ function openEdit(row: FlatCertRow) {
   editingId.value = row.id;
   if (row.rowType === 'category') {
     const cat = store.categories.find((c) => c.id === row.id)!;
-    form.value = { type: 'category', parentId: null, code: cat.code, description: cat.description, fee: cat.fee, standardIds: [] };
+    form.value = { type: 'category', schemeId: cat.schemeId, parentId: null, code: cat.code, description: cat.description, fee: cat.fee, standardIds: [] };
   } else if (row.rowType === 'subcategory') {
     const sub = store.subcategories.find((s) => s.id === row.id)!;
-    form.value = { type: 'subcategory', parentId: sub.categoryId, code: sub.code, description: sub.description, fee: sub.fee, standardIds: [] };
-  } else {
+    form.value = { type: 'subcategory', schemeId: null, parentId: sub.categoryId, code: sub.code, description: sub.description, fee: sub.fee, standardIds: [] };
+  } else if (row.rowType === 'product') {
     const pt = store.productTypes.find((p) => p.id === row.id)!;
-    form.value = { type: 'product', parentId: pt.subcategoryId, code: pt.code, description: pt.description, fee: pt.fee, standardIds: pt.standardIds };
+    form.value = { type: 'product', schemeId: null, parentId: pt.subcategoryId, code: pt.code, description: pt.description, fee: pt.fee, standardIds: pt.standardIds };
   }
   open.value = true;
 }
@@ -189,25 +210,28 @@ async function submitForm() {
   const valid = await formRef.value?.validate();
   if (!valid) return;
   saving.value = true;
-  if (isEditing.value) {
-    if (form.value.type === 'category') {
-      await store.updateCategory({ id: editingId.value!, code: form.value.code, description: form.value.description, fee: form.value.fee! });
-    } else if (form.value.type === 'subcategory') {
-      await store.updateSubcategory({ id: editingId.value!, categoryId: form.value.parentId!, code: form.value.code, description: form.value.description, fee: form.value.fee! });
+  try {
+    if (isEditing.value) {
+      if (form.value.type === 'category') {
+        await store.updateCategory({ id: editingId.value!, schemeId: form.value.schemeId!, code: form.value.code, description: form.value.description, fee: form.value.fee! });
+      } else if (form.value.type === 'subcategory') {
+        await store.updateSubcategory({ id: editingId.value!, categoryId: form.value.parentId!, code: form.value.code, description: form.value.description, fee: form.value.fee! });
+      } else {
+        await store.updateProductType({ id: editingId.value!, subcategoryId: form.value.parentId!, code: form.value.code, description: form.value.description, fee: form.value.fee!, standardIds: form.value.standardIds });
+      }
     } else {
-      await store.updateProductType({ id: editingId.value!, subcategoryId: form.value.parentId!, code: form.value.code, description: form.value.description, fee: form.value.fee!, standardIds: form.value.standardIds });
+      if (form.value.type === 'category') {
+        await store.addCategory({ schemeId: form.value.schemeId!, code: form.value.code, description: form.value.description, fee: form.value.fee! });
+      } else if (form.value.type === 'subcategory') {
+        await store.addSubcategory({ categoryId: form.value.parentId!, code: form.value.code, description: form.value.description, fee: form.value.fee! });
+      } else {
+        await store.addProductType({ subcategoryId: form.value.parentId!, code: form.value.code, description: form.value.description, fee: form.value.fee!, standardIds: form.value.standardIds });
+      }
     }
-  } else {
-    if (form.value.type === 'category') {
-      await store.addCategory({ code: form.value.code, description: form.value.description, fee: form.value.fee! });
-    } else if (form.value.type === 'subcategory') {
-      await store.addSubcategory({ categoryId: form.value.parentId!, code: form.value.code, description: form.value.description, fee: form.value.fee! });
-    } else {
-      await store.addProductType({ subcategoryId: form.value.parentId!, code: form.value.code, description: form.value.description, fee: form.value.fee!, standardIds: form.value.standardIds });
-    }
+    open.value = false;
+  } finally {
+    saving.value = false;
   }
-  saving.value = false;
-  open.value = false;
 }
 
 defineExpose({ openAdd, openEdit });

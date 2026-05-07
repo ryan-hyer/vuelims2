@@ -21,14 +21,21 @@ export const useCheckoutStore = defineStore('checkouts', {
     checkouts: [] as ProjectLibraryWithDetails[],
     allCustomers: [] as LookupItem[],
     allStandards: [] as StandardOption[],
+    allRevisions: [] as StandardOption[],
   }),
 
   actions: {
     async fetchCheckouts(filter?: string) {
-      await Promise.all([api.fetchCheckouts(filter), api.fetchAllCustomers(), api.fetchAllStandardOptions()])
-        .then(([raw, customers, standards]) => {
+      await Promise.all([
+        api.fetchCheckouts(filter),
+        api.fetchAllCustomers(),
+        api.fetchAllStandardOptions(),
+        api.fetchAllRevisionLabels(),
+      ])
+        .then(([raw, customers, standards, revisions]) => {
           this.allCustomers = customers as LookupItem[];
           this.allStandards = standards as StandardOption[];
+          this.allRevisions = revisions as StandardOption[];
           this.checkouts = (raw as ProjectLibrary[]).map((c) => ({
             ...c,
             customerName: this.allCustomers.find((cu) => cu.id === c.customerId)?.name ?? 'Unknown',
@@ -39,10 +46,15 @@ export const useCheckoutStore = defineStore('checkouts', {
         });
     },
     async fetchLookups() {
-      await Promise.all([api.fetchAllCustomers(), api.fetchAllStandardOptions()])
-        .then(([customers, standards]) => {
+      await Promise.all([
+        api.fetchAllCustomers(),
+        api.fetchAllStandardOptions(),
+        api.fetchAllRevisionLabels(),
+      ])
+        .then(([customers, standards, revisions]) => {
           this.allCustomers = customers as LookupItem[];
           this.allStandards = standards as StandardOption[];
+          this.allRevisions = revisions as StandardOption[];
         })
         .catch((error) => {
           console.error('Error fetching checkout lookups:', error);

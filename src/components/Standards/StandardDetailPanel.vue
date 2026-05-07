@@ -45,26 +45,14 @@
   </div>
   <div v-else class="q-pa-md bg-grey-1">
     <q-form @submit="handleSubmit" class="q-gutter-sm">
-      <div class="row q-gutter-sm">
-        <q-input
-          class="col"
-          filled
-          dense
-          v-model="form.number"
-          label="Standard Number *"
-          lazy-rules
-          :rules="[(v: string) => !!v || 'Cannot be blank']"
-        />
-        <q-input
-          class="col-3"
-          filled
-          dense
-          v-model="form.revision"
-          label="Revision *"
-          lazy-rules
-          :rules="[(v: string) => !!v || 'Cannot be blank']"
-        />
-      </div>
+      <q-input
+        filled
+        dense
+        v-model="form.number"
+        label="Standard Number *"
+        lazy-rules
+        :rules="[(v: string) => !!v || 'Cannot be blank']"
+      />
       <q-input
         filled
         dense
@@ -124,9 +112,10 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import type { Standard } from './models';
+import type { StandardWithLatestRevision } from 'src/stores/standard-store';
 
 const props = defineProps<{
-  row: Standard;
+  row: StandardWithLatestRevision;
   isEditing: boolean;
   clickTooltips?: boolean;
 }>();
@@ -168,7 +157,6 @@ watch(
 
 const form = ref({
   number: '',
-  revision: '',
   title: '',
   ics_codes: '',
   webstore_url: '',
@@ -182,7 +170,6 @@ watch(
     if (val) {
       form.value = {
         number: props.row.number,
-        revision: props.row.revision,
         title: props.row.title,
         ics_codes: (props.row.ics_codes ?? []).join(', '),
         webstore_url: props.row.webstore_url ?? '',
@@ -195,9 +182,8 @@ watch(
 
 function handleSubmit() {
   emit('save', {
-    ...props.row,
+    id: props.row.id,
     number: form.value.number,
-    revision: form.value.revision,
     title: form.value.title,
     ics_codes: form.value.ics_codes
       .split(',')

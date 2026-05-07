@@ -15,17 +15,21 @@ import trainingJson from './data/training.json';
 import reviewsJson from './data/reviews.json';
 import usersJson from './data/users.json';
 import standardsJson from './data/standards.json';
+import standardRevisionsJson from './data/standardrevisions.json';
 import libraryCheckoutsJson from './data/librarycheckouts.json';
+import certSchemesJson from './data/certificationschemes.json';
 import certCategoriesJson from './data/certificationcategories.json';
 import certSubcategoriesJson from './data/certificationsubcategories.json';
 import certProductTypesJson from './data/certificationproducttypes.json';
 
+const certSchemesData = certSchemesJson.map((s) => ({ ...s }));
 const certCategoriesData = certCategoriesJson.map((c) => ({ ...c }));
 const certSubcategoriesData = certSubcategoriesJson.map((s) => ({ ...s }));
 const certProductTypesData = certProductTypesJson.map((p) => ({ ...p }));
 
 // Mutable in-memory copies so write operations work within the session
-const standardsData = standardsJson.map((s) => ({ ...s, url: null }));
+const standardsData = standardsJson.map((s) => ({ ...s }));
+const standardRevisionsData = standardRevisionsJson.map((r) => ({ ...r, filename: null, url: null }));
 const libraryCheckoutsData = libraryCheckoutsJson.map((c) => ({ ...c }));
 const projectsData = projectsJson.map((p) => ({ ...p }));
 const rolesData = JSON.parse(JSON.stringify(rolesJson));
@@ -172,18 +176,17 @@ export default {
       const match = revision.match(/\d{4}/);
       return match ? parseInt(match[0]) : 0;
     };
-    const latest = new Map();
-    for (const s of standardsData) {
-      const existing = latest.get(s.number);
-      if (!existing || extractYear(s.revision) > extractYear(existing.revision)) {
-        latest.set(s.number, s);
-      }
-    }
-    const options = Array.from(latest.values()).map((s) => ({
-      value: `${s.number} (${s.revision})`,
-      label: `${s.number} (${s.revision}) — ${s.title}`,
-      title: s.title,
-    }));
+    const options = standardsData.map((s) => {
+      const latestRev = standardRevisionsData
+        .filter((r) => r.standardId === s.id)
+        .sort((a, b) => extractYear(b.revision) - extractYear(a.revision))[0];
+      if (!latestRev) return null;
+      return {
+        value: `${s.number} (${latestRev.revision})`,
+        label: `${s.number} (${latestRev.revision}) — ${s.title}`,
+        title: s.title,
+      };
+    }).filter(Boolean);
     options.sort((a, b) =>
       a.value.localeCompare(b.value, undefined, { numeric: true, sensitivity: 'base' }),
     );
@@ -430,10 +433,21 @@ export default {
   },
 
   fetchAllStandardOptions() {
-    const options = standardsData.map((s) => ({
-      id: s.id,
-      label: `${s.number} (${s.revision})`,
-    }));
+    const options = standardsData.map((s) => ({ id: s.id, label: s.number }));
+    options.sort((a, b) =>
+      a.label.localeCompare(b.label, undefined, { numeric: true, sensitivity: 'base' }),
+    );
+    return Promise.resolve(options);
+  },
+
+  fetchAllRevisionLabels() {
+    const options = standardRevisionsData.map((r) => {
+      const std = standardsData.find((s) => s.id === r.standardId);
+      return {
+        id: r.id,
+        label: std ? `${std.number} (${r.revision})` : `Revision #${r.id}`,
+      };
+    });
     options.sort((a, b) =>
       a.label.localeCompare(b.label, undefined, { numeric: true, sensitivity: 'base' }),
     );
@@ -464,6 +478,9 @@ export default {
     return Promise.resolve();
   },
 
+  fetchCertificationSchemes() {
+    return fetch(certSchemesData.slice(), 300);
+  },
   fetchCertificationCategories() {
     return fetch(certCategoriesData.slice(), 300);
   },
@@ -525,10 +542,15 @@ export default {
     const data = filter
       ? standardsData.filter((s) => s.number.toLowerCase().includes(filter.toLowerCase()))
       : standardsData.slice();
-    data.sort((a, b) => {
-      b.number.localeCompare(a.number);
-    });
     return fetch(data, 500);
+  },
+
+  fetchStandardRevisions(standardId) {
+    const data =
+      standardId !== undefined
+        ? standardRevisionsData.filter((r) => r.standardId === standardId)
+        : standardRevisionsData.slice();
+    return fetch(data, 300);
   },
 
   updateStandard(standard) {
@@ -539,14 +561,23 @@ export default {
 
   addStandard(standard) {
     const id = standardsData.length ? Math.max(...standardsData.map((s) => s.id)) + 1 : 1;
-    const entry = { ...standard, id, url: null };
+    const entry = { ...standard, id };
     standardsData.push(entry);
     return Promise.resolve(entry);
   },
 
-  uploadStandardDoc(id, filename, url) {
-    const index = standardsData.findIndex((s) => s.id === id);
-    if (index !== -1) standardsData[index] = { ...standardsData[index], filename, url };
+  addStandardRevision(revision) {
+    const id = standardRevisionsData.length
+      ? Math.max(...standardRevisionsData.map((r) => r.id)) + 1
+      : 1;
+    const entry = { ...revision, id, filename: null, url: null };
+    standardRevisionsData.push(entry);
+    return Promise.resolve(entry);
+  },
+
+  uploadStandardDoc(revisionId, filename, url) {
+    const index = standardRevisionsData.findIndex((r) => r.id === revisionId);
+    if (index !== -1) standardRevisionsData[index] = { ...standardRevisionsData[index], filename, url };
     return Promise.resolve();
   },
 };

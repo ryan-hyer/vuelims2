@@ -133,13 +133,19 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },
     children: [
+      /* If I am successful in integrating listing stuff into the larger Customer/Project modules, then I won't need any of these routes
       {
         path: '',
+        name: 'certification-list',
+        component: () => import('components/Certification/CertificationList.vue'),
+      },
+      {
+        path: 'projects',
         name: 'certification-project-list',
         component: () => import('components/Certification/CertificationProjectList.vue'),
       },
       {
-        path: 'new',
+        path: 'project-new',
         name: 'certification-project-new',
         component: () => import('components/Certification/CertificationProjectNew.vue'),
       },
@@ -149,6 +155,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('components/Certification/CertificationProjectDetail.vue'),
         props: true,
       },
+      */
       {
         path: 'category-list',
         name: 'certification-category-list',

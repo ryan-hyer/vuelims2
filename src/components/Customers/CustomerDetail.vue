@@ -21,7 +21,9 @@
       mobile-arrows
     >
       <q-tab name="identity" label="Company Info" />
-      <q-tab name="interactions" label="Interactions" />
+      <q-tab name="interactions" label="Interaction Log" />
+      <!-- Hide if customer has no listings -->
+      <q-tab name="certifications" label="Certifications" />
       <q-tab name="projects" label="Projects / Invoices" disable />
     </q-tabs>
     <q-separator />
@@ -29,6 +31,7 @@
     <q-tab-panels v-if="customer" v-model="tab" animated>
       <q-tab-panel name="identity"> <CustomerInfo :customer="customer" /></q-tab-panel>
       <q-tab-panel name="interactions"> <CustomerInteractions :customer="customer" /></q-tab-panel>
+      <q-tab-panel name="certifications"> <CertificationDetail :customer="customer" /></q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>
@@ -45,6 +48,7 @@ import type { Customer } from './models';
 import { useCustomerStore } from 'src/stores/customer-store';
 import CustomerInfo from './CustomerInfo.vue';
 import CustomerInteractions from './CustomerInteractions.vue';
+import CertificationDetail from '../Certification/CertificationDetail.vue';
 
 const store = useCustomerStore();
 const customer = ref<Customer>();

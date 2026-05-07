@@ -1,6 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import api from 'src/api/mock';
 import type {
+  CertificationScheme,
   CertificationCategory,
   CertificationSubcategory,
   CertificationProductType,
@@ -16,58 +17,49 @@ export interface FlatCertRow {
   standardIds?: number[];
 }
 
+export interface CertSchemeGroup {
+  scheme: CertificationScheme;
+  rows: FlatCertRow[];
+}
+
 export const useCertificationStore = defineStore('certification', {
   state: () => ({
+    schemes: [] as CertificationScheme[],
     categories: [] as CertificationCategory[],
     subcategories: [] as CertificationSubcategory[],
     productTypes: [] as CertificationProductType[],
   }),
 
   getters: {
-    flatRows(state): FlatCertRow[] {
-      const rows: FlatCertRow[] = [];
-      for (const cat of state.categories) {
-        rows.push({
-          rowType: 'category',
-          id: cat.id,
-          code: cat.code,
-          description: cat.description,
-          fee: cat.fee,
-        });
-        const subs = state.subcategories.filter((s) => s.categoryId === cat.id);
-        for (const sub of subs) {
-          rows.push({
-            rowType: 'subcategory',
-            id: sub.id,
-            code: `${cat.code}${sub.code}`,
-            description: sub.description,
-            fee: sub.fee,
-          });
-          const products = state.productTypes.filter((p) => p.subcategoryId === sub.id);
-          for (const pt of products) {
-            rows.push({
-              rowType: 'product',
-              id: pt.id,
-              code: `${cat.code}${sub.code}${pt.code}`,
-              description: pt.description,
-              fee: pt.fee,
-              totalFee: cat.fee + sub.fee + pt.fee,
-              standardIds: pt.standardIds,
-            });
+    rowsByScheme(state): CertSchemeGroup[] {
+      return state.schemes.map((scheme) => {
+        const rows: FlatCertRow[] = [];
+        for (const cat of state.categories.filter((c) => c.schemeId === scheme.id)) {
+          rows.push({ rowType: 'category', id: cat.id, code: cat.code, description: cat.description, fee: cat.fee });
+          for (const sub of state.subcategories.filter((s) => s.categoryId === cat.id)) {
+            rows.push({ rowType: 'subcategory', id: sub.id, code: `${cat.code}${sub.code}`, description: sub.description, fee: sub.fee });
+            for (const pt of state.productTypes.filter((p) => p.subcategoryId === sub.id)) {
+              rows.push({ rowType: 'product', id: pt.id, code: `${cat.code}${sub.code}${pt.code}`, description: pt.description, fee: pt.fee, totalFee: cat.fee + sub.fee + pt.fee, standardIds: pt.standardIds });
+            }
           }
         }
-      }
-      return rows;
+        return { scheme, rows };
+      });
+    },
+    flatRows(): FlatCertRow[] {
+      return this.rowsByScheme.flatMap((g) => g.rows);
     },
   },
 
   actions: {
     async fetchAll() {
-      const [cats, subs, products] = await Promise.all([
+      const [schemes, cats, subs, products] = await Promise.all([
+        api.fetchCertificationSchemes(),
         api.fetchCertificationCategories(),
         api.fetchCertificationSubcategories(),
         api.fetchCertificationProductTypes(),
       ]);
+      this.schemes = schemes as CertificationScheme[];
       this.categories = cats as CertificationCategory[];
       this.subcategories = subs as CertificationSubcategory[];
       this.productTypes = products as CertificationProductType[];

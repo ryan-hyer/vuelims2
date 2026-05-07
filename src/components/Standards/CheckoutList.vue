@@ -37,8 +37,8 @@
           </q-td>
           <q-td key="customer" :props="props">{{ props.row.customerName }}</q-td>
           <q-td key="standards" :props="props">
-            {{ props.row.standardId.length }}
-            {{ props.row.standardId.length === 1 ? 'standard' : 'standards' }}
+            {{ props.row.standardRevisionId.length }}
+            {{ props.row.standardRevisionId.length === 1 ? 'revision' : 'revisions' }}
           </q-td>
           <q-td key="checkoutDate" :props="props">{{ props.row.checkoutDate }}</q-td>
           <q-td key="returnDate" :props="props">{{ props.row.returnDate ?? '—' }}</q-td>
@@ -47,9 +47,9 @@
           <q-td colspan="100%" class="q-pa-md bg-grey-1">
             <div class="row q-col-gutter-lg">
               <div class="col-12 col-sm-7">
-                <div class="text-subtitle2 q-mb-sm">Standards Checked Out</div>
+                <div class="text-subtitle2 q-mb-sm">Revisions Checked Out</div>
                 <q-list dense bordered separator>
-                  <q-item v-for="sid in props.row.standardId" :key="sid">
+                  <q-item v-for="sid in props.row.standardRevisionId" :key="sid">
                     <q-item-section>{{ standardLabel(sid) }}</q-item-section>
                   </q-item>
                 </q-list>
@@ -138,7 +138,7 @@ const columns: QTableColumn[] = [
   {
     name: 'standards',
     label: 'Standards',
-    field: (row: ProjectLibraryWithDetails) => row.standardId.length,
+    field: (row: ProjectLibraryWithDetails) => row.standardRevisionId.length,
     align: 'left',
   },
   {
@@ -158,7 +158,7 @@ const columns: QTableColumn[] = [
 ];
 
 function standardLabel(id: number): string {
-  return store.allStandards.find((s) => s.id === id)?.label ?? `Standard #${id}`;
+  return store.allRevisions.find((r) => r.id === id)?.label ?? `Revision #${id}`;
 }
 
 function toggleExpand(row: ProjectLibraryWithDetails) {

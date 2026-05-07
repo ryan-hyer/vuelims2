@@ -23,9 +23,20 @@ export const usePersonnelStore = defineStore('personnel', {
     employeeDocs: [] as EmployeeDocument[],
     trainingRecords: [] as Training[],
     reviews: [] as PerformanceReview[],
+    personnelList: [] as { id: number; name: string }[],
   }),
 
   actions: {
+    async fetchAllPersonnel() {
+      await api
+        .fetchAllPersonnel()
+        .then((response: { id: number; name: string }[]) => {
+          this.personnelList = response;
+        })
+        .catch((error) => {
+          console.error('Error fetching personnel list:', error);
+        });
+    },
     async fetchPersonnel(
       startRow: number,
       fetchCount: number,

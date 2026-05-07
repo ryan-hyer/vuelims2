@@ -107,9 +107,8 @@ const onDocSelected = (e: Event) => {
 };
 
 const submitForm = async () => {
-  const newId = await store.addStandard({
+  const newStandardId = await store.addStandard({
     number: form.value.number,
-    revision: form.value.revision,
     title: form.value.title,
     ics_codes: form.value.ics_codes
       ? form.value.ics_codes
@@ -119,8 +118,16 @@ const submitForm = async () => {
       : [],
     webstore_url: form.value.webstore_url || null,
   });
-  if (docFile.value && newId) {
-    await store.uploadDoc(newId, docFile.value);
+  if (!newStandardId) {
+    void router.push({ name: 'standard-list' });
+    return;
+  }
+  const newRevisionId = await store.addStandardRevision({
+    standardId: newStandardId,
+    revision: form.value.revision,
+  });
+  if (docFile.value && newRevisionId) {
+    await store.uploadDoc(newRevisionId, docFile.value);
   }
   void router.push({ name: 'standard-list' });
 };

@@ -71,7 +71,7 @@ export interface ProjectInspection extends Project {
 
 export interface ProjectLibrary extends Project {
   id: number;
-  standardId: number[];
+  standardRevisionId: number[];
   checkoutDate: string;
   returnDate?: string | null;
 }

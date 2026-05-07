@@ -61,7 +61,7 @@
               flat
               color="grey"
               icon="upload_file"
-              @click="openUpload(props.row.id)"
+              @click="openUpload(props.row.revisionId)"
             >
               <q-tooltip>Upload Document</q-tooltip>
             </q-btn>
@@ -140,7 +140,7 @@
                     dense
                     color="grey"
                     icon="upload_file"
-                    @click="openUpload(props.row.id)"
+                    @click="openUpload(props.row.revisionId)"
                   >
                     <q-tooltip>Upload Document</q-tooltip>
                   </q-btn>
@@ -326,7 +326,8 @@ function viewDoc(url: string) {
   window.open(url, '_blank');
 }
 
-function openUpload(id: number) {
+function openUpload(id: number | undefined) {
+  if (id == null) return;
   uploadingId.value = id;
   pendingFile.value = null;
   uploadDialog.value = true;

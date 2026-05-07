@@ -41,6 +41,6 @@ export interface CustomerInteraction {
   description: string;
   followUpByDate?: string;
   followUpAction?: string;
-  followUpAssignedTo?: string; // TODO: User ID, so this might be a number; change if necessary
+  followUpAssignedTo?: number;
   followUpCompleted?: boolean; // Might be better to make this a date?
 }

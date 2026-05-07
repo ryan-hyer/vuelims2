@@ -68,17 +68,18 @@
           filled
           multiple
           use-chips
-          v-model="newCheckout.standardId"
           use-input
+          v-model="newCheckout.standardRevisionId"
           options-dense
           emit-value
           map-options
           input-debounce="200"
           label="Standards"
-          :options="filteredStandards"
+          hint="Type a standard number to search, e.g. UL 1234"
+          :options="filteredRevisions"
           option-value="id"
           option-label="label"
-          @filter="filterStandards"
+          @filter="filterRevisions"
           :rules="[(val) => (val && val.length > 0) || 'Select at least one standard']"
         >
           <template v-slot:no-option>
@@ -116,7 +117,12 @@
             label="Create Checkout"
             color="primary"
             :loading="submitting"
-            :disable="!newCheckout.jobNumber || !newCheckout.customerId || !newCheckout.startDate || newCheckout.standardId.length === 0"
+            :disable="
+              !newCheckout.jobNumber ||
+              !newCheckout.customerId ||
+              !newCheckout.startDate ||
+              newCheckout.standardRevisionId.length === 0
+            "
           />
         </div>
       </q-form>
@@ -138,13 +144,13 @@ const newCheckout = ref({
   jobNumber: '',
   customerId: null as number | null,
   startDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
-  standardId: [] as number[],
+  standardRevisionId: [] as number[],
   checkoutDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
 });
 
 const submitting = ref(false);
 const filteredCustomers = ref(store.allCustomers);
-const filteredStandards = ref(store.allStandards);
+const filteredRevisions = ref(store.allRevisions);
 
 const filterCustomers = (
   val: string,
@@ -158,14 +164,14 @@ const filterCustomers = (
   });
 };
 
-const filterStandards = (
+const filterRevisions = (
   val: string,
   update: (callbackFn: () => void, afterFn?: (ref: QSelect) => void) => void,
 ) => {
   update(() => {
     const needle = val.toLowerCase();
-    filteredStandards.value = store.allStandards.filter((s) =>
-      s.label.toLowerCase().includes(needle),
+    filteredRevisions.value = store.allRevisions.filter((r) =>
+      r.label.toLowerCase().includes(needle),
     );
   });
 };
@@ -176,7 +182,7 @@ const submitForm = async () => {
     jobNumber: newCheckout.value.jobNumber,
     customerId: newCheckout.value.customerId!,
     startDate: newCheckout.value.startDate,
-    standardId: newCheckout.value.standardId,
+    standardRevisionId: newCheckout.value.standardRevisionId,
     checkoutDate: newCheckout.value.checkoutDate,
     returnDate: null,
   });
@@ -185,10 +191,10 @@ const submitForm = async () => {
 };
 
 onMounted(async () => {
-  if (store.allCustomers.length === 0 || store.allStandards.length === 0) {
+  if (store.allCustomers.length === 0 || store.allRevisions.length === 0) {
     await store.fetchLookups();
   }
   filteredCustomers.value = store.allCustomers;
-  filteredStandards.value = store.allStandards;
+  filteredRevisions.value = store.allRevisions;
 });
 </script>

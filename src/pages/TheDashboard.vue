@@ -13,6 +13,16 @@
       </q-linear-progress>
       <ul>
         <li>
+          Need to make some design decisions around things like customers -- a single large
+          customers page that can be filtered by job type? Or a separate page for customers by job
+          type?
+        </li>
+        <li>
+          Same with listings: Do I have a separate structure just for listing, like I do with the
+          Tracker, or do I just integrate listing-specific info into the existing customer/project
+          structure?
+        </li>
+        <li>
           Also think about how this all might integrate with a new public site, things like library
           check-out and return, access to completed reports, application process, submitting
           payments, etc.
@@ -144,15 +154,10 @@
         </div>
       </q-linear-progress>
       <ul>
-        <li>Do next: create models for Certifications</li>
+        <li>Finish the Certification Detail page -- this is our first big milestone!</li>
         <li>
           Need a section for QRC and a way to generate the prior year's project list along with PDF
           datasheets
-        </li>
-        <li>
-          Ooh ooh, make the model numbers in a listing be clickable and bring up a dialog with
-          drawings and documents for that model (might mean a large table with an entry for every
-          single model listed by all clients)
         </li>
       </ul>
 
@@ -171,8 +176,12 @@
       </q-linear-progress>
       <ul>
         <li>
-          The data structure is quickly becoming unwieldy, so separate standard revisions into a
-          separate table
+          Integrate this whole module into the larger Projects schema, though best time to do this
+          will probably be when I'm doing the other Project pages
+        </li>
+        <li>
+          The "new" button should have two options: new standard or new revision. Each of these will
+          have its own workflow.
         </li>
         <li>
           Adding new standard revisions should eventually be linked to a certification review
@@ -228,7 +237,7 @@ const complete = {
   qualitySystem: 0,
   qualityControl: 0,
   testing: 0,
-  certification: 10,
+  certification: 30,
   inspection: 0,
   library: 80,
 };

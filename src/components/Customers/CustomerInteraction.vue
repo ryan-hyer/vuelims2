@@ -59,7 +59,11 @@
             dense
             hide-bottom-space
             v-model="interaction.followUpAssignedTo"
-            :options="employees"
+            :options="personnelStore.personnelList"
+            option-value="id"
+            option-label="name"
+            emit-value
+            map-options
             label="Follow-up Assigned To"
           />
 
@@ -96,7 +100,7 @@
           <span class="text-bold">Follow-up:</span> {{ interaction.followUpAction }}
         </div>
         <div v-if="interaction.followUpAssignedTo">
-          <span class="text-bold">Assigned to:</span> {{ interaction.followUpAssignedTo }}
+          <span class="text-bold">Assigned to:</span> {{ assignedToName }}
         </div>
         <div v-if="interaction.followUpByDate" class="text-weight-bold text-red">
           Follow-up By: {{ interaction.followUpByDate }}
@@ -129,8 +133,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import type { CustomerInteraction } from './models';
+import { usePersonnelStore } from 'src/stores/personnel-store';
+
+const personnelStore = usePersonnelStore();
 
 const props = defineProps({
   interaction: {
@@ -153,22 +160,25 @@ const interaction = ref(
     description: '',
     followUpAction: '',
     followUpByDate: '',
-    followUpAssignedTo: '',
+    followUpAssignedTo: undefined as number | undefined,
     followUpCompleted: false,
   },
 );
 
 const interactionTypeOptions = ['Phone Call', 'Email', 'Meeting', 'Virtual Meeting', 'Other'];
-// Employee list will eventually be pulled from an API call
-const employees = [
-  'Merrill Gee',
-  'Ryan Hyer',
-  'Alona MacGregor',
-  'Matthew MacGregor',
-  'Frank Strickland',
-];
+
+const assignedToName = computed(() => {
+  if (!interaction.value.followUpAssignedTo) return '';
+  return personnelStore.personnelList.find((p) => p.id === interaction.value.followUpAssignedTo)?.name ?? '';
+});
 
 const formIsVisible = ref(false);
+
+onMounted(async () => {
+  if (!personnelStore.personnelList.length) {
+    await personnelStore.fetchAllPersonnel();
+  }
+});
 
 const submitForm = () => {
   if (props.interaction) {
@@ -184,7 +194,7 @@ const submitForm = () => {
       description: '',
       followUpAction: '',
       followUpByDate: '',
-      followUpAssignedTo: '', // This should eventually be a userId (for ease in dashboarding), and then the name gets retrieved through a query
+      followUpAssignedTo: undefined as number | undefined,
       followUpCompleted: false,
     };
   }

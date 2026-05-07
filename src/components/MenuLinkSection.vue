@@ -1,8 +1,8 @@
 <template>
-  <q-expansion-item :class="color ? color : ''">
+  <q-expansion-item>
     <template v-slot:header>
       <q-item-section avatar>
-        <q-icon color="grey" :name="icon" />
+        <q-icon :color="color ? color : 'grey'" :name="icon" />
       </q-item-section>
       <q-item-section>{{ title }}</q-item-section>
     </template>
@@ -11,6 +11,7 @@
       :key="link.title"
       v-bind="link"
       style="margin-left: 5px; border-left: 2px solid black"
+      :color="color || 'grey'"
     />
   </q-expansion-item>
 </template>
@@ -27,5 +28,6 @@ export interface MenuLinkSectionProps {
 
 withDefaults(defineProps<MenuLinkSectionProps>(), {
   icon: '',
+  color: 'grey',
 });
 </script>

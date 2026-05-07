@@ -1,7 +1,7 @@
 <template>
   <q-item clickable tag="a" :to="{ name: link }">
     <q-item-section v-if="icon" avatar>
-      <q-icon color="grey" :name="icon" />
+      <q-icon :color="color ? color : 'grey'" :name="icon" />
     </q-item-section>
 
     <q-item-section>
@@ -14,11 +14,13 @@
 export interface MenuLinkProps {
   title: string;
   link?: string;
+  color?: string;
   icon?: string;
 }
 
 withDefaults(defineProps<MenuLinkProps>(), {
   link: '#',
+  color: 'grey',
   icon: '',
 });
 </script>

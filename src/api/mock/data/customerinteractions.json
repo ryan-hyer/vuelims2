@@ -8,7 +8,7 @@
     "description": "Discussed project updates and next steps.",
     "followUpAction": "Send project report by end of week.",
     "followUpByDate": "2023-10-07",
-    "followUpAssignedTo": "Alona MacGregor"
+    "followUpAssignedTo": 3
   },
   {
     "id": 2,
@@ -18,7 +18,7 @@
     "with": "Jane Smith",
     "description": "Reviewed contract terms and conditions.",
     "followUpAction": "Email revised contract for approval.",
-    "followUpAssignedTo": "Ryan Hyer",
+    "followUpAssignedTo": 2,
     "followUpCompleted": true
   },
   {
@@ -38,7 +38,7 @@
     "description": "Product demo and Q&A session.",
     "followUpAction": "Schedule follow-up meeting to discuss feedback.",
     "followUpByDate": "2023-10-02",
-    "followUpAssignedTo": "Matt MacGregor"
+    "followUpAssignedTo": 4
   },
   {
     "id": 5,
@@ -49,6 +49,6 @@
     "description": "Sent proposal for new project.",
     "followUpAction": "Call to discuss proposal details.",
     "followUpByDate": "2023-09-27",
-    "followUpAssignedTo": "Ryan Hyer"
+    "followUpAssignedTo": 2
   }
 ]
