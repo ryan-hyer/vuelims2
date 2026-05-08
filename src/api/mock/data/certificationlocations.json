@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "certificationCustomerId": 1,
+    "customerLocationId": null,
+    "name": "Cashion Thermoplastics, Inc. — Main Plant",
+    "address": "1006 Hwy. 19 South",
+    "city": "Red Bay",
+    "state": "AL",
+    "zipCode": "35582",
+    "country": "USA",
+    "phone": "256-356-2017",
+    "contactName": "Jane Smith",
+    "contactEmail": null,
+    "contactPhone": "256-356-2017 x201",
+    "status": "approved"
+  }
+]

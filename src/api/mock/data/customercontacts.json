@@ -31,5 +31,14 @@
     "customerId": 3,
     "name": "Charlie Davis",
     "email": "charlie@charlie.com"
+  },
+  {
+    "id": 6,
+    "customerId": 12,
+    "name": "Charles Cashion",
+    "email": "cashiontp@bellsouth.net",
+    "phone": "256-412-7869",
+    "position": "President",
+    "notes": "Test entry for certifications"
   }
 ]

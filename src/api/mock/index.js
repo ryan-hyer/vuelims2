@@ -21,11 +21,19 @@ import certSchemesJson from './data/certificationschemes.json';
 import certCategoriesJson from './data/certificationcategories.json';
 import certSubcategoriesJson from './data/certificationsubcategories.json';
 import certProductTypesJson from './data/certificationproducttypes.json';
+import certCustomersJson from './data/certificationcustomers.json';
+import certListingsJson from './data/certificationlistings.json';
+import certModelsJson from './data/certificationmodels.json';
+import certLocationsJson from './data/certificationlocations.json';
 
 const certSchemesData = certSchemesJson.map((s) => ({ ...s }));
 const certCategoriesData = certCategoriesJson.map((c) => ({ ...c }));
 const certSubcategoriesData = certSubcategoriesJson.map((s) => ({ ...s }));
 const certProductTypesData = certProductTypesJson.map((p) => ({ ...p }));
+const certCustomersData = certCustomersJson.map((c) => ({ ...c }));
+const certListingsData = certListingsJson.map((l) => ({ ...l }));
+const certModelsData = certModelsJson.map((m) => ({ ...m }));
+const certLocationsData = certLocationsJson.map((l) => ({ ...l }));
 
 // Mutable in-memory copies so write operations work within the session
 const standardsData = standardsJson.map((s) => ({ ...s }));
@@ -476,6 +484,61 @@ export default {
     const index = libraryCheckoutsData.findIndex((c) => c.id === checkout.id);
     if (index !== -1) libraryCheckoutsData[index] = { ...checkout };
     return Promise.resolve();
+  },
+
+  fetchCertificationCustomer(customerId) {
+    return Promise.all([
+      fetch(certCustomersData, 300),
+      fetch(certListingsData, 0),
+      fetch(certModelsData, 0),
+      fetch(certLocationsData, 0),
+      fetch(customercontacts, 0),
+    ]).then(([certCustomers, listings, models, locations, contacts]) => {
+      const certCustomer = certCustomers.find((c) => c.customerId === customerId);
+      if (!certCustomer) return null;
+
+      const enrichedListings = listings
+        .filter((l) => l.certificationCustomerId === certCustomer.id)
+        .map((listing) => {
+          const productType = certProductTypesData.find((pt) => pt.id === listing.productTypeId);
+          const subcategory = productType
+            ? certSubcategoriesData.find((s) => s.id === productType.subcategoryId)
+            : null;
+          const category = subcategory
+            ? certCategoriesData.find((c) => c.id === subcategory.categoryId)
+            : null;
+          const scheme = category
+            ? certSchemesData.find((s) => s.id === category.schemeId)
+            : null;
+          const combinedCode =
+            category && subcategory && productType
+              ? `${category.code}${subcategory.code}${productType.code}`
+              : '';
+          const displayLabel =
+            scheme && category && productType && combinedCode
+              ? `${scheme.code} ${category.description} - ${productType.description} (${combinedCode})`
+              : 'Unknown Product Type';
+          return {
+            ...listing,
+            models: models.filter((m) => m.certificationListingId === listing.id),
+            displayLabel,
+          };
+        });
+
+      const primaryContactRecord = certCustomer.primaryContactId
+        ? contacts.find((c) => c.id === certCustomer.primaryContactId)
+        : null;
+      const primaryContact = primaryContactRecord
+        ? { name: primaryContactRecord.name, email: primaryContactRecord.email, phone: primaryContactRecord.phone }
+        : null;
+
+      return {
+        ...certCustomer,
+        listings: enrichedListings,
+        locations: locations.filter((l) => l.certificationCustomerId === certCustomer.id),
+        primaryContact,
+      };
+    });
   },
 
   fetchCertificationSchemes() {

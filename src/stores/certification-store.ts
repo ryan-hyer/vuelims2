@@ -5,6 +5,7 @@ import type {
   CertificationCategory,
   CertificationSubcategory,
   CertificationProductType,
+  CertificationCustomerDetail,
 } from 'src/components/Certification/models';
 
 export interface FlatCertRow {
@@ -28,6 +29,7 @@ export const useCertificationStore = defineStore('certification', {
     categories: [] as CertificationCategory[],
     subcategories: [] as CertificationSubcategory[],
     productTypes: [] as CertificationProductType[],
+    certCustomer: null as CertificationCustomerDetail | null,
   }),
 
   getters: {
@@ -52,6 +54,11 @@ export const useCertificationStore = defineStore('certification', {
   },
 
   actions: {
+    async fetchCertificationCustomer(customerId: number) {
+      this.certCustomer = null;
+      const result = await api.fetchCertificationCustomer(customerId);
+      this.certCustomer = result as CertificationCustomerDetail | null;
+    },
     async fetchAll() {
       const [schemes, cats, subs, products] = await Promise.all([
         api.fetchCertificationSchemes(),

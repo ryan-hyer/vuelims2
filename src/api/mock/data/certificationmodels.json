@@ -1,0 +1,8 @@
+[
+  { "id": 1, "certificationListingId": 1, "modelNumber": "FWT-10", "description": "10-gallon fresh water tank" },
+  { "id": 2, "certificationListingId": 1, "modelNumber": "FWT-20", "description": "20-gallon fresh water tank" },
+  { "id": 3, "certificationListingId": 1, "modelNumber": "FWT-30", "description": "30-gallon fresh water tank" },
+  { "id": 4, "certificationListingId": 2, "modelNumber": "BWT-15", "description": "15-gallon black water tank" },
+  { "id": 5, "certificationListingId": 2, "modelNumber": "GWT-10", "description": "10-gallon gray water tank" },
+  { "id": 6, "certificationListingId": 3, "modelNumber": "GWT-08", "description": "8-gallon gray water tank (discontinued)" }
+]

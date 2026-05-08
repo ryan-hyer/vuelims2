@@ -51,18 +51,27 @@ export interface CertificationCustomer {
   // Might need to revisit this after we do the Invoicing module
   effectiveDate?: Date; // will be null until the listing is approved
   terminationDate?: Date;
+  terminationReason?: string;
   status: 'pending' | 'canceled' | 'active' | 'suspended' | 'terminated';
+  notes?: CertificationNote[];
   documents?: CertificationDocument[]; // for contracts and other docs related to the customer as a whole, not specific to a location or listing
   // This is sort of a weird reverse one-to-many
   // But the other option is nearly identical models for CertificationCustomerDocument, CertificationListingDocument, CertificationModelDocument, CertificationLocationDocument, etc., which seems way too complicated for what we need
 }
 
 export interface CertificationNote {
-  id: number;
-  certificationCustomerId: number; // from CertificationCustomer model
+  id: number; // Do I need an id if these notes are intended to be stored as arrays of objects, rather than in its own table?
   note: string;
   createdAt: Date;
   createdBy: number; // userId
+}
+
+export interface CertificationDocument {
+  id: number;
+  description: string;
+  url: string;
+  uploadedAt: Date;
+  uploadedBy: number; // userId
 }
 
 export interface CertificationListing {
@@ -74,8 +83,9 @@ export interface CertificationListing {
   description: string;
   listingConditions: string[]; // these will be split into an ordered list for display
   hasCanada: boolean;
+  status: 'pending' | 'approved' | 'archived';
+  notes?: CertificationNote[];
   documents?: CertificationDocument[]; // for listing-specific documents that apply to all models within a category
-  notes?: string[];
 }
 
 export interface CertificationModel {
@@ -86,19 +96,11 @@ export interface CertificationModel {
   documents?: CertificationDocument[]; // for drawings and other docs related to a specific model
 }
 
-export interface CertificationDocument {
-  id: number;
-  description: string;
-  url: string;
-  uploadedAt: Date;
-  uploadedBy: number; // userId
-}
-
 export interface CertificationLocation {
   id: number;
   certificationCustomerId: number; // from CertificationCustomer model
   customerLocationId: number; // from CustomerLocations model in the Customers module
-  name?: string;
+  name: string;
   address: string;
   city: string;
   state: string;
@@ -110,6 +112,19 @@ export interface CertificationLocation {
   contactEmail?: string;
   contactPhone?: string;
   status: 'pending' | 'approved' | 'archived';
-  notes?: string;
+  notes?: CertificationNote[];
   documents?: CertificationDocument[]; // not sure what I'd use this for, but just in case
+}
+
+// Denormalized view types used for display
+
+export interface CertificationListingDetail extends CertificationListing {
+  models: CertificationModel[];
+  displayLabel: string; // "[Scheme code] [Category description] - [Product type description] ([Combined code])"
+}
+
+export interface CertificationCustomerDetail extends CertificationCustomer {
+  listings: CertificationListingDetail[];
+  locations: CertificationLocation[];
+  primaryContact?: { name: string; email?: string; phone?: string } | null;
 }

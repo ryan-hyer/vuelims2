@@ -88,6 +88,10 @@
         </div>
       </q-linear-progress>
       <ul>
+        <li>
+          Redo the Company Info and Interaction Log tabs with some better style, more like the
+          Certifications tab
+        </li>
         <li>Once Projects module is finished, hook up the Projects/Invoices tab</li>
         <li>
           Maybe separate Projects and Invoices? Or leave it as is since Projects and Invoices are
@@ -155,6 +159,12 @@
       </q-linear-progress>
       <ul>
         <li>Finish the Certification Detail page -- this is our first big milestone!</li>
+        <li>
+          Next step: create forms for adding/editing/deleting customer/listing/location info, only
+          for admins! (In production, data will only be alterable through formal amendment process,
+          but I need this to import all the existing data, and maybe to fix unintentional errors in
+          the future)
+        </li>
         <li>
           Need a section for QRC and a way to generate the prior year's project list along with PDF
           datasheets
@@ -237,7 +247,7 @@ const complete = {
   qualitySystem: 0,
   qualityControl: 0,
   testing: 0,
-  certification: 30,
+  certification: 40,
   inspection: 0,
   library: 80,
 };

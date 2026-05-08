@@ -9,7 +9,7 @@
             type="textarea"
             dense
             hide-bottom-space
-            v-model="location.address"
+            v-model="location.address1"
             label="Street Address"
             lazy-rules
             :rules="[(val) => !!val || 'Cannot be blank']"
@@ -25,7 +25,7 @@
           <q-input
             dense
             hide-bottom-space
-            v-model="location.customerState"
+            v-model="location.state"
             label="State / Province / Region"
             lazy-rules
             :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
@@ -68,9 +68,9 @@
     <q-item-section>
       <q-item-label>
         <div v-if="location.name">{{ location.name }}</div>
-        <div style="white-space: pre">{{ location.address }}</div>
+        <div style="white-space: pre">{{ location.address1 }}</div>
         <div>
-          {{ location.city }}, {{ location.customerState }}
+          {{ location.city }}, {{ location.state }}
           {{ location.zipCode }}
         </div>
         <div>{{ location.country }}</div>
@@ -124,12 +124,13 @@ const location = ref(
     id: Date.now(), // Simulate an ID for the new location
     customerId: 0,
     name: '',
-    address: '',
+    address1: '',
     city: '',
-    customerState: '',
+    state: '',
     zipCode: '',
     country: '',
     phone: '',
+    isPrimary: false,
     notes: '',
   },
 );
@@ -145,12 +146,13 @@ const submitForm = () => {
       id: Date.now(), // Reset for a new entry
       customerId: 0,
       name: '',
-      address: '',
+      address1: '',
       city: '',
-      customerState: '',
+      state: '',
       zipCode: '',
       country: '',
       phone: '',
+      isPrimary: false,
       notes: '',
     };
   }

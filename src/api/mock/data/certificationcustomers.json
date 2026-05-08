@@ -1,0 +1,63 @@
+[
+  {
+    "id": 1,
+    "customerId": 12,
+    "companyName": "Cashion Thermoplastics, Inc.",
+    "address1": "P.O. Box 400",
+    "address2": "1006 Hwy. 19 South",
+    "city": "Red Bay",
+    "state": "AL",
+    "zipCode": "35582",
+    "country": "USA",
+    "phone": "256-356-2017",
+    "website": "",
+    "listingNumber": "02A01",
+    "effectiveDate": "2002-12-07",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "customerId": 13,
+    "companyName": "HeadHunter Inc.",
+    "address1": "3380 SW 11th Ave.",
+    "city": "Fort Lauderdale",
+    "state": "FL",
+    "zipCode": "33315",
+    "country": "USA",
+    "phone": "954-581-6996",
+    "website": "http://www.headhunterinc.com",
+    "listingNumber": "04F03 (01C01,17853)",
+    "effectiveDate": "1999-10-31",
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "customerId": 14,
+    "companyName": "Custom Roto-Molding Inc.",
+    "address1": "307 Evans",
+    "city": "Caldwell",
+    "state": "ID",
+    "zipCode": "83605",
+    "country": "USA",
+    "phone": "208-459-1944",
+    "website": "http://www.customroto.com",
+    "listingNumber": "16928",
+    "effectiveDate": "1997-04-14",
+    "status": "active"
+  },
+  {
+    "id": 4,
+    "customerId": 15,
+    "companyName": "Inca Plastics Molding Co., Inc.",
+    "address1": "17129 Koala Rd.",
+    "city": "Adelanto",
+    "state": "CA",
+    "zipCode": "92301",
+    "country": "USA",
+    "phone": "909-923-3235",
+    "website": "http://incaplastics.com",
+    "listingNumber": "17281",
+    "effectiveDate": "1997-11-26",
+    "status": "active"
+  }
+]

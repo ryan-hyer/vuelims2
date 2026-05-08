@@ -12,9 +12,10 @@ export interface CustomerLocation {
   id: number;
   customerId: number;
   name?: string;
-  address: string;
+  address1: string;
+  address2?: string;
   city: string;
-  customerState: string;
+  state: string;
   zipCode: string;
   country: string;
   phone?: string;

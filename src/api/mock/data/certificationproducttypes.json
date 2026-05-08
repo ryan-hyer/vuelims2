@@ -14,5 +14,21 @@
     "description": "Heating Appliances",
     "fee": 750,
     "standardIds": [2, 4, 6]
+  },
+  {
+    "id": 3,
+    "subcategoryId": 14,
+    "code": "1",
+    "description": "Fresh Water Tanks",
+    "fee": 500,
+    "standardIds": []
+  },
+  {
+    "id": 4,
+    "subcategoryId": 14,
+    "code": "2",
+    "description": "Waste Water Tanks",
+    "fee": 500,
+    "standardIds": []
   }
 ]

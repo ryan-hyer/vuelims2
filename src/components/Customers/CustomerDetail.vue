@@ -22,7 +22,7 @@
     >
       <q-tab name="identity" label="Company Info" />
       <q-tab name="interactions" label="Interaction Log" />
-      <!-- Hide if customer has no listings -->
+      <!-- Only show if customer has active, suspended, or terminated certifications -->
       <q-tab name="certifications" label="Certifications" />
       <q-tab name="projects" label="Projects / Invoices" disable />
     </q-tabs>
@@ -31,7 +31,7 @@
     <q-tab-panels v-if="customer" v-model="tab" animated>
       <q-tab-panel name="identity"> <CustomerInfo :customer="customer" /></q-tab-panel>
       <q-tab-panel name="interactions"> <CustomerInteractions :customer="customer" /></q-tab-panel>
-      <q-tab-panel name="certifications"> <CertificationDetail :customer="customer" /></q-tab-panel>
+      <q-tab-panel name="certifications"> <CertificationDetail :customerId="customer!.id" /></q-tab-panel>
     </q-tab-panels>
   </q-page>
 </template>

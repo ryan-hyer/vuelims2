@@ -2,9 +2,9 @@
   {
     "id": 1,
     "customerId": 1,
-    "address": "123 Main St",
+    "address1": "123 Main St",
     "city": "Anytown",
-    "customerState": "CA",
+    "state": "CA",
     "zipCode": "12345",
     "country": "USA",
     "isPrimary": true
@@ -13,9 +13,9 @@
     "id": 2,
     "customerId": 1,
     "name": "Warehouse",
-    "address": "456 Elm St",
+    "address1": "456 Elm St",
     "city": "Othertown",
-    "customerState": "TX",
+    "state": "TX",
     "zipCode": "67890",
     "country": "USA",
     "isPrimary": false
@@ -23,9 +23,9 @@
   {
     "id": 3,
     "customerId": 2,
-    "address": "789 Oak St",
+    "address1": "789 Oak St",
     "city": "Sometown",
-    "customerState": "FL",
+    "state": "FL",
     "zipCode": "11223",
     "country": "USA",
     "isPrimary": true
@@ -33,11 +33,22 @@
   {
     "id": 4,
     "customerId": 3,
-    "address": "321 Pine St",
+    "address1": "321 Pine St",
     "city": "Anycity",
-    "customerState": "WA",
+    "state": "WA",
     "zipCode": "33445",
     "country": "USA",
+    "isPrimary": true
+  },
+  {
+    "id": 5,
+    "customerId": 12,
+    "address1": "1404 7th St NW",
+    "city": "Red Bay",
+    "state": "AL",
+    "zipCode": "35582",
+    "country": "USA",
+    "phone": "256-356-2017",
     "isPrimary": true
   }
 ]
