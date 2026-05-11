@@ -2,7 +2,9 @@ export interface Customer {
   id: number;
   name: string;
   website?: string;
+  relevance?: string;
   notes?: string;
+  archivedAt?: string;
   locations?: CustomerLocation[];
   contacts?: CustomerContact[];
   interactions?: CustomerInteraction[];
@@ -21,6 +23,7 @@ export interface CustomerLocation {
   phone?: string;
   isPrimary: boolean; // Not sure about this one, might be hard to enforce
   notes?: string;
+  archivedAt?: string;
 }
 
 export interface CustomerContact {
@@ -31,6 +34,7 @@ export interface CustomerContact {
   phone?: string;
   position?: string;
   notes?: string;
+  archivedAt?: string;
 }
 
 export interface CustomerInteraction {

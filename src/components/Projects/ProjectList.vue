@@ -1,6 +1,14 @@
 <template>
   <q-page padding>
-    <div class="page-header">Projects</div>
+    <div class="page-header row items-center no-wrap">
+      <div class="col">Projects</div>
+      <q-btn round color="primary" icon="search" class="q-mr-md" @click="openSearch = !openSearch">
+        <q-tooltip>Search and Filter</q-tooltip>
+      </q-btn>
+      <q-btn round color="green" icon="add" class="q-mr-md" :to="{ name: 'project-new' }">
+        <q-tooltip>Add New Project</q-tooltip>
+      </q-btn>
+    </div>
     <q-table
       flat
       bordered
@@ -13,16 +21,19 @@
       :table-row-class-fn="rowClassFn"
       @row-click="onRowClick"
     >
-      <template v-slot:top>
+      <template v-slot:top v-if="openSearch">
         <q-toolbar>
-          <q-input v-model="filter" placeholder="Search projects..." dense outlined clearable />
-          <q-toggle v-model="hideCompleted" label="Hide completed" class="q-ml-md" />
-          <q-space />
-          <q-btn round color="green" icon="add" class="q-ma-sm" :to="{ name: 'project-new' }">
-            <q-tooltip>Add New Project</q-tooltip>
-          </q-btn>
+          <q-input
+            v-model="filter"
+            placeholder="Search projects..."
+            dense
+            outlined
+            clearable
+            debounce="300"
+            class="col"
+          />
+          <q-toggle v-model="showCompleted" label="Show completed" class="q-ml-md" />
         </q-toolbar>
-        <div class="text-caption text-italic">Click a row to view more details</div>
       </template>
       <template v-slot:body-cell-description="props">
         <q-td :props="props" style="max-width: fit-content">
@@ -45,10 +56,11 @@ const store = useProjectStore();
 
 const filter = ref('');
 const loading = ref(false);
-const hideCompleted = ref(false);
+const showCompleted = ref(false);
+const openSearch = ref(false);
 
 const projects = computed(() =>
-  hideCompleted.value ? store.projects.filter((p) => !p.completeDate) : store.projects,
+  showCompleted.value ? store.projects : store.projects.filter((p) => !p.completeDate),
 );
 
 onMounted(async () => {
@@ -75,7 +87,10 @@ const columns: QTableColumn[] = [
       const byDate = a.localeCompare(b);
       return byDate !== 0
         ? byDate
-        : rowA.jobNumber.localeCompare(rowB.jobNumber, undefined, { numeric: true, sensitivity: 'base' });
+        : rowA.jobNumber.localeCompare(rowB.jobNumber, undefined, {
+            numeric: true,
+            sensitivity: 'base',
+          });
     },
   },
   {

@@ -25,6 +25,13 @@
           label="Company Website (optional)"
           class="q-mb-md"
         />
+        <q-input
+          filled
+          v-model="newCustomer.relevance"
+          label="Relevance (optional)"
+          hint="Why is this customer important to our business? (e.g. Calibration provider, Mostly a listing customer but sometimes asks for FMVSS work, etc.)"
+          class="q-mb-md"
+        />
         <q-input filled v-model="newCustomer.notes" type="textarea" label="Notes (optional)" />
         <div class="row justify-end q-gutter-sm q-mt-md">
           <q-btn flat label="Cancel" color="red" :to="{ name: 'customer-list' }" />
@@ -47,6 +54,7 @@ const newCustomer = ref<Customer>({
   id: -1,
   name: '',
   website: '',
+  relevance: '',
   notes: '',
 });
 

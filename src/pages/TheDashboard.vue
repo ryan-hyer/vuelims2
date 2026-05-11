@@ -13,23 +13,13 @@
       </q-linear-progress>
       <ul>
         <li>
-          Need to make some design decisions around things like customers -- a single large
-          customers page that can be filtered by job type? Or a separate page for customers by job
-          type?
+          At some point, think about how this all might integrate with a new public site, things
+          like library check-out and return, access to completed reports, application process,
+          submitting payments, etc.
         </li>
         <li>
-          Same with listings: Do I have a separate structure just for listing, like I do with the
-          Tracker, or do I just integrate listing-specific info into the existing customer/project
-          structure?
-        </li>
-        <li>
-          Also think about how this all might integrate with a new public site, things like library
-          check-out and return, access to completed reports, application process, submitting
-          payments, etc.
-        </li>
-        <li>
-          Might be helpful to have each module have its own color, then use that as the accent color
-          throughout those pages, kind of like the internal audit
+          See LIMS Notes document for notes on how we'll handle importing old data from the Tracker
+          when we get closer to completion
         </li>
       </ul>
 
@@ -45,9 +35,7 @@
           Some functions should be available to any of an employee's supervisors, as well as admins
           (e.g. performance reviews)
         </li>
-        <li>
-          And also flesh out the user Profile page, notifications, messages and stuff like that
-        </li>
+        <li>Flesh out the user Profile page, notifications, messages and stuff like that</li>
       </ul>
 
       <div class="text-bold">Projects</div>
@@ -57,6 +45,10 @@
         </div>
       </q-linear-progress>
       <ul>
+        <li>
+          Everything below is subject to change as we proceed, and it might be best to sit on this
+          until we get farther along with listing amendments:
+        </li>
         <li>
           Maybe the best way is to not have a consolidated Projects menu item, but instead have
           separate lists, each with their own New Project button, all of which go to the same route
@@ -88,10 +80,6 @@
         </div>
       </q-linear-progress>
       <ul>
-        <li>
-          Redo the Company Info and Interaction Log tabs with some better style, more like the
-          Certifications tab
-        </li>
         <li>Once Projects module is finished, hook up the Projects/Invoices tab</li>
         <li>
           Maybe separate Projects and Invoices? Or leave it as is since Projects and Invoices are
@@ -119,14 +107,19 @@
         </div>
       </q-linear-progress>
       <ul>
-        <li>Personnel: make decision on unassign vs delete roles</li>
         <li>
-          Also try to put the personnel agreement in the system rather than have it as a document
-          that needs to be uploaded
+          Personnel: make decision on unassign vs delete roles -- might be clearer later on when
+          we've got all our role guards in place
         </li>
         <li>
-          If I can do that, then I might be able to include the CV in the Info tab like before, and
-          remove the Documentation tab again. But where to handle the agreement?
+          Try to put the personnel agreement in the system rather than have it as a document that
+          needs to be uploaded. Maybe as part of the competency section? If I can do that, then I
+          might be able to include the CV in the Info tab like before, and remove the Documentation
+          tab again.
+        </li>
+        <li>
+          Improve the style of sections, headers, icons, etc. to be more like what we've done with
+          Customers
         </li>
       </ul>
 
@@ -159,15 +152,28 @@
       </q-linear-progress>
       <ul>
         <li>Finish the Certification Detail page -- this is our first big milestone!</li>
+        <li>Next step: functionality for notes and documents</li>
+        <li>Then: workflows for amendments and surveillance</li>
         <li>
-          Next step: create forms for adding/editing/deleting customer/listing/location info, only
-          for admins! (In production, data will only be alterable through formal amendment process,
-          but I need this to import all the existing data, and maybe to fix unintentional errors in
-          the future)
+          Add functionality for generating listing sheets -- this will be a good test run for how to
+          export things as PDF
         </li>
         <li>
-          Need a section for QRC and a way to generate the prior year's project list along with PDF
-          datasheets
+          Then we need functionality for suspending/terminating certifications, and role guards for
+          all listing functions
+        </li>
+        <li>
+          QRC: Flesh out with I guess a list of past QRC meetings? Similar to performance reviews
+          etc? And a place to upload meeting documents (agenda, minutes) for each meeting.
+        </li>
+        <li>
+          QRC: Along with the meeting list, need a place to track committee members and upload their
+          confidentiality agreements
+        </li>
+        <li>
+          QRC: Also need a way to generate the prior year's project list along with PDF datasheets
+          -- put this under Reports? Do I even want Reports under Certification, or maybe as a
+          top-level menu item?
         </li>
       </ul>
 

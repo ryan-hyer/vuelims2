@@ -2,18 +2,18 @@
   {
     "id": 1,
     "customerId": 1,
-    "date": "2023-10-05",
+    "date": "2023/10/05",
     "type": "Meeting",
     "with": "John Doe",
     "description": "Discussed project updates and next steps.",
     "followUpAction": "Send project report by end of week.",
-    "followUpByDate": "2023-10-07",
+    "followUpByDate": "2023/10/07",
     "followUpAssignedTo": 3
   },
   {
     "id": 2,
     "customerId": 1,
-    "date": "2023-10-01",
+    "date": "2023/10/01",
     "type": "Email",
     "with": "Jane Smith",
     "description": "Reviewed contract terms and conditions.",
@@ -24,7 +24,7 @@
   {
     "id": 3,
     "customerId": 2,
-    "date": "2023-09-28",
+    "date": "2023/09/28",
     "type": "Phone Call",
     "with": "Mike Johnson",
     "description": "Initial outreach and introduction."
@@ -32,23 +32,23 @@
   {
     "id": 4,
     "customerId": 3,
-    "date": "2023-09-25",
+    "date": "2023/09/25",
     "type": "Meeting",
     "with": "Emily Davis",
     "description": "Product demo and Q&A session.",
     "followUpAction": "Schedule follow-up meeting to discuss feedback.",
-    "followUpByDate": "2023-10-02",
+    "followUpByDate": "2023/10/02",
     "followUpAssignedTo": 4
   },
   {
     "id": 5,
     "customerId": 2,
-    "date": "2023-09-20",
+    "date": "2023/09/20",
     "type": "Email",
     "with": "Sarah Wilson",
     "description": "Sent proposal for new project.",
     "followUpAction": "Call to discuss proposal details.",
-    "followUpByDate": "2023-09-27",
+    "followUpByDate": "2023/09/27",
     "followUpAssignedTo": 2
   }
 ]

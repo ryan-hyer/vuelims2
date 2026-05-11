@@ -10,11 +10,23 @@
             dense
             hide-bottom-space
             v-model="interaction.date"
-            label="Interaction Date"
-            type="date"
+            label="Interaction Date (yyyy/mm/dd)"
+            mask="date"
             lazy-rules
             :rules="[(val) => !!val || 'Cannot be blank']"
-          />
+          >
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-date v-model="interaction.date">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
           <q-select
             dense
             hide-bottom-space
@@ -41,20 +53,33 @@
             lazy-rules
             :rules="[(val) => !!val || 'Cannot be blank']"
           />
+          <!-- TODO: There should be some logic for these follow-up fields - they either all need to be filled in, or none of them - but I'm not sure how to do that -->
           <q-input
             dense
             hide-bottom-space
             v-model="interaction.followUpAction"
-            label="Follow-up Actions"
+            label="Follow-up Actions (optional)"
             type="textarea"
           />
           <q-input
             dense
             hide-bottom-space
             v-model="interaction.followUpByDate"
-            label="Follow-up Date"
-            type="date"
-          />
+            label="Follow-up Date (yyyy/mm/dd) (optional)"
+            mask="date"
+          >
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-date v-model="interaction.followUpByDate">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
           <q-select
             dense
             hide-bottom-space
@@ -64,14 +89,14 @@
             option-label="name"
             emit-value
             map-options
-            label="Follow-up Assigned To"
+            label="Follow-up Assigned To (optional)"
           />
 
           <q-card-actions>
             <q-btn label="Submit" type="submit" color="teal" />
             <q-btn label="Cancel" flat class="q-ml-sm" @click="formIsVisible = false" />
             <q-space />
-            <span v-if="props.interaction">
+            <span v-if="props.interaction && authStore.isAdmin">
               <q-btn round color="red" icon="delete" @click="emit('deleteInteraction')">
                 <q-tooltip>Delete Interaction Record</q-tooltip>
               </q-btn>
@@ -87,7 +112,9 @@
       <q-item-label overline>
         {{ interaction.date }} - {{ interaction.type }} with {{ interaction.with }}
       </q-item-label>
-      <q-item-label caption>{{ interaction.description }}</q-item-label>
+      <q-item-label caption
+        ><div style="white-space: pre-wrap">{{ interaction.description }}</div></q-item-label
+      >
       <q-item-label caption v-if="interaction.followUpCompleted"
         >Follow-up: {{ interaction.followUpAction }} (completed)</q-item-label
       >
@@ -96,8 +123,9 @@
         class="bg-grey-2 q-pa-sm q-mt-sm"
         v-if="interaction.followUpAction && !interaction.followUpCompleted"
       >
-        <div v-if="interaction.followUpAction">
-          <span class="text-bold">Follow-up:</span> {{ interaction.followUpAction }}
+        <div v-if="interaction.followUpAction" style="white-space: pre-wrap">
+          <div class="text-h6">Follow-up:</div>
+          <div>{{ interaction.followUpAction }}</div>
         </div>
         <div v-if="interaction.followUpAssignedTo">
           <span class="text-bold">Assigned to:</span> {{ assignedToName }}
@@ -105,8 +133,8 @@
         <div v-if="interaction.followUpByDate" class="text-weight-bold text-red">
           Follow-up By: {{ interaction.followUpByDate }}
         </div>
-        <!-- This button should only be visible to the assigned person and admins -->
         <q-btn
+          v-if="authStore.isAdmin || interaction.followUpAssignedTo === authStore.user?.employeeId"
           size="xs"
           icon="check"
           color="green"
@@ -115,20 +143,9 @@
         />
       </q-card>
     </q-item-section>
-    <q-item-section side bottom>
+    <q-item-section v-if="!props.archived" side bottom>
       <q-btn flat round color="grey" icon="edit" @click="formIsVisible = true" />
     </q-item-section>
-  </q-item>
-
-  <q-item dense v-if="!formIsVisible && !props.interaction">
-    <q-btn
-      rounded
-      color="green"
-      icon="add_box"
-      label="Add New Interaction"
-      class="q-mb-md"
-      @click="formIsVisible = true"
-    />
   </q-item>
 </template>
 
@@ -136,14 +153,15 @@
 import { ref, computed, onMounted } from 'vue';
 import type { CustomerInteraction } from './models';
 import { usePersonnelStore } from 'src/stores/personnel-store';
+import { useAuthStore } from 'src/stores/auth-store';
 
 const personnelStore = usePersonnelStore();
+const authStore = useAuthStore();
 
-const props = defineProps({
-  interaction: {
-    type: Object as () => CustomerInteraction,
-  },
-});
+const props = defineProps<{
+  interaction?: CustomerInteraction;
+  archived?: boolean;
+}>();
 
 const emit = defineEmits<{
   addInteraction: [interaction: object];
@@ -169,10 +187,19 @@ const interactionTypeOptions = ['Phone Call', 'Email', 'Meeting', 'Virtual Meeti
 
 const assignedToName = computed(() => {
   if (!interaction.value.followUpAssignedTo) return '';
-  return personnelStore.personnelList.find((p) => p.id === interaction.value.followUpAssignedTo)?.name ?? '';
+  return (
+    personnelStore.personnelList.find((p) => p.id === interaction.value.followUpAssignedTo)?.name ??
+    ''
+  );
 });
 
 const formIsVisible = ref(false);
+
+defineExpose({
+  show: () => {
+    formIsVisible.value = true;
+  },
+});
 
 onMounted(async () => {
   if (!personnelStore.personnelList.length) {

@@ -42,11 +42,11 @@
               </q-list>
             </q-menu>
           </q-btn>
-          <q-btn round flat color="primary" icon="notes">
+          <q-btn round flat color="primary" icon="edit_note">
             <q-tooltip>Notes</q-tooltip>
             <q-badge color="grey-7" floating>{{ certCustomer.notes?.length ?? 0 }}</q-badge>
           </q-btn>
-          <q-btn round flat color="primary" icon="description">
+          <q-btn round flat color="primary" icon="file_present">
             <q-tooltip>Documents</q-tooltip>
             <q-badge color="grey-7" floating>{{ certCustomer.documents?.length ?? 0 }}</q-badge>
           </q-btn>
@@ -104,28 +104,23 @@
                   certCustomer.status.toUpperCase()
                 }}</span>
               </q-item-label>
-              <template
+              <q-item-label
+                class="q-pl-md"
                 v-if="certCustomer.status !== 'pending' && certCustomer.status !== 'canceled'"
               >
-                <q-item-label class="q-pl-md">
-                  <span class="text-overline">Listing Number:</span>
-                  <span class="text-bold"> {{ certCustomer.listingNumber }}</span>
-                </q-item-label>
-                <q-item-label class="q-pl-md">
-                  <span class="text-overline">Effective Date:</span>
-                  {{ formatDate(certCustomer.effectiveDate) }}
-                </q-item-label>
-              </template>
-              <template v-if="isTerminated">
-                <q-item-label class="q-pl-md">
-                  <span class="text-overline">Termination Date:</span>
-                  {{ formatDate(certCustomer.terminationDate) }}
-                </q-item-label>
-                <q-item-label class="q-pl-md">
-                  <span class="text-overline">Termination Reason:</span>
-                  {{ certCustomer.terminationReason ?? 'N/A' }}
-                </q-item-label>
-              </template>
+                <span class="text-overline">Listing Number:</span>
+                <span class="text-bold"> {{ certCustomer.listingNumber }}</span>
+                <br />
+                <span class="text-overline">Effective Date:</span>
+                {{ formatDate(certCustomer.effectiveDate) }}
+              </q-item-label>
+              <q-item-label class="q-pl-md" v-if="isTerminated">
+                <span class="text-overline">Termination Date:</span>
+                {{ formatDate(certCustomer.terminationDate) }}
+                <br />
+                <span class="text-overline">Termination Reason:</span>
+                {{ certCustomer.terminationReason ?? 'N/A' }}
+              </q-item-label>
             </q-item-section>
           </q-item>
         </q-list>
@@ -145,10 +140,10 @@
             <q-toolbar class="bg-grey-3">
               <div class="text-bold">{{ listing.displayLabel }}</div>
               <q-space />
-              <q-btn round flat color="primary" icon="notes">
+              <q-btn round flat color="primary" icon="edit_note">
                 <q-tooltip>Notes</q-tooltip>
               </q-btn>
-              <q-btn round flat color="primary" icon="description">
+              <q-btn round flat color="primary" icon="file_present">
                 <q-tooltip>Documents</q-tooltip>
               </q-btn>
             </q-toolbar>
@@ -212,10 +207,10 @@
               <q-toolbar class="bg-grey-3">
                 <div class="text-bold">{{ listing.displayLabel }}</div>
                 <q-space />
-                <q-btn round flat color="primary" icon="notes">
+                <q-btn round flat color="primary" icon="edit_note">
                   <q-tooltip>Notes</q-tooltip>
                 </q-btn>
-                <q-btn round flat color="primary" icon="description">
+                <q-btn round flat color="primary" icon="file_present">
                   <q-tooltip>Documents</q-tooltip>
                 </q-btn>
               </q-toolbar>
@@ -239,10 +234,10 @@
               <q-toolbar class="bg-grey-3">
                 <div class="text-bold">{{ location.name }}</div>
                 <q-space />
-                <q-btn round flat color="primary" icon="notes">
+                <q-btn round flat color="primary" icon="edit_note">
                   <q-tooltip>Notes</q-tooltip>
                 </q-btn>
-                <q-btn round flat color="primary" icon="description">
+                <q-btn round flat color="primary" icon="file_present">
                   <q-tooltip>Documents</q-tooltip>
                 </q-btn>
               </q-toolbar>
@@ -285,10 +280,10 @@
               <q-toolbar class="bg-grey-3">
                 <div class="text-bold">{{ location.name }}</div>
                 <q-space />
-                <q-btn round flat color="primary" icon="notes">
+                <q-btn round flat color="primary" icon="edit_note">
                   <q-tooltip>Notes</q-tooltip>
                 </q-btn>
-                <q-btn round flat color="primary" icon="description">
+                <q-btn round flat color="primary" icon="file_present">
                   <q-tooltip>Documents</q-tooltip>
                 </q-btn>
               </q-toolbar>

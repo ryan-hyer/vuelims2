@@ -1,10 +1,18 @@
 <template>
   <q-page padding>
-    <div class="page-header">Customers</div>
+    <div class="page-header row items-center no-wrap">
+      <div class="col">Customers</div>
+      <q-btn round color="primary" icon="search" class="q-mr-md" @click="openSearch = !openSearch">
+        <q-tooltip>Search and Filter</q-tooltip>
+      </q-btn>
+      <q-btn round color="green" icon="add" class="q-mr-md" :to="{ name: 'customer-new' }">
+        <q-tooltip>Add New Customer</q-tooltip>
+      </q-btn>
+    </div>
+
     <q-table
       flat
       bordered
-      dense
       ref="customerTable"
       :rows="customers"
       :columns="columns"
@@ -15,7 +23,7 @@
       @request="onRequest"
       @row-click="onRowClick"
     >
-      <template v-slot:top>
+      <template v-slot:top v-if="openSearch">
         <q-toolbar>
           <q-input
             v-model="filter"
@@ -24,13 +32,21 @@
             outlined
             clearable
             debounce="300"
+            class="col"
           />
-          <q-space />
-          <q-btn round color="green" icon="add" class="q-ma-sm" :to="{ name: 'customer-new' }">
-            <q-tooltip>Add New Customer</q-tooltip>
-          </q-btn>
+          <q-toggle
+            v-model="showArchived"
+            label="Show Archived"
+            class="q-ml-md"
+            @update:model-value="customerTable.requestServerInteraction()"
+          />
         </q-toolbar>
-        <div class="text-caption text-italic">Click a row to view more details</div>
+      </template>
+      <template v-slot:body-cell-name="props">
+        <q-td :props="props">
+          <span :class="props.row.archivedAt ? 'text-grey-6' : ''">{{ props.row.name }}</span>
+          <q-badge v-if="props.row.archivedAt" color="grey-5" label="Archived" class="q-ml-sm" />
+        </q-td>
       </template>
     </q-table>
   </q-page>
@@ -50,6 +66,8 @@ const customers = ref<Customer[]>([]);
 const customerTable = ref();
 const filter = ref('');
 const loading = ref(false);
+const openSearch = ref(false);
+const showArchived = ref(false);
 
 onMounted(() => {
   customerTable.value.requestServerInteraction();
@@ -99,7 +117,7 @@ async function onRequest(props: {
   const startRow = (page - 1) * rowsPerPage;
 
   // fetch data from "server"
-  await store.fetchCustomers(startRow, fetchCount, filter, sortBy, descending).then(() => {
+  await store.fetchCustomers(startRow, fetchCount, filter, sortBy, descending, showArchived.value).then(() => {
     // clear out existing data and add new
     customers.value = store.customers;
 

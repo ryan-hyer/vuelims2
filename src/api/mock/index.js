@@ -1,7 +1,7 @@
 // This is a mock API, which should handle all logic normally handled by a real backend
 // Altering the import call in the store(s) should be all that's needed to switch to the production API
 
-import customers from './data/customers.json';
+import customersJson from './data/customers.json';
 import customerlocations from './data/customerlocations.json';
 import customercontacts from './data/customercontacts.json';
 import customerinteractions from './data/customerinteractions.json';
@@ -36,6 +36,7 @@ const certModelsData = certModelsJson.map((m) => ({ ...m }));
 const certLocationsData = certLocationsJson.map((l) => ({ ...l }));
 
 // Mutable in-memory copies so write operations work within the session
+const customersData = customersJson.map((c) => ({ ...c }));
 const standardsData = standardsJson.map((s) => ({ ...s }));
 const standardRevisionsData = standardRevisionsJson.map((r) => ({ ...r, filename: null, url: null }));
 const libraryCheckoutsData = libraryCheckoutsJson.map((c) => ({ ...c }));
@@ -54,7 +55,7 @@ const resetTokens = {};
 
 const joinProject = (p) => ({
   ...p,
-  customerName: customers.find((c) => c.id === p.customerId)?.name ?? 'Unknown',
+  customerName: customersData.find((c) => c.id === p.customerId)?.name ?? 'Unknown',
 });
 
 const fetch = (mockData, time = 0) => {
@@ -77,14 +78,12 @@ const findChildren = (parent, roleData) => {
 };
 
 export default {
-  async fetchCustomers(startRow, fetchCount, filter, sortBy, descending) {
+  async fetchCustomers(startRow, fetchCount, filter, sortBy, descending, includeArchived = false) {
     // Fetch all customers, then filter, sort, and paginate the results
-    return await fetch(customers, 1000)
+    return await fetch(customersData, 1000)
       .then((response) => {
-        const customerArray = response;
-        const data = filter
-          ? customerArray.filter((row) => row.name.toLowerCase().includes(filter.toLowerCase()))
-          : customerArray.slice();
+        let data = includeArchived ? response.slice() : response.filter((row) => !row.archivedAt);
+        if (filter) data = data.filter((row) => row.name.toLowerCase().includes(filter.toLowerCase()));
         if (sortBy) {
           // In this case, sortBy can only be 'name' (the only column in the table)
           const sortFn = descending
@@ -98,31 +97,29 @@ export default {
         console.error('Error in Mock API fetching customer list:', error);
       });
   },
-  async fetchCustomerCount(filter) {
+  async fetchCustomerCount(filter, includeArchived = false) {
     // Fetch all customers, then filter and return the count
-    return fetch(customers).then((response) => {
-      const customerArray = response;
-      const data = filter
-        ? customerArray.filter((row) => row.name.toLowerCase().includes(filter.toLowerCase()))
-        : customerArray.slice();
+    return fetch(customersData).then((response) => {
+      let data = includeArchived ? response.slice() : response.filter((row) => !row.archivedAt);
+      if (filter) data = data.filter((row) => row.name.toLowerCase().includes(filter.toLowerCase()));
       return data.length;
     });
   },
   async fetchCustomer(customerId) {
     // simulating a join query
     return await Promise.all([
-      fetch(customers, 1000),
+      fetch(customersData, 1000),
       fetch(customerlocations),
       fetch(customercontacts),
       fetch(customerinteractions),
     ])
       .then((responses) => {
-        const customersData = responses[0];
+        const allCustomers = responses[0];
         const locationsData = responses[1];
         const contactsData = responses[2];
         const interactionsData = responses[3];
 
-        const customer = customersData.find((c) => c.id === customerId);
+        const customer = allCustomers.find((c) => c.id === customerId);
         if (customer) {
           customer.locations = locationsData.filter((l) => l.customerId === customerId);
           customer.contacts = contactsData.filter((c) => c.customerId === customerId);
@@ -133,6 +130,16 @@ export default {
       .catch((error) => {
         console.error('Error in Mock API fetching customer data:', error);
       });
+  },
+  archiveCustomer(customerId) {
+    const customer = customersData.find((c) => c.id === customerId);
+    if (customer) customer.archivedAt = new Date().toISOString();
+    return Promise.resolve();
+  },
+  restoreCustomer(customerId) {
+    const customer = customersData.find((c) => c.id === customerId);
+    if (customer) delete customer.archivedAt;
+    return Promise.resolve();
   },
 
   fetchProjects(filter) {
@@ -172,7 +179,9 @@ export default {
     return Promise.resolve();
   },
   fetchAllCustomers() {
-    return Promise.resolve(customers.map((c) => ({ id: c.id, name: c.name })));
+    return Promise.resolve(
+      customersData.filter((c) => !c.archivedAt).map((c) => ({ id: c.id, name: c.name })),
+    );
   },
   fetchAllPersonnel() {
     return Promise.resolve(
@@ -465,7 +474,7 @@ export default {
   fetchCheckouts(filter) {
     const data = filter
       ? libraryCheckoutsData.filter((c) =>
-          customers.find((cu) => cu.id === c.customerId)?.name.toLowerCase().includes(filter.toLowerCase()),
+          customersData.find((cu) => cu.id === c.customerId)?.name.toLowerCase().includes(filter.toLowerCase()),
         )
       : libraryCheckoutsData.slice();
     data.sort((a, b) => b.checkoutDate.localeCompare(a.checkoutDate));

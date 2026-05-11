@@ -25,8 +25,11 @@
             <q-btn label="Submit" type="submit" color="teal" />
             <q-btn label="Cancel" flat class="q-ml-sm" @click="formIsVisible = false" />
             <q-space />
-            <span v-if="props.contact">
-              <q-btn round color="red" icon="delete" @click="emit('deleteContact')">
+            <span v-if="props.contact" class="q-gutter-xs">
+              <q-btn round color="grey-7" icon="archive" @click="emit('archiveContact')">
+                <q-tooltip>Archive Contact</q-tooltip>
+              </q-btn>
+              <q-btn v-if="authStore.isAdmin" round color="red" icon="delete" @click="emit('deleteContact')">
                 <q-tooltip>Delete Contact</q-tooltip>
               </q-btn>
             </span>
@@ -36,55 +39,53 @@
     </q-item-section>
   </q-item>
 
-  <q-item v-if="!formIsVisible && props.contact">
-    <q-item-section>
+  <q-card bordered class="q-ma-sm" v-if="!formIsVisible && props.contact">
+    <q-toolbar class="q-py-sm q-pl-md">
       <q-item-label>
         <div>
           {{ contact.name }} <span v-if="contact.position">({{ contact.position }})</span>
         </div>
         <div v-if="contact.phone">{{ contact.phone }}</div>
         <div v-if="contact.email">{{ contact.email }}</div>
-        <q-btn label="View Notes" size="sm" icon="description" v-if="contact.notes">
-          <q-popup-proxy>
-            <q-card>
-              <q-card-section>
-                <div style="white-space: pre">{{ contact.notes }}</div>
-              </q-card-section>
-            </q-card>
-          </q-popup-proxy>
-        </q-btn>
       </q-item-label>
-    </q-item-section>
-    <q-item-section side bottom>
-      <q-btn flat round color="grey" icon="edit" @click="formIsVisible = true" />
-    </q-item-section>
-  </q-item>
-
-  <q-item v-if="!formIsVisible && !props.contact">
-    <q-btn
-      color="green"
-      icon="add"
-      label="Add New Contact"
-      class="q-ma-xs"
-      size="sm"
-      @click="formIsVisible = true"
-    />
-  </q-item>
+      <q-space />
+      <q-btn
+        v-if="contact.notes"
+        flat
+        round
+        :color="notesVisible ? 'teal' : 'primary'"
+        icon="sticky_note_2"
+        @click="notesVisible = !notesVisible"
+      >
+        <q-tooltip>{{ notesVisible ? 'Hide Notes' : 'Show Notes' }}</q-tooltip>
+      </q-btn>
+      <q-btn v-if="!props.archived" flat round color="primary" icon="edit" @click="formIsVisible = true">
+        <q-tooltip>Edit Contact</q-tooltip>
+      </q-btn>
+    </q-toolbar>
+    <q-card-section v-if="notesVisible && contact.notes" class="q-pt-none text-body2">
+      <div class="text-bold">Notes:</div>
+      <div style="white-space: pre-wrap">{{ contact.notes }}</div>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import type { CustomerContact } from './models';
+import { useAuthStore } from 'src/stores/auth-store';
 
-const props = defineProps({
-  contact: {
-    type: Object as () => CustomerContact,
-  },
-});
+const authStore = useAuthStore();
+
+const props = defineProps<{
+  contact?: CustomerContact;
+  archived?: boolean;
+}>();
 
 const emit = defineEmits<{
   addContact: [contact: object];
   deleteContact: [];
+  archiveContact: [];
 }>();
 
 const contact = ref<CustomerContact>(
@@ -100,6 +101,13 @@ const contact = ref<CustomerContact>(
 );
 
 const formIsVisible = ref(false);
+const notesVisible = ref(false);
+
+defineExpose({
+  show: () => {
+    formIsVisible.value = true;
+  },
+});
 
 const submitForm = () => {
   if (props.contact) {
