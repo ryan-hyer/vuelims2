@@ -4,28 +4,35 @@
     "certificationCustomerId": 1,
     "productTypeId": 3,
     "standardRevisionIds": [],
-    "standardRevisionsApproved": ["NSF/ANSI 61 (2021)", "NSF/ANSI 14 (2020)"],
+    "standardRevisionsApproved": [
+      "NSF/ANSI 61 (2021) – Drinking Water System Components — Health Effects",
+      "NSF/ANSI 14 (2020) – Plastics Piping System Components and Related Materials"
+    ],
     "description": "Rotationally molded polyethylene fresh water holding tanks",
     "listingConditions": [
       "Tanks shall be marked with the maximum capacity in gallons",
       "Tanks shall bear the NSF 61 potable water certification mark"
     ],
     "hasCanada": false,
-    "status": "approved"
+    "status": "approved",
+    "archivedAt": null
   },
   {
     "id": 2,
     "certificationCustomerId": 1,
     "productTypeId": 4,
     "standardRevisionIds": [],
-    "standardRevisionsApproved": ["NSF/ANSI 14 (2020)"],
+    "standardRevisionsApproved": [
+      "NSF/ANSI 14 (2020) – Plastics Piping System Components and Related Materials"
+    ],
     "description": "Rotationally molded polyethylene waste holding tanks",
     "listingConditions": [
       "Tanks shall be marked with maximum capacity in gallons",
       "Black water tanks shall be color-coded or otherwise clearly identified"
     ],
-    "hasCanada": false,
-    "status": "approved"
+    "hasCanada": true,
+    "status": "approved",
+    "archivedAt": null
   },
   {
     "id": 3,
@@ -36,6 +43,7 @@
     "description": "Polyethylene gray water holding tanks (legacy design)",
     "listingConditions": [],
     "hasCanada": false,
-    "status": "archived"
+    "status": "archived",
+    "archivedAt": "2023-11-01"
   }
 ]

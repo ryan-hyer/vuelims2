@@ -13,7 +13,14 @@
     "website": "",
     "listingNumber": "02A01",
     "effectiveDate": "2002-12-07",
-    "status": "active"
+    "status": "active",
+    "notes": [
+      { "id": 1, "note": "Customer requested paper copies of all certificates going forward.", "createdAt": "2024-06-10", "createdBy": 2 },
+      { "id": 2, "note": "Annual invoice sent via email per their updated billing contact.", "createdAt": "2025-01-15", "createdBy": 2 }
+    ],
+    "documents": [
+      { "id": 1, "description": "Signed Certification Agreement (2002)", "url": "#", "uploadedAt": "2002-12-07", "uploadedBy": 2 }
+    ]
   },
   {
     "id": 2,

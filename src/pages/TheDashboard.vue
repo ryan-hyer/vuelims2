@@ -152,15 +152,26 @@
       </q-linear-progress>
       <ul>
         <li>Finish the Certification Detail page -- this is our first big milestone!</li>
-        <li>Next step: functionality for notes and documents</li>
-        <li>Then: workflows for amendments and surveillance</li>
         <li>
-          Add functionality for generating listing sheets -- this will be a good test run for how to
-          export things as PDF
+          The clickable model numbers are so amazing, but what happens when there's other stuff in
+          the models section, like blow-molded versus rotationally-molded, or hardcoded specs like
+          50A 120V?
         </li>
         <li>
-          Then we need functionality for suspending/terminating certifications, and role guards for
-          all listing functions
+          Then muck about in the stylesheet of the printable listing sheet, and make it look better.
+        </li>
+        <li>
+          Then: workflows for new listing projects, then surveillance and amendments, although this
+          will re-introduce us to the issues in the Projects module. Try to resolve them here.
+        </li>
+        <li>
+          Also add functionality for generating listing sheets -- this will be a good test run for
+          how to generate and export PDF documents.
+        </li>
+        <li>
+          Then we need functionality for suspending/terminating certifications (probably another
+          workflow, or at least some kind of auditable dialog), and role guards for all listing
+          functions
         </li>
         <li>
           QRC: Flesh out with I guess a list of past QRC meetings? Similar to performance reviews

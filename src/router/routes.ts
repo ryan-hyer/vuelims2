@@ -197,6 +197,13 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
+  {
+    path: '/listing-sheet/:customerId',
+    name: 'certification-listing-sheet',
+    component: () => import('pages/Certification/CertificationListingSheet.vue'),
+    props: (route) => ({ customerId: Number(route.params.customerId) }),
+    meta: { requiresAuth: true },
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

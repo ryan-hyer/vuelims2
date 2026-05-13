@@ -599,6 +599,31 @@ export default {
     certProductTypesData.push(entry);
     return Promise.resolve(entry);
   },
+  updateCertificationCustomerDocuments(customerId, documents) {
+    const index = certCustomersData.findIndex((c) => c.id === customerId);
+    if (index !== -1) certCustomersData[index] = { ...certCustomersData[index], documents: [...documents] };
+    return Promise.resolve();
+  },
+  updateCertificationCustomerNotes(customerId, notes) {
+    const index = certCustomersData.findIndex((c) => c.id === customerId);
+    if (index !== -1) certCustomersData[index] = { ...certCustomersData[index], notes: [...notes] };
+    return Promise.resolve();
+  },
+  updateCertificationListingNotes(listingId, notes) {
+    const index = certListingsData.findIndex((l) => l.id === listingId);
+    if (index !== -1) certListingsData[index] = { ...certListingsData[index], notes: [...notes] };
+    return Promise.resolve();
+  },
+  updateCertificationLocationNotes(locationId, notes) {
+    const index = certLocationsData.findIndex((l) => l.id === locationId);
+    if (index !== -1) certLocationsData[index] = { ...certLocationsData[index], notes: [...notes] };
+    return Promise.resolve();
+  },
+  updateCertificationModel(modelId, data) {
+    const index = certModelsData.findIndex((m) => m.id === modelId);
+    if (index !== -1) certModelsData[index] = { ...certModelsData[index], ...data };
+    return Promise.resolve();
+  },
 
   changePassword(userId, currentPassword, newPassword) {
     const index = usersData.findIndex((u) => u.id === userId);

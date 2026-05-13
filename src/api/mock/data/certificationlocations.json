@@ -4,7 +4,7 @@
     "certificationCustomerId": 1,
     "customerLocationId": null,
     "name": "Cashion Thermoplastics, Inc. — Main Plant",
-    "address": "1006 Hwy. 19 South",
+    "address1": "1006 Hwy. 19 South",
     "city": "Red Bay",
     "state": "AL",
     "zipCode": "35582",
@@ -13,6 +13,25 @@
     "contactName": "Jane Smith",
     "contactEmail": null,
     "contactPhone": "256-356-2017 x201",
-    "status": "approved"
+    "status": "approved",
+    "archivedAt": null,
+    "notes": ["Products manufactured here are approved for the base listing only — Canada mark not authorized at this facility."]
+  },
+  {
+    "id": 2,
+    "certificationCustomerId": 1,
+    "customerLocationId": null,
+    "name": "Cashion Thermoplastics, Inc. — East Annex",
+    "address1": "1022 Hwy. 19 South",
+    "city": "Red Bay",
+    "state": "AL",
+    "zipCode": "35582",
+    "country": "USA",
+    "phone": "256-356-2017",
+    "contactName": "Bob Jones",
+    "contactEmail": null,
+    "contactPhone": "256-356-2017 x215",
+    "status": "archived",
+    "archivedAt": "2024-03-15"
   }
 ]

@@ -84,7 +84,8 @@ export interface CertificationListing {
   listingConditions: string[]; // these will be split into an ordered list for display
   hasCanada: boolean;
   status: 'pending' | 'approved' | 'archived';
-  notes?: CertificationNote[];
+  archivedAt?: string;
+  notes?: string[];
   documents?: CertificationDocument[]; // for listing-specific documents that apply to all models within a category
 }
 
@@ -101,7 +102,8 @@ export interface CertificationLocation {
   certificationCustomerId: number; // from CertificationCustomer model
   customerLocationId: number; // from CustomerLocations model in the Customers module
   name: string;
-  address: string;
+  address1: string;
+  address2?: string;
   city: string;
   state: string;
   zipCode: string;
@@ -112,7 +114,8 @@ export interface CertificationLocation {
   contactEmail?: string;
   contactPhone?: string;
   status: 'pending' | 'approved' | 'archived';
-  notes?: CertificationNote[];
+  archivedAt?: string;
+  notes?: string[];
   documents?: CertificationDocument[]; // not sure what I'd use this for, but just in case
 }
 

@@ -6,6 +6,9 @@ import type {
   CertificationSubcategory,
   CertificationProductType,
   CertificationCustomerDetail,
+  CertificationModel,
+  CertificationNote,
+  CertificationDocument,
 } from 'src/components/Certification/models';
 
 export interface FlatCertRow {
@@ -85,6 +88,38 @@ export const useCertificationStore = defineStore('certification', {
       await api.updateCertificationProductType(data);
       const index = this.productTypes.findIndex((p) => p.id === data.id);
       if (index !== -1) this.productTypes[index] = { ...data };
+    },
+    async updateLocationNotes(locationId: number, notes: string[]) {
+      await api.updateCertificationLocationNotes(locationId, notes);
+      const location = this.certCustomer?.locations.find((l) => l.id === locationId);
+      if (location) location.notes = [...notes];
+    },
+    async updateListingNotes(listingId: number, notes: string[]) {
+      await api.updateCertificationListingNotes(listingId, notes);
+      const listing = this.certCustomer?.listings.find((l) => l.id === listingId);
+      if (listing) listing.notes = [...notes];
+    },
+    async updateCustomerNotes(notes: CertificationNote[]) {
+      if (!this.certCustomer) return;
+      await api.updateCertificationCustomerNotes(this.certCustomer.id, notes);
+      this.certCustomer.notes = [...notes];
+    },
+    async updateCustomerDocuments(documents: CertificationDocument[]) {
+      if (!this.certCustomer) return;
+      await api.updateCertificationCustomerDocuments(this.certCustomer.id, documents);
+      this.certCustomer.documents = [...documents];
+    },
+    async updateCertificationModel(modelId: number, description: string, documents: CertificationDocument[]) {
+      await api.updateCertificationModel(modelId, { description, documents });
+      if (!this.certCustomer) return;
+      for (const listing of this.certCustomer.listings) {
+        const model = listing.models.find((m: CertificationModel) => m.id === modelId);
+        if (model) {
+          model.description = description;
+          model.documents = [...documents];
+          break;
+        }
+      }
     },
     async addCategory(data: Omit<CertificationCategory, 'id'>) {
       const result = await api.addCertificationCategory(data);
