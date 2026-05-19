@@ -5,6 +5,8 @@ export interface Project {
   description?: string;
   startDate: string;
   completeDate?: string;
+  notes?: ProjectNote[];
+  documents?: ProjectDocument[];
 }
 // Also project status codes, but I think those can be derived from the presence or absence of other data -- add as its own field if easier
 
@@ -12,8 +14,8 @@ export interface ProjectNote {
   id: number;
   projectId: number;
   note: string;
-  date: string;
-  userId: number;
+  createdAt: Date;
+  createdBy: number; // userId
 }
 
 export interface ProjectDocument {
@@ -21,8 +23,8 @@ export interface ProjectDocument {
   projectId: number;
   title: string;
   url: string;
-  date: string;
-  userId: number;
+  uploadedAt: Date;
+  uploadedBy: number; // userId
 }
 
 export interface ProjectWithDetails extends Project {

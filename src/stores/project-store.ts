@@ -12,6 +12,7 @@ export const useProjectStore = defineStore('projects', {
     projects: [] as ProjectWithDetails[],
     project: null as ProjectWithDetails | null,
     allCustomers: [] as LookupItem[],
+    projectTypes: [] as { label: string; value: string }[],
   }),
 
   actions: {
@@ -65,10 +66,10 @@ export const useProjectStore = defineStore('projects', {
         });
     },
     async fetchProjectLookups() {
-      await api
-        .fetchAllCustomers()
-        .then((customers) => {
+      await Promise.all([api.fetchAllCustomers(), api.fetchProjectTypes()])
+        .then(([customers, types]) => {
           this.allCustomers = customers as LookupItem[];
+          this.projectTypes = types as { label: string; value: string }[];
         })
         .catch((error) => {
           console.error('Error fetching project lookups:', error);

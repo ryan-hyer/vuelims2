@@ -1,0 +1,11 @@
+[
+  { "description": "Testing - Analytical", "code": "A" },
+  { "description": "Testing - Electrical", "code": "E" },
+  { "description": "Testing - Fire & Smoke", "code": "F" },
+  { "description": "Testing - Mechanical", "code": "M" },
+  { "description": "Testing - Plumbing", "code": "P" },
+  { "description": "Testing - Stone & Tile", "code": "ST" },
+  { "description": "Inspection", "code": "I" },
+  { "description": "Certification", "code": "LS" },
+  { "description": "Library Services", "code": "LIB" }
+]

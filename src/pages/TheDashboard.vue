@@ -45,21 +45,10 @@
         </div>
       </q-linear-progress>
       <ul>
+        <li>Next: Finish building the Project Detail page</li>
         <li>
-          Everything below is subject to change as we proceed, and it might be best to sit on this
-          until we get farther along with listing amendments:
-        </li>
-        <li>
-          Maybe the best way is to not have a consolidated Projects menu item, but instead have
-          separate lists, each with their own New Project button, all of which go to the same route
-          with a different query param or something to determine the project type? Or try both?
-          Maybe even separate models and tables for different project types, back to the modular
-          idea.
-        </li>
-        <li>
-          Redo the Project model based on recent notes. Create models for different project types
-          that extend Project. Might be best to completely separate project tracking and logic by
-          company.
+          Now that we have project types in the mock data, we can use that to filter the projects
+          list.
         </li>
         <li>
           Redo the new project form, have the New Project button pull down a list of project types
@@ -67,9 +56,8 @@
           determine which fields get displayed, and also determine who gets assigned to the project.
         </li>
         <li>
-          For this to work, we'll need some logic that assigns an employee based on their role.
-          Maybe a lab code field attached to Director roles. Supervisors can then delegate to
-          technicians? Maybe too complicated at this point.
+          There should be a place to add/edit/delete the list of project types, possibly in the
+          admin menu
         </li>
       </ul>
 
@@ -157,6 +145,7 @@
           the models section, like blow-molded versus rotationally-molded, or hardcoded specs like
           50A 120V?
         </li>
+        <li>Looks like the listing documents button doesn't work</li>
         <li>
           Then muck about in the stylesheet of the printable listing sheet, and make it look better.
         </li>
@@ -186,6 +175,8 @@
           -- put this under Reports? Do I even want Reports under Certification, or maybe as a
           top-level menu item?
         </li>
+        <li>We probably need a place to add/edit/delete schemes, the same as categories</li>
+        <li>Also a section for SFEs, either here or in the Library module</li>
       </ul>
 
       <div class="text-bold">Inspection</div>

@@ -6,6 +6,7 @@ import customerlocations from './data/customerlocations.json';
 import customercontacts from './data/customercontacts.json';
 import customerinteractions from './data/customerinteractions.json';
 import projectsJson from './data/projects.json';
+import projectTypesJson from './data/projecttypes.json';
 import personnel from './data/personnel.json';
 import rolesJson from './data/roles.json';
 import legalDocsJson from './data/legaldocs.json';
@@ -142,6 +143,9 @@ export default {
     return Promise.resolve();
   },
 
+  fetchProjectTypes() {
+    return Promise.resolve(projectTypesJson.map((t) => ({ label: `(${t.code}) ${t.description}`, value: t.code })));
+  },
   fetchProjects(filter) {
     const withDetails = projectsData.map(joinProject);
     const data = filter

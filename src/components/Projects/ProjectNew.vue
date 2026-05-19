@@ -13,37 +13,16 @@
     <div class="q-pa-md">
       <q-form @submit.prevent="submitForm">
         <Transition name="fade" mode="out-in">
-          <div v-if="!newProject.jobNumber">
+          <div v-if="!projectType">
             <q-select
               filled
               options-dense
               v-model="projectType"
-              :options="jobTypes"
+              :options="store.projectTypes"
               label="Project Type"
               hint="Select the company this job belongs to"
+              @input-value="newProject.jobNumber = newNumber || ''"
             />
-
-            <q-card bordered class="q-pa-sm q-mt-sm" v-if="projectType">
-              <p>
-                Next available number: <span class="text-bold">{{ newNumber }}</span
-                >. Use this number for this project?
-              </p>
-              <q-btn
-                color="green"
-                label="Yes"
-                icon="check"
-                size="xs"
-                @click="newProject.jobNumber = newNumber"
-              />
-              <q-btn
-                color="red"
-                label="No"
-                icon="close"
-                size="xs"
-                class="q-ml-sm"
-                @click="newProject.jobNumber = projectType.value"
-              />
-            </q-card>
           </div>
           <div v-else>
             <q-input
@@ -112,7 +91,9 @@
                 label="Create Project"
                 color="primary"
                 :loading="submitting"
-                :disable="!newProject.jobNumber || !newProject.customerId || !newProject.description"
+                :disable="
+                  !newProject.jobNumber || !newProject.customerId || !newProject.description
+                "
               />
             </div>
           </div>
@@ -151,18 +132,6 @@ const newNumber = computed<string>(() => {
   }
   return '';
 });
-
-// TODO: This list should be in a database table, and editable
-const jobTypes = [
-  { label: '(A) Testing - Analytical', value: 'A' },
-  { label: '(E) Testing - Electrical', value: 'E' },
-  { label: '(F) Testing - Fire & Smoke', value: 'F' },
-  { label: '(M) Testing - Mechanical', value: 'M' },
-  { label: '(P) Testing - Plumbing', value: 'P' },
-  { label: '(ST) Testing - Stone & Tile', value: 'ST' },
-  { label: '(I) Inspection', value: 'I' },
-  { label: '(LS) Certification', value: 'LS' },
-];
 
 // TODO: In production these sequence numbers come from the backend (max of each prefix + 1)
 const nextNumbers = {
@@ -203,7 +172,7 @@ const submitForm = async () => {
 };
 
 onMounted(async () => {
-  if (store.allCustomers.length === 0) {
+  if (store.allCustomers.length === 0 || store.projectTypes.length === 0) {
     await store.fetchProjectLookups();
   }
   filteredCustomers.value = store.allCustomers;
