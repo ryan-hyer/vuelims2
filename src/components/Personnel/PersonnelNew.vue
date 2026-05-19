@@ -99,7 +99,6 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { usePersonnelStore } from 'src/stores/personnel-store';
-import type { Employee } from 'src/components/Personnel/models';
 
 const router = useRouter();
 const store = usePersonnelStore();
@@ -116,7 +115,7 @@ const newEmployee = ref({
 
 
 const submitForm = async () => {
-  const id = await store.addEmployee({ id: 0, ...newEmployee.value } as Employee);
+  const id = await store.addEmployee({ id: 0, ...newEmployee.value });
   void router.push({ name: 'personnel-detail', params: { employeeId: id } });
 };
 </script>

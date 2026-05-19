@@ -68,8 +68,8 @@ export const useProjectStore = defineStore('projects', {
     async fetchProjectLookups() {
       await Promise.all([api.fetchAllCustomers(), api.fetchProjectTypes()])
         .then(([customers, types]) => {
-          this.allCustomers = customers as LookupItem[];
-          this.projectTypes = types as { label: string; value: string }[];
+          this.allCustomers = customers;
+          this.projectTypes = types;
         })
         .catch((error) => {
           console.error('Error fetching project lookups:', error);

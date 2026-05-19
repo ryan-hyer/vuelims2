@@ -57,7 +57,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async requestPasswordReset(email: string): Promise<PasswordResetResult> {
-      return (await api.requestPasswordReset(email)) as PasswordResetResult;
+      return (await api.requestPasswordReset(email));
     },
 
     async resetPassword(email: string, token: string, newPassword: string) {

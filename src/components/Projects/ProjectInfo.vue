@@ -111,7 +111,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useProjectStore } from 'src/stores/project-store';
-import type { Project, ProjectWithDetails } from './models';
+import type { ProjectWithDetails } from './models';
 
 const store = useProjectStore();
 const saving = ref(false);
@@ -146,7 +146,7 @@ const cancelEdit = () => {
 const saveProject = async () => {
   if (!project.value) return;
   saving.value = true;
-  await store.updateProject({ ...project.value } as Project);
+  await store.updateProject({ ...project.value });
   saving.value = false;
   editing.value = false;
 };

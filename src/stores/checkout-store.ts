@@ -33,9 +33,9 @@ export const useCheckoutStore = defineStore('checkouts', {
         api.fetchAllRevisionLabels(),
       ])
         .then(([raw, customers, standards, revisions]) => {
-          this.allCustomers = customers as LookupItem[];
-          this.allStandards = standards as StandardOption[];
-          this.allRevisions = revisions as StandardOption[];
+          this.allCustomers = customers;
+          this.allStandards = standards;
+          this.allRevisions = revisions;
           this.checkouts = (raw as ProjectLibrary[]).map((c) => ({
             ...c,
             customerName: this.allCustomers.find((cu) => cu.id === c.customerId)?.name ?? 'Unknown',
@@ -52,9 +52,9 @@ export const useCheckoutStore = defineStore('checkouts', {
         api.fetchAllRevisionLabels(),
       ])
         .then(([customers, standards, revisions]) => {
-          this.allCustomers = customers as LookupItem[];
-          this.allStandards = standards as StandardOption[];
-          this.allRevisions = revisions as StandardOption[];
+          this.allCustomers = customers;
+          this.allStandards = standards;
+          this.allRevisions = revisions;
         })
         .catch((error) => {
           console.error('Error fetching checkout lookups:', error);
