@@ -1,3 +1,5 @@
+import type { CertificationLocation } from '../Certification/models';
+
 export interface Project {
   id: number;
   jobNumber: string;
@@ -7,8 +9,8 @@ export interface Project {
   completeDate?: string;
   notes?: ProjectNote[];
   documents?: ProjectDocument[];
+  // Also project status codes, but I think those can be derived from the presence or absence of other data -- add as its own field if easier
 }
-// Also project status codes, but I think those can be derived from the presence or absence of other data -- add as its own field if easier
 
 export interface ProjectNote {
   id: number;
@@ -32,21 +34,22 @@ export interface ProjectWithDetails extends Project {
 }
 
 export interface ProjectCertification extends Project {
-  id: number;
-  listingNumber: string;
-  projectCategories: number[];
-  projectType: string;
+  listingNumber?: string;
+  projectSubtype: string; // new, scope change, redesign, facility, other
+  projectCategories?: ProjectCertificationCategories[]; // only for new, scope change, and redesign subtypes
+  newFacility?: CertificationLocation; // only for new and facility subtypes
+  oldFacility?: CertificationLocation; // only for facility subtype
 }
 
 export interface ProjectCertificationCategories {
   id: number;
-  certificationCategoryId: number; // from CertificationCategories model in the Certification module
-  productDescription: string;
-  modelNumbers: string[]; // Is there any value in having this be an array instead of just a string list? Maybe to automate modifying the listing sheet?
+  certificationProductTypeId: number;
+  newModelNumbers?: string[]; // new + scope change: model numbers being added
+  affectedModels?: { id: number; modelNumber: string }[]; // redesign: existing models in scope
+  removedModels?: { id: number; modelNumber: string }[]; // scope change: existing models being removed
 }
 
 export interface ProjectTesting extends Project {
-  id: number;
   manufacturer: string;
   standardId: number[]; // from Standards model in the Standards module
   sampleDescription: string;
@@ -66,14 +69,12 @@ export interface Sample {
 }
 
 export interface ProjectInspection extends Project {
-  id: number;
   inspectionLocation: string;
   inspectionType: string; // selected from a list of pre-defined inspection types; this determines the inspection data template
 }
 
 export interface ProjectLibrary extends Project {
-  id: number;
-  standardRevisionId: number[];
+  standardRevisionIds: number[];
   checkoutDate: string;
   returnDate?: string | null;
 }

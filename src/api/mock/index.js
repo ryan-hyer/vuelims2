@@ -38,6 +38,7 @@ const certLocationsData = certLocationsJson.map((l) => ({ ...l }));
 
 // Mutable in-memory copies so write operations work within the session
 const customersData = customersJson.map((c) => ({ ...c }));
+const customerLocationsData = customerlocations.map((l) => ({ ...l }));
 const standardsData = standardsJson.map((s) => ({ ...s }));
 const standardRevisionsData = standardRevisionsJson.map((r) => ({ ...r, filename: null, url: null }));
 const libraryCheckoutsData = libraryCheckoutsJson.map((c) => ({ ...c }));
@@ -110,7 +111,7 @@ export default {
     // simulating a join query
     return await Promise.all([
       fetch(customersData, 1000),
-      fetch(customerlocations),
+      fetch(customerLocationsData),
       fetch(customercontacts),
       fetch(customerinteractions),
     ])
@@ -131,6 +132,17 @@ export default {
       .catch((error) => {
         console.error('Error in Mock API fetching customer data:', error);
       });
+  },
+  fetchCustomerLocations(customerId) {
+    return fetch(customerLocationsData.filter((l) => l.customerId === customerId), 300);
+  },
+  addCustomerLocation(location) {
+    const id = customerLocationsData.length
+      ? Math.max(...customerLocationsData.map((l) => l.id)) + 1
+      : 1;
+    const newLocation = { ...location, id };
+    customerLocationsData.push(newLocation);
+    return Promise.resolve(newLocation);
   },
   archiveCustomer(customerId) {
     const customer = customersData.find((c) => c.id === customerId);
@@ -167,6 +179,17 @@ export default {
     const p = projectsData.find((p) => p.id === projectId);
     return fetch(p ? joinProject(p) : null, 300);
   },
+  fetchNextJobNumber(prefix) {
+    const matching = projectsData.filter(
+      (p) => p.jobNumber.startsWith(prefix) && /^\d/.test(p.jobNumber[prefix.length] ?? ''),
+    );
+    const maxSeq = matching.reduce((max, p) => {
+      const seq = parseInt(p.jobNumber.slice(-5));
+      return seq > max ? seq : max;
+    }, 0);
+    const year = new Date().toLocaleDateString('en', { year: '2-digit' });
+    return Promise.resolve(prefix + year + (maxSeq + 1).toString().padStart(5, '0'));
+  },
   addProject(project) {
     const id = projectsData.length ? Math.max(...projectsData.map((p) => p.id)) + 1 : 1;
     const entry = { ...project, id };
@@ -184,7 +207,12 @@ export default {
   },
   fetchAllCustomers() {
     return Promise.resolve(
-      customersData.filter((c) => !c.archivedAt).map((c) => ({ id: c.id, name: c.name })),
+      customersData.filter((c) => !c.archivedAt).map((c) => {
+        const certCustomer = certCustomersData.find((cc) => cc.customerId === c.id);
+        return certCustomer
+          ? { id: c.id, name: c.name, listingNumber: certCustomer.listingNumber }
+          : { id: c.id, name: c.name };
+      }),
     );
   },
   fetchAllPersonnel() {
@@ -565,6 +593,48 @@ export default {
   },
   fetchCertificationProductTypes() {
     return fetch(certProductTypesData.slice(), 300);
+  },
+  fetchCustomerApprovedCertLocations(customerId) {
+    const certCustomer = certCustomersData.find((cc) => cc.customerId === customerId);
+    if (!certCustomer) return Promise.resolve([]);
+    return Promise.resolve(
+      certLocationsData
+        .filter((l) => l.certificationCustomerId === certCustomer.id && l.status === 'approved')
+        .map((l) => ({ id: l.id, name: l.name, address1: l.address1, city: l.city, state: l.state })),
+    );
+  },
+  fetchCustomerProductTypeModels(customerId, productTypeId) {
+    const certCustomer = certCustomersData.find((cc) => cc.customerId === customerId);
+    if (!certCustomer) return Promise.resolve([]);
+    const listing = certListingsData.find(
+      (l) => l.certificationCustomerId === certCustomer.id && l.productTypeId === productTypeId,
+    );
+    if (!listing) return Promise.resolve([]);
+    return Promise.resolve(
+      certModelsData
+        .filter((m) => m.certificationListingId === listing.id)
+        .map((m) => ({ id: m.id, modelNumber: m.modelNumber })),
+    );
+  },
+  fetchCustomerCertProductTypeIds(customerId) {
+    const certCustomer = certCustomersData.find((cc) => cc.customerId === customerId);
+    if (!certCustomer) return Promise.resolve([]);
+    const ids = certListingsData
+      .filter((l) => l.certificationCustomerId === certCustomer.id)
+      .map((l) => l.productTypeId);
+    return Promise.resolve(ids);
+  },
+  fetchAllProductTypeOptions() {
+    return Promise.resolve(
+      certProductTypesData.map((pt) => {
+        const sub = certSubcategoriesData.find((s) => s.id === pt.subcategoryId);
+        const cat = sub ? certCategoriesData.find((c) => c.id === sub.categoryId) : null;
+        const scheme = cat ? certSchemesData.find((s) => s.id === cat.schemeId) : null;
+        const code = `${cat?.code ?? ''}${sub?.code ?? ''}${pt.code}`;
+        const label = `${code} - ${scheme?.code ?? ''} ${cat?.description ?? ''} - ${pt.description}`;
+        return { id: pt.id, code, label };
+      }),
+    );
   },
   updateCertificationCategory(category) {
     const index = certCategoriesData.findIndex((c) => c.id === category.id);

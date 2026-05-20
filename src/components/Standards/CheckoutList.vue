@@ -37,8 +37,8 @@
           </q-td>
           <q-td key="customer" :props="props">{{ props.row.customerName }}</q-td>
           <q-td key="standards" :props="props">
-            {{ props.row.standardRevisionId.length }}
-            {{ props.row.standardRevisionId.length === 1 ? 'revision' : 'revisions' }}
+            {{ props.row.standardRevisionIds.length }}
+            {{ props.row.standardRevisionIds.length === 1 ? 'revision' : 'revisions' }}
           </q-td>
           <q-td key="checkoutDate" :props="props">{{ props.row.checkoutDate }}</q-td>
           <q-td key="returnDate" :props="props">{{ props.row.returnDate ?? '—' }}</q-td>
@@ -49,7 +49,7 @@
               <div class="col-12 col-sm-7">
                 <div class="text-subtitle2 q-mb-sm">Revisions Checked Out</div>
                 <q-list dense bordered separator>
-                  <q-item v-for="sid in props.row.standardRevisionId" :key="sid">
+                  <q-item v-for="sid in props.row.standardRevisionIds" :key="sid">
                     <q-item-section>{{ standardLabel(sid) }}</q-item-section>
                   </q-item>
                 </q-list>
@@ -138,7 +138,7 @@ const columns: QTableColumn[] = [
   {
     name: 'standards',
     label: 'Standards',
-    field: (row: ProjectLibraryWithDetails) => row.standardRevisionId.length,
+    field: (row: ProjectLibraryWithDetails) => row.standardRevisionIds.length,
     align: 'left',
   },
   {

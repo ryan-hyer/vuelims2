@@ -4,7 +4,7 @@
     "jobNumber": "LIB2500101",
     "customerId": 3,
     "startDate": "2025/01/06",
-    "standardRevisionId": [12, 45],
+    "standardRevisionIds": [12, 45],
     "checkoutDate": "2025/01/08",
     "returnDate": "2025/01/22"
   },
@@ -13,7 +13,7 @@
     "jobNumber": "LIB2500102",
     "customerId": 8,
     "startDate": "2025/02/12",
-    "standardRevisionId": [7, 23, 67],
+    "standardRevisionIds": [7, 23, 67],
     "checkoutDate": "2025/02/14",
     "returnDate": "2025/02/28"
   },
@@ -22,7 +22,7 @@
     "jobNumber": "LIB2500103",
     "customerId": 1,
     "startDate": "2025/03/03",
-    "standardRevisionId": [31],
+    "standardRevisionIds": [31],
     "checkoutDate": "2025/03/05",
     "returnDate": "2025/03/19"
   },
@@ -31,7 +31,7 @@
     "jobNumber": "LIB2500104",
     "customerId": 10,
     "startDate": "2025/04/09",
-    "standardRevisionId": [5, 18, 42, 88],
+    "standardRevisionIds": [5, 18, 42, 88],
     "checkoutDate": "2025/04/11",
     "returnDate": "2025/04/25"
   },
@@ -40,7 +40,7 @@
     "jobNumber": "LIB2500105",
     "customerId": 5,
     "startDate": "2025/05/19",
-    "standardRevisionId": [64, 71],
+    "standardRevisionIds": [64, 71],
     "checkoutDate": "2025/05/20",
     "returnDate": "2025/06/03"
   },
@@ -49,7 +49,7 @@
     "jobNumber": "LIB2500106",
     "customerId": 2,
     "startDate": "2025/06/13",
-    "standardRevisionId": [9, 33, 55],
+    "standardRevisionIds": [9, 33, 55],
     "checkoutDate": "2025/06/16",
     "returnDate": "2025/06/30"
   },
@@ -58,7 +58,7 @@
     "jobNumber": "LIB2500107",
     "customerId": 11,
     "startDate": "2025/07/25",
-    "standardRevisionId": [22],
+    "standardRevisionIds": [22],
     "checkoutDate": "2025/07/28",
     "returnDate": "2025/08/11"
   },
@@ -67,7 +67,7 @@
     "jobNumber": "LIB2500108",
     "customerId": 6,
     "startDate": "2025/09/01",
-    "standardRevisionId": [14, 49, 77],
+    "standardRevisionIds": [14, 49, 77],
     "checkoutDate": "2025/09/03",
     "returnDate": "2025/09/17"
   },
@@ -76,7 +76,7 @@
     "jobNumber": "LIB2500109",
     "customerId": 9,
     "startDate": "2025/10/20",
-    "standardRevisionId": [38, 60],
+    "standardRevisionIds": [38, 60],
     "checkoutDate": "2025/10/22",
     "returnDate": null
   },
@@ -85,7 +85,7 @@
     "jobNumber": "LIB2500110",
     "customerId": 4,
     "startDate": "2025/11/12",
-    "standardRevisionId": [2, 16, 93],
+    "standardRevisionIds": [2, 16, 93],
     "checkoutDate": "2025/11/14",
     "returnDate": "2025/11/28"
   },
@@ -94,7 +94,7 @@
     "jobNumber": "LIB2500111",
     "customerId": 7,
     "startDate": "2025/12/08",
-    "standardRevisionId": [53],
+    "standardRevisionIds": [53],
     "checkoutDate": "2025/12/09",
     "returnDate": null
   },
@@ -103,7 +103,7 @@
     "jobNumber": "LIB2600101",
     "customerId": 1,
     "startDate": "2026/01/15",
-    "standardRevisionId": [26, 42, 72, 103],
+    "standardRevisionIds": [26, 42, 72, 103],
     "checkoutDate": "2026/01/17",
     "returnDate": "2026/01/31"
   },
@@ -112,7 +112,7 @@
     "jobNumber": "LIB2600102",
     "customerId": 10,
     "startDate": "2026/02/24",
-    "standardRevisionId": [8, 35],
+    "standardRevisionIds": [8, 35],
     "checkoutDate": "2026/02/26",
     "returnDate": "2026/03/12"
   },
@@ -121,7 +121,7 @@
     "jobNumber": "LIB2600103",
     "customerId": 3,
     "startDate": "2026/03/17",
-    "standardRevisionId": [19, 57, 80],
+    "standardRevisionIds": [19, 57, 80],
     "checkoutDate": "2026/03/18",
     "returnDate": null
   },
@@ -130,7 +130,7 @@
     "jobNumber": "LIB2600104",
     "customerId": 8,
     "startDate": "2026/04/08",
-    "standardRevisionId": [41],
+    "standardRevisionIds": [41],
     "checkoutDate": "2026/04/10",
     "returnDate": null
   }

@@ -1,10 +1,23 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import api from 'src/api/mock';
 import type { Project, ProjectWithDetails } from 'src/components/Projects/models';
+import type { CustomerLocation } from 'src/components/Customers/models';
 
 interface LookupItem {
   id: number;
   name: string;
+  listingNumber?: string;
+}
+
+interface StandardOption {
+  id: number;
+  label: string;
+}
+
+interface ProductTypeOption {
+  id: number;
+  code: string;
+  label: string;
 }
 
 export const useProjectStore = defineStore('projects', {
@@ -13,6 +26,9 @@ export const useProjectStore = defineStore('projects', {
     project: null as ProjectWithDetails | null,
     allCustomers: [] as LookupItem[],
     projectTypes: [] as { label: string; value: string }[],
+    allStandards: [] as StandardOption[],
+    allRevisions: [] as StandardOption[],
+    certProductTypes: [] as ProductTypeOption[],
   }),
 
   actions: {
@@ -65,11 +81,38 @@ export const useProjectStore = defineStore('projects', {
           console.error('Error updating project:', error);
         });
     },
+    fetchNextJobNumber(typeCode: string): Promise<string> {
+      return api.fetchNextJobNumber(typeCode);
+    },
+    fetchCustomerLocations(customerId: number): Promise<unknown[]> {
+      return api.fetchCustomerLocations(customerId);
+    },
+    fetchCustomerCertProductTypeIds(customerId: number): Promise<number[]> {
+      return api.fetchCustomerCertProductTypeIds(customerId);
+    },
+    fetchCustomerProductTypeModels(customerId: number, productTypeId: number): Promise<{ id: number; modelNumber: string }[]> {
+      return api.fetchCustomerProductTypeModels(customerId, productTypeId);
+    },
+    fetchCustomerApprovedCertLocations(customerId: number): Promise<{ id: number; name: string; address1: string; city: string; state: string }[]> {
+      return api.fetchCustomerApprovedCertLocations(customerId);
+    },
+    addCustomerLocation(location: Omit<CustomerLocation, 'id'>): Promise<CustomerLocation> {
+      return api.addCustomerLocation(location) as Promise<CustomerLocation>;
+    },
     async fetchProjectLookups() {
-      await Promise.all([api.fetchAllCustomers(), api.fetchProjectTypes()])
-        .then(([customers, types]) => {
+      await Promise.all([
+        api.fetchAllCustomers(),
+        api.fetchProjectTypes(),
+        api.fetchAllStandardOptions(),
+        api.fetchAllRevisionLabels(),
+        api.fetchAllProductTypeOptions(),
+      ])
+        .then(([customers, types, standards, revisions, productTypes]) => {
           this.allCustomers = customers;
           this.projectTypes = types;
+          this.allStandards = standards;
+          this.allRevisions = revisions;
+          this.certProductTypes = productTypes;
         })
         .catch((error) => {
           console.error('Error fetching project lookups:', error);

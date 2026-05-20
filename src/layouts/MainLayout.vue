@@ -215,6 +215,7 @@ const linkSectionList: MenuLinkSectionProps[] = [
     color: 'cyan-4',
     linksList: [
       { icon: 'people', title: 'Certification Customers', link: 'home' }, // this one should just go to the Customers list, but somehow filtered for only those with listings
+      { icon: 'work', title: 'Certification Projects', link: 'project-list', query: { type: 'LS' } },
       { icon: 'category', title: 'Categories and Fees', link: 'certification-category-list' },
       { icon: 'groups_3', title: 'Impartiality Committee', link: 'home' },
       { icon: 'summarize', title: 'Reports', link: 'home' },

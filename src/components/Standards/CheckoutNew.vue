@@ -69,7 +69,7 @@
           multiple
           use-chips
           use-input
-          v-model="newCheckout.standardRevisionId"
+          v-model="newCheckout.standardRevisionIds"
           options-dense
           emit-value
           map-options
@@ -121,7 +121,7 @@
               !newCheckout.jobNumber ||
               !newCheckout.customerId ||
               !newCheckout.startDate ||
-              newCheckout.standardRevisionId.length === 0
+              newCheckout.standardRevisionIds.length === 0
             "
           />
         </div>
@@ -144,7 +144,7 @@ const newCheckout = ref({
   jobNumber: '',
   customerId: null as number | null,
   startDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
-  standardRevisionId: [] as number[],
+  standardRevisionIds: [] as number[],
   checkoutDate: date.formatDate(Date.now(), 'YYYY/MM/DD'),
 });
 
@@ -182,7 +182,7 @@ const submitForm = async () => {
     jobNumber: newCheckout.value.jobNumber,
     customerId: newCheckout.value.customerId!,
     startDate: newCheckout.value.startDate,
-    standardRevisionId: newCheckout.value.standardRevisionId,
+    standardRevisionIds: newCheckout.value.standardRevisionIds,
     checkoutDate: newCheckout.value.checkoutDate,
     returnDate: null,
   });

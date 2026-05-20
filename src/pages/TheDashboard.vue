@@ -35,6 +35,11 @@
           Some functions should be available to any of an employee's supervisors, as well as admins
           (e.g. performance reviews)
         </li>
+        <li>
+          There should be a place to add/edit/delete certain foundational lists, possibly in an
+          admin menu, e.g. project types, subtypes, etc. Let's look deeper at this when we get
+          closer to completion.
+        </li>
         <li>Flesh out the user Profile page, notifications, messages and stuff like that</li>
       </ul>
 
@@ -45,20 +50,14 @@
         </div>
       </q-linear-progress>
       <ul>
-        <li>Next: Finish building the Project Detail page</li>
         <li>
-          Now that we have project types in the mock data, we can use that to filter the projects
-          list.
+          Lots of work got done on the New Project form; review one more time after sleeping on it,
+          then start testing it a bit more
         </li>
         <li>
-          Redo the new project form, have the New Project button pull down a list of project types
-          to pick from, which will get sent to the New Project form and populate the job number,
-          determine which fields get displayed, and also determine who gets assigned to the project.
+          Especially check the Testing project type fields; see if any of those need refinement
         </li>
-        <li>
-          There should be a place to add/edit/delete the list of project types, possibly in the
-          admin menu
-        </li>
+        <li>Then start working on the project detail page, specifically the data section</li>
       </ul>
 
       <div class="text-bold">Customers</div>

@@ -22,18 +22,39 @@
       @row-click="onRowClick"
     >
       <template v-slot:top v-if="openSearch">
-        <q-toolbar>
-          <q-input
-            v-model="filter"
-            placeholder="Search projects..."
-            dense
-            outlined
-            clearable
-            debounce="300"
-            class="col"
-          />
-          <q-toggle v-model="showCompleted" label="Show completed" class="q-ml-md" />
-        </q-toolbar>
+        <div class="full-width q-pa-sm">
+          <div class="row wrap q-col-gutter-sm">
+            <div class="col-12 col-sm">
+              <q-input
+                v-model="filter"
+                placeholder="Search projects..."
+                dense
+                outlined
+                clearable
+                debounce="300"
+                class="full-width"
+              />
+            </div>
+            <div class="col-12 col-sm-auto">
+              <q-select
+                v-model="typeFilter"
+                :options="typeOptions"
+                label="Filter by Type"
+                dense
+                outlined
+                clearable
+                emit-value
+                map-options
+                options-dense
+                class="full-width"
+                style="min-width: 200px"
+              />
+            </div>
+            <div class="col-12 col-sm-auto flex items-center">
+              <q-toggle v-model="showCompleted" label="Show completed" />
+            </div>
+          </div>
+        </div>
       </template>
       <template v-slot:body-cell-description="props">
         <q-td :props="props" style="max-width: fit-content">
@@ -46,26 +67,47 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import type { QTableColumn } from 'quasar';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useProjectStore } from 'src/stores/project-store';
 
+const route = useRoute();
 const router = useRouter();
 const store = useProjectStore();
 
-const filter = ref('');
+const queryType = Array.isArray(route.query.type) ? route.query.type[0] : route.query.type;
+const filter = ref((route.query.q as string) ?? '');
+const showCompleted = ref(route.query.completed === '1');
+const typeFilter = ref<string | null>(queryType ?? null);
 const loading = ref(false);
-const showCompleted = ref(false);
-const openSearch = ref(false);
+const openSearch = ref(!!(filter.value || typeFilter.value || showCompleted.value));
 
-const projects = computed(() =>
-  showCompleted.value ? store.projects : store.projects.filter((p) => !p.completeDate),
-);
+const typeOptions = computed(() => [{ label: 'All Types', value: null }, ...store.projectTypes]);
+
+const projects = computed(() => {
+  let result = store.projects;
+  if (!showCompleted.value) result = result.filter((p) => !p.completeDate);
+  if (typeFilter.value) result = result.filter((p) => p.jobNumber.startsWith(typeFilter.value!));
+  return result;
+});
+
+watch([filter, showCompleted, typeFilter], ([q, completed, type]) => {
+  void router.replace({
+    query: {
+      ...(q ? { q } : {}),
+      ...(completed ? { completed: '1' } : {}),
+      ...(type ? { type } : {}),
+    },
+  });
+});
 
 onMounted(async () => {
   loading.value = true;
-  await store.fetchProjects();
+  await Promise.all([
+    store.fetchProjects(),
+    store.projectTypes.length === 0 ? store.fetchProjectLookups() : Promise.resolve(),
+  ]);
   loading.value = false;
 });
 

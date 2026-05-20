@@ -81,6 +81,7 @@ export interface CertificationListing {
   standardRevisionIds: number[]; // for linking, and possibly checking whether a standard has a new revision in real time?
   standardRevisionsApproved: string[]; // hardcopied list of revisions approved for this listing; updating this will involve the standards revision workflow
   description: string;
+  models: CertificationModel[];
   listingConditions: string[]; // these will be split into an ordered list for display
   hasCanada: boolean;
   status: 'pending' | 'approved' | 'archived';
@@ -91,7 +92,6 @@ export interface CertificationListing {
 
 export interface CertificationModel {
   id: number;
-  certificationListingId: number; // from CertificationListing model
   modelNumber: string;
   description?: string;
   documents?: CertificationDocument[]; // for drawings and other docs related to a specific model
