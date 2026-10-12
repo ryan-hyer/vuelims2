@@ -144,7 +144,7 @@
         </q-item-label>
       </q-toolbar>
       <q-card-section>
-        <ProjectData></ProjectData>
+        <ProjectData v-if="store.project" :key="store.project.id" :project="store.project" />
       </q-card-section>
     </q-card>
 

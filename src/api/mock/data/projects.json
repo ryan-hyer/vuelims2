@@ -2,6 +2,7 @@
   {
     "id": 5,
     "jobNumber": "LS2500315",
+    "typeCode": "LS",
     "customerId": 5,
     "description": "Energy Efficiency Upgrade",
     "startDate": "2024/03/05"
@@ -9,28 +10,35 @@
   {
     "id": 4,
     "jobNumber": "I2500314",
+    "typeCode": "I",
     "customerId": 4,
     "description": "RFI 2024",
     "startDate": "2024/02/10",
-    "completeDate": "2024/04/15"
+    "completeDate": "2024/04/15",
+    "inspectionType": "Follow-Up Inspection"
   },
   {
     "id": 3,
     "jobNumber": "P2500313",
+    "typeCode": "P",
     "customerId": 3,
     "description": "Plastic shower pans",
-    "startDate": "2024/01/20"
+    "startDate": "2024/01/20",
+    "standardIds": [9, 11]
   },
   {
     "id": 2,
     "jobNumber": "A2500312",
+    "typeCode": "A",
     "customerId": 2,
     "description": "Flow",
-    "startDate": "2023/11/15"
+    "startDate": "2023/11/15",
+    "standardIds": [14]
   },
   {
     "id": 1,
     "jobNumber": "LS2500311",
+    "typeCode": "LS",
     "customerId": 1,
     "description": "Listing Addition",
     "startDate": "2023/10/01"

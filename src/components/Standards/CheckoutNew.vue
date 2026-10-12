@@ -180,6 +180,7 @@ const submitForm = async () => {
   submitting.value = true;
   await store.addCheckout({
     jobNumber: newCheckout.value.jobNumber,
+    typeCode: 'LIB',
     customerId: newCheckout.value.customerId!,
     startDate: newCheckout.value.startDate,
     standardRevisionIds: newCheckout.value.standardRevisionIds,

@@ -1019,6 +1019,7 @@ const submitForm = async () => {
   const docs = docsRef.value?.getDocs() ?? [];
   const base = {
     jobNumber: newProject.value.jobNumber,
+    typeCode: projectType.value!.value,
     customerId: newProject.value.customerId!,
     description: newProject.value.description,
     startDate: newProject.value.startDate,
@@ -1030,7 +1031,7 @@ const submitForm = async () => {
   if (category === 'testing') {
     payload = {
       ...payload,
-      standardId: testing.value.standardIds,
+      standardIds: testing.value.standardIds,
     };
   } else if (category === 'inspection') {
     payload = {

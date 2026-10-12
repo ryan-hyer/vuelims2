@@ -2,6 +2,7 @@
   {
     "id": 1,
     "jobNumber": "LIB2500101",
+    "typeCode": "LIB",
     "customerId": 3,
     "startDate": "2025/01/06",
     "standardRevisionIds": [12, 45],
@@ -11,6 +12,7 @@
   {
     "id": 2,
     "jobNumber": "LIB2500102",
+    "typeCode": "LIB",
     "customerId": 8,
     "startDate": "2025/02/12",
     "standardRevisionIds": [7, 23, 67],
@@ -20,6 +22,7 @@
   {
     "id": 3,
     "jobNumber": "LIB2500103",
+    "typeCode": "LIB",
     "customerId": 1,
     "startDate": "2025/03/03",
     "standardRevisionIds": [31],
@@ -29,6 +32,7 @@
   {
     "id": 4,
     "jobNumber": "LIB2500104",
+    "typeCode": "LIB",
     "customerId": 10,
     "startDate": "2025/04/09",
     "standardRevisionIds": [5, 18, 42, 88],
@@ -38,6 +42,7 @@
   {
     "id": 5,
     "jobNumber": "LIB2500105",
+    "typeCode": "LIB",
     "customerId": 5,
     "startDate": "2025/05/19",
     "standardRevisionIds": [64, 71],
@@ -47,6 +52,7 @@
   {
     "id": 6,
     "jobNumber": "LIB2500106",
+    "typeCode": "LIB",
     "customerId": 2,
     "startDate": "2025/06/13",
     "standardRevisionIds": [9, 33, 55],
@@ -56,6 +62,7 @@
   {
     "id": 7,
     "jobNumber": "LIB2500107",
+    "typeCode": "LIB",
     "customerId": 11,
     "startDate": "2025/07/25",
     "standardRevisionIds": [22],
@@ -65,6 +72,7 @@
   {
     "id": 8,
     "jobNumber": "LIB2500108",
+    "typeCode": "LIB",
     "customerId": 6,
     "startDate": "2025/09/01",
     "standardRevisionIds": [14, 49, 77],
@@ -74,6 +82,7 @@
   {
     "id": 9,
     "jobNumber": "LIB2500109",
+    "typeCode": "LIB",
     "customerId": 9,
     "startDate": "2025/10/20",
     "standardRevisionIds": [38, 60],
@@ -83,6 +92,7 @@
   {
     "id": 10,
     "jobNumber": "LIB2500110",
+    "typeCode": "LIB",
     "customerId": 4,
     "startDate": "2025/11/12",
     "standardRevisionIds": [2, 16, 93],
@@ -92,6 +102,7 @@
   {
     "id": 11,
     "jobNumber": "LIB2500111",
+    "typeCode": "LIB",
     "customerId": 7,
     "startDate": "2025/12/08",
     "standardRevisionIds": [53],
@@ -101,6 +112,7 @@
   {
     "id": 12,
     "jobNumber": "LIB2600101",
+    "typeCode": "LIB",
     "customerId": 1,
     "startDate": "2026/01/15",
     "standardRevisionIds": [26, 42, 72, 103],
@@ -110,6 +122,7 @@
   {
     "id": 13,
     "jobNumber": "LIB2600102",
+    "typeCode": "LIB",
     "customerId": 10,
     "startDate": "2026/02/24",
     "standardRevisionIds": [8, 35],
@@ -119,6 +132,7 @@
   {
     "id": 14,
     "jobNumber": "LIB2600103",
+    "typeCode": "LIB",
     "customerId": 3,
     "startDate": "2026/03/17",
     "standardRevisionIds": [19, 57, 80],
@@ -128,6 +142,7 @@
   {
     "id": 15,
     "jobNumber": "LIB2600104",
+    "typeCode": "LIB",
     "customerId": 8,
     "startDate": "2026/04/08",
     "standardRevisionIds": [41],

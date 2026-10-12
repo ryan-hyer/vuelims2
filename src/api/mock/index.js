@@ -7,6 +7,8 @@ import customercontacts from './data/customercontacts.json';
 import customerinteractions from './data/customerinteractions.json';
 import projectsJson from './data/projects.json';
 import projectTypesJson from './data/projecttypes.json';
+import dataSheetsJson from './data/datasheets.json';
+import samplesJson from './data/samples.json';
 import personnel from './data/personnel.json';
 import rolesJson from './data/roles.json';
 import legalDocsJson from './data/legaldocs.json';
@@ -43,6 +45,11 @@ const standardsData = standardsJson.map((s) => ({ ...s }));
 const standardRevisionsData = standardRevisionsJson.map((r) => ({ ...r, filename: null, url: null }));
 const libraryCheckoutsData = libraryCheckoutsJson.map((c) => ({ ...c }));
 const projectsData = projectsJson.map((p) => ({ ...p }));
+// Deep copy via JSON, like a request/response body; also strips Vue reactive proxies
+const clone = (value) => JSON.parse(JSON.stringify(value));
+
+const dataSheetsData = dataSheetsJson.map((d) => ({ ...d, data: clone(d.data) }));
+const samplesData = samplesJson.map((s) => ({ ...s }));
 const rolesData = JSON.parse(JSON.stringify(rolesJson));
 const legalDocsData = legalDocsJson.map((doc) => ({ ...doc, url: null }));
 const employeeRolesData = employeeRolesJson.map((er) => ({ ...er }));
@@ -59,6 +66,81 @@ const joinProject = (p) => ({
   ...p,
   customerName: customersData.find((c) => c.id === p.customerId)?.name ?? 'Unknown',
 });
+
+const TESTING_TYPE_CODES = new Set(['A', 'E', 'F', 'M', 'P', 'ST']);
+
+const nextId = (rows) => (rows.length ? Math.max(...rows.map((r) => r.id)) + 1 : 1);
+
+const latestRevisionId = (standardId) => {
+  const year = (rev) => parseInt(rev.match(/\d{4}/)?.[0] ?? '0');
+  const revs = standardRevisionsData
+    .filter((r) => r.standardId === standardId)
+    .sort((a, b) => year(b.revision) - year(a.revision));
+  return revs[0]?.id;
+};
+
+// Creates any data sheets a project should have but doesn't yet (e.g. a standard added later)
+const ensureDataSheets = (project) => {
+  const existing = dataSheetsData.filter((d) => d.projectId === project.id);
+  const wanted = [];
+  if (TESTING_TYPE_CODES.has(project.typeCode)) {
+    wanted.push({
+      kind: 'testing-common',
+      templateKey: 'testing-common',
+      data: {
+        manufacturer: {
+          name: '',
+          address1: '',
+          address2: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          country: '',
+          phone: '',
+          website: '',
+        },
+        sampleDescription: '',
+        samplePlan: '',
+        samplingDate: '',
+        samplingLocation: '',
+      },
+    });
+    for (const standardId of project.standardIds ?? []) {
+      wanted.push({
+        kind: 'testing-standard',
+        templateKey: 'generic',
+        standardId,
+        standardRevisionId: latestRevisionId(standardId),
+        data: {},
+      });
+    }
+  } else if (project.typeCode === 'I') {
+    wanted.push({
+      kind: 'inspection-checklist',
+      templateKey: project.inspectionType ?? 'generic',
+      data: {},
+    });
+  } else if (project.typeCode === 'LS') {
+    wanted.push({ kind: 'certification', templateKey: 'certification', data: {} });
+  }
+  for (const w of wanted) {
+    const exists = existing.some(
+      (d) => d.kind === w.kind && (w.kind !== 'testing-standard' || d.standardId === w.standardId),
+    );
+    if (!exists) dataSheetsData.push({ ...w, id: nextId(dataSheetsData), projectId: project.id });
+  }
+};
+
+const projectDataBundle = (project) => {
+  const locker = usersData.find((u) => u.id === project.dataLockedBy);
+  return {
+    sheets: dataSheetsData
+      .filter((d) => d.projectId === project.id)
+      .map((d) => ({ ...d, data: clone(d.data) })),
+    samples: samplesData.filter((s) => s.projectId === project.id).map((s) => ({ ...s })),
+    ...(locker ? { lockedByName: `${locker.firstName} ${locker.lastName}` } : {}),
+  };
+};
 
 const fetch = (mockData, time = 0) => {
   return new Promise((resolve) => {
@@ -204,6 +286,47 @@ export default {
       projectsData[index] = raw;
     }
     return Promise.resolve();
+  },
+  fetchProjectData(projectId) {
+    const project = projectsData.find((p) => p.id === projectId);
+    if (!project) return Promise.reject(new Error(`Project ${projectId} not found`));
+    ensureDataSheets(project);
+    return fetch(projectDataBundle(project), 300);
+  },
+  // Saves all sheets and replaces the project's sample list (new samples have no id yet)
+  saveProjectData(projectId, sheets, samples, userId) {
+    const project = projectsData.find((p) => p.id === projectId);
+    if (!project) return Promise.reject(new Error(`Project ${projectId} not found`));
+    if (project.dataLockedAt) return Promise.reject(new Error('Project data is locked'));
+    const savedAt = new Date().toISOString();
+    for (const sheet of sheets) {
+      const index = dataSheetsData.findIndex((d) => d.id === sheet.id && d.projectId === projectId);
+      if (index !== -1) {
+        dataSheetsData[index] = { ...sheet, data: clone(sheet.data), savedAt, savedBy: userId };
+      }
+    }
+    for (let i = samplesData.length - 1; i >= 0; i--) {
+      if (samplesData[i].projectId === projectId) samplesData.splice(i, 1);
+    }
+    for (const sample of samples) {
+      samplesData.push({ ...sample, id: sample.id ?? nextId(samplesData), projectId });
+    }
+    return fetch(projectDataBundle(project), 300);
+  },
+  lockProjectData(projectId, userId) {
+    const project = projectsData.find((p) => p.id === projectId);
+    if (!project) return Promise.reject(new Error(`Project ${projectId} not found`));
+    project.dataLockedAt = new Date().toISOString().split('T')[0].replaceAll('-', '/');
+    project.dataLockedBy = userId;
+    return Promise.resolve(joinProject(project));
+  },
+  // Only allowed until a deliverable exists; after that, changes go through a formal revision
+  unlockProjectData(projectId) {
+    const project = projectsData.find((p) => p.id === projectId);
+    if (!project) return Promise.reject(new Error(`Project ${projectId} not found`));
+    delete project.dataLockedAt;
+    delete project.dataLockedBy;
+    return Promise.resolve(joinProject(project));
   },
   fetchAllCustomers() {
     return Promise.resolve(

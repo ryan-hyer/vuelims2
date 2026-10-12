@@ -1,7 +1,13 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import api from 'src/api/mock';
-import type { Project, ProjectWithDetails } from 'src/components/Projects/models';
-import type { CustomerLocation } from 'src/components/Customers/models';
+import type {
+  DataSheet,
+  DraftSample,
+  Project,
+  ProjectDataBundle,
+  ProjectWithDetails,
+} from 'src/components/Projects/models';
+import type { Customer, CustomerLocation } from 'src/components/Customers/models';
 
 interface LookupItem {
   id: number;
@@ -24,6 +30,7 @@ export const useProjectStore = defineStore('projects', {
   state: () => ({
     projects: [] as ProjectWithDetails[],
     project: null as ProjectWithDetails | null,
+    projectData: null as ProjectDataBundle | null,
     allCustomers: [] as LookupItem[],
     projectTypes: [] as { label: string; value: string }[],
     allStandards: [] as StandardOption[],
@@ -81,8 +88,58 @@ export const useProjectStore = defineStore('projects', {
           console.error('Error updating project:', error);
         });
     },
+    async fetchProjectData(projectId: number) {
+      await api
+        .fetchProjectData(projectId)
+        .then((response) => {
+          this.projectData = response as ProjectDataBundle;
+        })
+        .catch((error) => {
+          console.error('Error fetching project data:', error);
+        });
+    },
+    async saveProjectData(
+      projectId: number,
+      sheets: DataSheet[],
+      samples: DraftSample[],
+      userId: number,
+    ) {
+      await api
+        .saveProjectData(projectId, sheets, samples, userId)
+        .then((response) => {
+          this.projectData = response as ProjectDataBundle;
+        })
+        .catch((error) => {
+          console.error('Error saving project data:', error);
+        });
+    },
+    async lockProjectData(projectId: number, userId: number) {
+      await api
+        .lockProjectData(projectId, userId)
+        .then(async (response) => {
+          this.project = response as ProjectWithDetails;
+          await this.fetchProjectData(projectId);
+        })
+        .catch((error) => {
+          console.error('Error locking project data:', error);
+        });
+    },
+    async unlockProjectData(projectId: number) {
+      await api
+        .unlockProjectData(projectId)
+        .then(async (response) => {
+          this.project = response as ProjectWithDetails;
+          await this.fetchProjectData(projectId);
+        })
+        .catch((error) => {
+          console.error('Error unlocking project data:', error);
+        });
+    },
     fetchNextJobNumber(typeCode: string): Promise<string> {
       return api.fetchNextJobNumber(typeCode);
+    },
+    fetchCustomer(customerId: number): Promise<Customer> {
+      return api.fetchCustomer(customerId) as Promise<Customer>;
     },
     fetchCustomerLocations(customerId: number): Promise<unknown[]> {
       return api.fetchCustomerLocations(customerId);

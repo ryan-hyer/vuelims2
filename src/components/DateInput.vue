@@ -4,13 +4,14 @@
     :model-value="modelValue"
     @update:model-value="emit('update:modelValue', $event as string)"
     mask="date"
+    :readonly="readonly"
     :label="label"
     lazy-rules
-    :rules="[(val) => !!val || 'Cannot be blank']"
+    :rules="optional ? [] : [(val) => !!val || 'Cannot be blank']"
     :ref="handleRef"
   >
     <template v-slot:append>
-      <q-icon name="event" class="cursor-pointer">
+      <q-icon v-if="!readonly" name="event" class="cursor-pointer">
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
           <q-date
             :model-value="modelValue"
@@ -30,6 +31,8 @@
 const props = defineProps<{
   modelValue: string;
   label: string;
+  optional?: boolean;
+  readonly?: boolean;
   fieldName?: string;
   setFieldRef?: (name: string, el: unknown) => void;
 }>();
