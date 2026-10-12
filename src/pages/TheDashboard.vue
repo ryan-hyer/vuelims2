@@ -37,8 +37,7 @@
         </li>
         <li>
           There should be a place to add/edit/delete certain foundational lists, possibly in an
-          admin menu, e.g. project types, subtypes, etc. Let's look deeper at this when we get
-          closer to completion.
+          admin menu, e.g. fee schedule. Let's look deeper at this when we get closer to completion.
         </li>
         <li>Flesh out the user Profile page, notifications, messages and stuff like that</li>
       </ul>
@@ -51,13 +50,9 @@
       </q-linear-progress>
       <ul>
         <li>
-          Lots of work got done on the New Project form; review one more time after sleeping on it,
-          then start testing it a bit more
+          Next: hammer out the project detail page, specifically the data section, the next major
+          portion of this app
         </li>
-        <li>
-          Especially check the Testing project type fields; see if any of those need refinement
-        </li>
-        <li>Then start working on the project detail page, specifically the data section</li>
       </ul>
 
       <div class="text-bold">Customers</div>
@@ -105,8 +100,8 @@
           tab again.
         </li>
         <li>
-          Improve the style of sections, headers, icons, etc. to be more like what we've done with
-          Customers
+          Improve the style of sections, headers, search and filter, icons, etc. to be more like
+          what we've done with Customers and Projects
         </li>
       </ul>
 
@@ -138,24 +133,22 @@
         </div>
       </q-linear-progress>
       <ul>
-        <li>Finish the Certification Detail page -- this is our first big milestone!</li>
         <li>
           The clickable model numbers are so amazing, but what happens when there's other stuff in
           the models section, like blow-molded versus rotationally-molded, or hardcoded specs like
           50A 120V?
         </li>
-        <li>Looks like the listing documents button doesn't work</li>
         <li>
           Then muck about in the stylesheet of the printable listing sheet, and make it look better.
         </li>
-        <li>
-          Then: workflows for new listing projects, then surveillance and amendments, although this
-          will re-introduce us to the issues in the Projects module. Try to resolve them here.
-        </li>
-        <li>
-          Also add functionality for generating listing sheets -- this will be a good test run for
-          how to generate and export PDF documents.
-        </li>
+        <li>Don't forget about a surveillance workflow</li>
+        <ul>
+          <li>Need to be able to track inspections, of course</li>
+          <li>
+            But also tagged work: which categories, which models, which sections of which standards
+          </li>
+          <li>Need to verify that all categories are getting hit every 3-5 years</li>
+        </ul>
         <li>
           Then we need functionality for suspending/terminating certifications (probably another
           workflow, or at least some kind of auditable dialog), and role guards for all listing
@@ -245,16 +238,16 @@
 
 <script setup lang="ts">
 const complete = {
-  overall: 10,
+  overall: 20,
   auth: 70,
-  projects: 30,
-  customers: 80,
+  projects: 50,
+  customers: 90,
   invoicing: 0,
   organization: 75,
   qualitySystem: 0,
   qualityControl: 0,
   testing: 0,
-  certification: 40,
+  certification: 50,
   inspection: 0,
   library: 80,
 };

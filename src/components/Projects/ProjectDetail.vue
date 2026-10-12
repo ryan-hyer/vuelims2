@@ -136,13 +136,42 @@
     </q-card>
 
     <q-card flat bordered class="q-mt-md">
-      <q-toolbar class="bg-grey-4 q-py-sm q-pl-md">
+      <q-toolbar class="bg-grey-4">
         <q-item-label>
           <div class="row items-center q-gutter-xs">
             <span class="text-h6">Project Data</span>
           </div>
         </q-item-label>
       </q-toolbar>
+      <q-card-section>
+        <ProjectData></ProjectData>
+      </q-card-section>
+    </q-card>
+
+    <q-card flat bordered class="q-mt-md">
+      <q-toolbar class="bg-grey-4">
+        <q-item-label>
+          <div class="row items-center q-gutter-xs">
+            <span class="text-h6">Deliverables</span>
+          </div>
+        </q-item-label>
+      </q-toolbar>
+      <q-card-section>
+        <ProjectDeliverables></ProjectDeliverables>
+      </q-card-section>
+    </q-card>
+
+    <q-card flat bordered class="q-mt-md">
+      <q-toolbar class="bg-grey-4">
+        <q-item-label>
+          <div class="row items-center q-gutter-xs">
+            <span class="text-h6">Invoicing</span>
+          </div>
+        </q-item-label>
+      </q-toolbar>
+      <q-card-section>
+        <ProjectInvoicing></ProjectInvoicing>
+      </q-card-section>
     </q-card>
 
     <q-dialog v-model="docsDialogOpen" persistent>
@@ -240,6 +269,9 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { useProjectStore } from 'src/stores/project-store';
 import { useAuthStore } from 'src/stores/auth-store';
 import type { ProjectDocument } from './models';
+import ProjectData from './ProjectData.vue';
+import ProjectDeliverables from './ProjectDeliverables.vue';
+import ProjectInvoicing from './ProjectInvoicing.vue';
 
 const props = defineProps<{ projectId: string }>();
 

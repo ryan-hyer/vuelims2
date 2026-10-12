@@ -1,8 +1,10 @@
 <template>
   <div class="q-mt-md">
     <div class="text-subtitle2 q-mb-sm">
-      Documents
-      <span class="text-grey-6 text-caption q-ml-xs">(optional)</span>
+      Project Documents
+      <span class="text-grey-6 text-caption q-ml-xs"
+        >(optional) (e.g. applications, purchase orders)</span
+      >
     </div>
     <q-list v-if="draftDocs.length" bordered separator class="rounded-borders q-mb-sm">
       <q-item v-for="(doc, i) in draftDocs" :key="i">
@@ -102,6 +104,8 @@ function removeDoc(index: number) {
 
 defineExpose({
   getDocs: () => draftDocs.value,
-  addDocIfReady: () => { if (newDocTitle.value.trim() && newDocFile.value) addDoc(); },
+  addDocIfReady: () => {
+    if (newDocTitle.value.trim() && newDocFile.value) addDoc();
+  },
 });
 </script>

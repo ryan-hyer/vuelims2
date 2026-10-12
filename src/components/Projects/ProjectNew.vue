@@ -25,6 +25,7 @@
           </div>
           <div v-else>
             <!-- Common fields -->
+            <div class="text-subtitle2 q-mb-sm">Basic Project Information</div>
             <q-input
               filled
               v-model="newProject.jobNumber"
@@ -56,6 +57,7 @@
               lazy-rules
               :ref="(el) => setFieldRef('customerId', el)"
               :rules="[(val) => !!val || 'Cannot be blank']"
+              class="q-mb-sm"
             >
               <template v-slot:no-option>
                 <q-item>
@@ -77,16 +79,7 @@
             <!-- Testing fields -->
             <template v-if="projectCategory === 'testing'">
               <q-separator spaced />
-              <div class="text-subtitle2 q-mb-sm">Testing Details</div>
-
-              <q-input
-                filled
-                v-model="testing.manufacturer"
-                label="Manufacturer"
-                lazy-rules
-                :ref="(el) => setFieldRef('manufacturer', el)"
-                :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
-              />
+              <div class="text-subtitle2 q-mb-sm">Testing-Specific Project Details</div>
 
               <q-select
                 filled
@@ -107,6 +100,7 @@
                 lazy-rules
                 :ref="(el) => setFieldRef('standardIds', el)"
                 :rules="[(val) => (val && val.length > 0) || 'Select at least one standard']"
+                class="q-mb-sm"
               >
                 <template v-slot:no-option>
                   <q-item>
@@ -115,47 +109,12 @@
                 </template>
               </q-select>
 
-              <q-input
-                filled
-                type="textarea"
-                v-model="testing.sampleDescription"
-                label="Sample Description"
-                lazy-rules
-                :ref="(el) => setFieldRef('sampleDescription', el)"
-                :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
-              />
-
-              <q-input
-                filled
-                type="textarea"
-                v-model="testing.samplePlan"
-                label="Sample Plan"
-                lazy-rules
-                :ref="(el) => setFieldRef('samplePlan', el)"
-                :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
-              />
-
-              <DateInput
-                v-model="testing.samplingDate"
-                label="Sampling Date (yyyy/mm/dd)"
-                field-name="samplingDate"
-                :set-field-ref="setFieldRef"
-              />
-
-              <q-input
-                filled
-                v-model="testing.samplingLocation"
-                label="Sampling Location"
-                lazy-rules
-                :ref="(el) => setFieldRef('samplingLocation', el)"
-                :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
-              />
             </template>
 
             <!-- Inspection fields -->
             <template v-if="projectCategory === 'inspection'">
               <q-separator spaced />
-              <div class="text-subtitle2 q-mb-sm">Inspection Details</div>
+              <div class="text-subtitle2 q-mb-sm">Inspection-Specific Project Details</div>
 
               <div>
                 <q-select
@@ -168,24 +127,28 @@
                   lazy-rules
                   :ref="(el) => setFieldRef('inspectionLocation', el)"
                   :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
+                  class="q-mb-sm"
                 />
                 <q-tooltip v-if="!newProject.customerId">Select a customer above first</q-tooltip>
               </div>
 
-              <q-input
+              <q-select
                 filled
+                options-dense
                 v-model="inspection.inspectionType"
+                :options="inspectionTypeOptions"
                 label="Inspection Type"
                 lazy-rules
                 :ref="(el) => setFieldRef('inspectionType', el)"
                 :rules="[(val) => (val && val.length > 0) || 'Cannot be blank']"
+                class="q-mb-sm"
               />
             </template>
 
             <!-- Certification fields -->
             <template v-if="projectCategory === 'certification'">
               <q-separator spaced />
-              <div class="text-subtitle2 q-mb-sm">Certification Details</div>
+              <div class="text-subtitle2 q-mb-sm">Certification-Specific Project Details</div>
 
               <q-select
                 v-if="selectedCustomerHasListing"
@@ -199,6 +162,7 @@
                 lazy-rules
                 :ref="(el) => setFieldRef('projectSubtype', el)"
                 :rules="[(val) => !!val || 'Cannot be blank']"
+                class="q-mb-sm"
               />
 
               <!-- Product types sub-form (new, scope change, redesign subtypes only) -->
@@ -208,10 +172,16 @@
                   <span
                     v-if="draftCategories.length === 0"
                     class="text-caption text-negative q-ml-xs"
-                  >At least one required</span>
+                    >At least one required</span
+                  >
                 </div>
 
-                <q-list v-if="draftCategories.length" bordered separator class="rounded-borders q-mb-sm">
+                <q-list
+                  v-if="draftCategories.length"
+                  bordered
+                  separator
+                  class="rounded-borders q-mb-sm"
+                >
                   <q-expansion-item
                     v-for="(cat, i) in draftCategories"
                     :key="i"
@@ -224,27 +194,61 @@
                             <template v-if="cat.newModelNumbers?.length">
                               <div class="text-caption text-grey q-mb-xs">Adding</div>
                               <div class="q-gutter-xs q-mb-sm">
-                                <q-chip v-for="mn in cat.newModelNumbers" :key="mn" dense color="green-2" text-color="dark">{{ mn }}</q-chip>
+                                <q-chip
+                                  v-for="mn in cat.newModelNumbers"
+                                  :key="mn"
+                                  dense
+                                  color="green-2"
+                                  text-color="dark"
+                                  >{{ mn }}</q-chip
+                                >
                               </div>
                             </template>
                             <template v-if="cat.affectedModels?.length">
                               <div class="text-caption text-grey q-mb-xs">Affected models</div>
                               <div class="q-gutter-xs q-mb-sm">
-                                <q-chip v-for="m in cat.affectedModels" :key="m.id" dense color="blue-grey-2" text-color="dark">{{ m.modelNumber }}</q-chip>
+                                <q-chip
+                                  v-for="m in cat.affectedModels"
+                                  :key="m.id"
+                                  dense
+                                  color="blue-grey-2"
+                                  text-color="dark"
+                                  >{{ m.modelNumber }}</q-chip
+                                >
                               </div>
                             </template>
                             <template v-if="cat.removedModels?.length">
                               <div class="text-caption text-grey q-mb-xs">Removing</div>
                               <div class="q-gutter-xs q-mb-sm">
-                                <q-chip v-for="m in cat.removedModels" :key="m.id" dense color="red-2" text-color="dark">{{ m.modelNumber }}</q-chip>
+                                <q-chip
+                                  v-for="m in cat.removedModels"
+                                  :key="m.id"
+                                  dense
+                                  color="red-2"
+                                  text-color="dark"
+                                  >{{ m.modelNumber }}</q-chip
+                                >
                               </div>
                             </template>
                             <div
-                              v-if="!cat.newModelNumbers?.length && !cat.affectedModels?.length && !cat.removedModels?.length"
+                              v-if="
+                                !cat.newModelNumbers?.length &&
+                                !cat.affectedModels?.length &&
+                                !cat.removedModels?.length
+                              "
                               class="text-caption text-grey"
-                            >No models specified</div>
+                            >
+                              No models specified
+                            </div>
                           </div>
-                          <q-btn flat round dense icon="delete" color="red-5" @click="removeCategory(i)" />
+                          <q-btn
+                            flat
+                            round
+                            dense
+                            icon="delete"
+                            color="red-5"
+                            @click="removeCategory(i)"
+                          />
                         </div>
                       </q-card-section>
                     </q-card>
@@ -279,20 +283,34 @@
                     </q-select>
 
                     <!-- New: comma-delimited textarea -->
-                    <template v-if="certification.projectSubtype === 'new' || certification.projectSubtype === 'scope change'">
+                    <template
+                      v-if="
+                        certification.projectSubtype === 'new' ||
+                        certification.projectSubtype === 'scope change'
+                      "
+                    >
                       <q-input
                         outlined
                         dense
                         type="textarea"
                         rows="2"
                         v-model="draftCategory.newModelNumbersText"
-                        :label="certification.projectSubtype === 'scope change' ? 'Models to Add (comma-separated, optional)' : 'Model Numbers (comma-separated)'"
+                        :label="
+                          certification.projectSubtype === 'scope change'
+                            ? 'Models to Add (comma-separated, optional)'
+                            : 'Model Numbers (comma-separated)'
+                        "
                         class="q-mb-sm"
                       />
                     </template>
 
                     <!-- Redesign / Scope Change: select existing models -->
-                    <template v-if="certification.projectSubtype === 'redesign' || certification.projectSubtype === 'scope change'">
+                    <template
+                      v-if="
+                        certification.projectSubtype === 'redesign' ||
+                        certification.projectSubtype === 'scope change'
+                      "
+                    >
                       <template v-if="draftCategory.certificationProductTypeId">
                         <q-select
                           v-if="existingModelsForDraft.length"
@@ -307,12 +325,20 @@
                           :options="existingModelsForDraft"
                           option-value="id"
                           option-label="modelNumber"
-                          :label="certification.projectSubtype === 'scope change' ? 'Models to Remove' : 'Affected Models'"
+                          :label="
+                            certification.projectSubtype === 'scope change'
+                              ? 'Models to Remove'
+                              : 'Affected Models'
+                          "
                           class="q-mb-sm"
                         />
-                        <div v-else class="text-caption text-grey q-mb-sm">No existing models found for this product type.</div>
+                        <div v-else class="text-caption text-grey q-mb-sm">
+                          No existing models found for this product type.
+                        </div>
                       </template>
-                      <div v-else class="text-caption text-grey q-mb-sm">Select a product type above to see existing models.</div>
+                      <div v-else class="text-caption text-grey q-mb-sm">
+                        Select a product type above to see existing models.
+                      </div>
                     </template>
 
                     <q-btn
@@ -331,7 +357,13 @@
               </div>
 
               <!-- Facility fields (shown for New and Facility Change subtypes) -->
-              <div v-if="certification.projectSubtype === 'facility' || certification.projectSubtype === 'new'" class="q-mt-md">
+              <div
+                v-if="
+                  certification.projectSubtype === 'facility' ||
+                  certification.projectSubtype === 'new'
+                "
+                class="q-mt-md"
+              >
                 <div class="text-subtitle2 q-mb-sm">Facility Details</div>
                 <!-- New subtype: multi-select -->
                 <q-select
@@ -426,41 +458,47 @@
                   <q-card-section class="q-pt-none">
                     <q-form ref="newLocationFormRef" @submit.prevent="saveNewLocation">
                       <q-input
-                        filled dense
+                        filled
+                        dense
                         v-model="newLocationForm.name"
                         label="Location Name (optional)"
                         class="q-mb-sm"
                       />
                       <q-input
-                        filled dense
+                        filled
+                        dense
                         v-model="newLocationForm.address1"
                         label="Address"
                         :rules="[(val) => !!val?.trim() || 'Cannot be blank']"
                         class="q-mb-sm"
                       />
                       <q-input
-                        filled dense
+                        filled
+                        dense
                         v-model="newLocationForm.address2"
                         label="Address Line 2 (optional)"
                         class="q-mb-sm"
                       />
                       <div class="row q-gutter-sm q-mb-sm">
                         <q-input
-                          filled dense
+                          filled
+                          dense
                           v-model="newLocationForm.city"
                           label="City"
                           :rules="[(val) => !!val?.trim() || 'Cannot be blank']"
                           class="col"
                         />
                         <q-input
-                          filled dense
+                          filled
+                          dense
                           v-model="newLocationForm.state"
                           label="State"
                           :rules="[(val) => !!val?.trim() || 'Cannot be blank']"
                           class="col-3"
                         />
                         <q-input
-                          filled dense
+                          filled
+                          dense
                           v-model="newLocationForm.zipCode"
                           label="ZIP"
                           :rules="[(val) => !!val?.trim() || 'Cannot be blank']"
@@ -468,14 +506,16 @@
                         />
                       </div>
                       <q-input
-                        filled dense
+                        filled
+                        dense
                         v-model="newLocationForm.country"
                         label="Country"
                         :rules="[(val) => !!val?.trim() || 'Cannot be blank']"
                         class="q-mb-sm"
                       />
                       <q-input
-                        filled dense
+                        filled
+                        dense
                         v-model="newLocationForm.phone"
                         label="Phone (optional)"
                         class="q-mb-sm"
@@ -483,7 +523,13 @@
                     </q-form>
                   </q-card-section>
                   <q-card-actions align="right">
-                    <q-btn flat label="Cancel" color="grey" v-close-popup @click="resetNewLocationForm" />
+                    <q-btn
+                      flat
+                      label="Cancel"
+                      color="grey"
+                      v-close-popup
+                      @click="resetNewLocationForm"
+                    />
                     <q-btn
                       color="primary"
                       label="Save Location"
@@ -498,7 +544,7 @@
             <!-- Library fields -->
             <template v-if="projectCategory === 'library'">
               <q-separator spaced />
-              <div class="text-subtitle2 q-mb-sm">Library Details</div>
+              <div class="text-subtitle2 q-mb-sm">Library-Specific Project Details</div>
 
               <q-select
                 filled
@@ -519,6 +565,7 @@
                 lazy-rules
                 :ref="(el) => setFieldRef('standardRevisionIds', el)"
                 :rules="[(val) => (val && val.length > 0) || 'Select at least one standard']"
+                class="q-mb-sm"
               >
                 <template v-slot:no-option>
                   <q-item>
@@ -532,10 +579,11 @@
                 label="Checkout Date (yyyy/mm/dd)"
                 field-name="checkoutDate"
                 :set-field-ref="setFieldRef"
+                class="q-mb-sm"
               />
-
             </template>
 
+            <q-separator spaced />
             <DocumentsSubForm ref="docsRef" />
 
             <div class="row justify-end q-gutter-sm q-mt-md">
@@ -561,6 +609,7 @@ import { date } from 'quasar';
 import type { QSelect, QForm } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useProjectStore } from 'src/stores/project-store';
+import { useStandardStore } from 'src/stores/standard-store';
 import DateInput from 'src/components/DateInput.vue';
 import DocumentsSubForm from './DocumentsSubForm.vue';
 import type { Project, ProjectCertificationCategories } from './models';
@@ -568,6 +617,7 @@ import type { CustomerLocation } from '../Customers/models';
 
 const router = useRouter();
 const store = useProjectStore();
+const standardStore = useStandardStore();
 
 // --- Field ref collection for validation ---
 type FieldInstance = { validate: () => Promise<boolean>; hasError: boolean };
@@ -579,7 +629,7 @@ function setFieldRef(name: string, el: unknown) {
 
 const COMMON_FIELDS = ['jobNumber', 'startDate', 'customerId', 'description'];
 const CATEGORY_FIELDS: Record<string, string[]> = {
-  testing: ['manufacturer', 'standardIds', 'sampleDescription', 'samplePlan', 'samplingDate', 'samplingLocation'],
+  testing: ['standardIds'],
   inspection: ['inspectionLocation', 'inspectionType'],
   certification: ['projectSubtype', 'newFacility'],
   library: ['standardRevisionIds', 'checkoutDate'],
@@ -635,25 +685,32 @@ const filterCustomers = (
 
 // --- Testing ---
 const testing = ref({
-  manufacturer: '',
   standardIds: [] as number[],
-  sampleDescription: '',
-  samplePlan: '',
-  samplingDate: '',
-  samplingLocation: '',
 });
 
-const filteredStandards = ref(store.allStandards.slice());
+const standardOptions = computed(() =>
+  standardStore.latestStandards
+    .map((s) => ({ id: s.id, label: s.revision ? `${s.number} (${s.revision})` : s.number }))
+    .sort((a, b) => a.label.localeCompare(b.label, undefined, { numeric: true, sensitivity: 'base' })),
+);
+
+const filteredStandards = ref<{ id: number; label: string }[]>([]);
 const filterStandards = (val: string, update: (callbackFn: () => void) => void) => {
   update(() => {
     const needle = val.toLowerCase();
-    filteredStandards.value = store.allStandards.filter((s) =>
+    filteredStandards.value = standardOptions.value.filter((s) =>
       s.label.toLowerCase().includes(needle),
     );
   });
 };
 
 // --- Inspection ---
+const inspectionTypeOptions = [
+  'Initial Plant Inspection',
+  'Follow-Up Inspection',
+  'Delisting Inspection',
+];
+
 const inspection = ref({
   inspectionLocation: '',
   inspectionType: '',
@@ -695,8 +752,8 @@ const facility = ref({
 const facilityNewOptions = ref<{ id: number; label: string }[]>([]);
 const facilityOldOptions = ref<{ id: number; label: string }[]>([]);
 
-const selectedCustomerHasListing = computed(() =>
-  !!store.allCustomers.find((c) => c.id === newProject.value.customerId)?.listingNumber,
+const selectedCustomerHasListing = computed(
+  () => !!store.allCustomers.find((c) => c.id === newProject.value.customerId)?.listingNumber,
 );
 
 const showProjectCategories = computed(() =>
@@ -709,7 +766,11 @@ watch(
     if (projectCategory.value !== 'certification') return;
     certCustomerProductTypeIds.value = [];
     draftCategories.value = [];
-    draftCategory.value = { certificationProductTypeId: null, newModelNumbersText: '', selectedExistingModelIds: [] };
+    draftCategory.value = {
+      certificationProductTypeId: null,
+      newModelNumbersText: '',
+      selectedExistingModelIds: [],
+    };
     const hasListing = !!store.allCustomers.find((c) => c.id === customerId)?.listingNumber;
     certification.value.projectSubtype = hasListing ? '' : 'new';
     if (customerId && hasListing) {
@@ -723,19 +784,27 @@ watch(
   () => certification.value.projectSubtype,
   async (subtype) => {
     draftCategories.value = [];
-    draftCategory.value = { certificationProductTypeId: null, newModelNumbersText: '', selectedExistingModelIds: [] };
+    draftCategory.value = {
+      certificationProductTypeId: null,
+      newModelNumbersText: '',
+      selectedExistingModelIds: [],
+    };
     facility.value = { newFacilityId: null, newFacilityIds: [], oldFacilityId: null };
     facilityNewOptions.value = [];
     facilityOldOptions.value = [];
     filteredProductTypes.value = buildProductTypeList('');
     if ((subtype === 'facility' || subtype === 'new') && newProject.value.customerId) {
-      const locs = (await store.fetchCustomerLocations(newProject.value.customerId)) as CustomerLocation[];
+      const locs = (await store.fetchCustomerLocations(
+        newProject.value.customerId,
+      )) as CustomerLocation[];
       facilityNewOptions.value = locs.map((l) => ({
         id: l.id,
         label: `${l.name ?? 'Primary'} — ${l.address1}, ${l.city}, ${l.state}`,
       }));
       if (subtype === 'facility') {
-        const certLocs = await store.fetchCustomerApprovedCertLocations(newProject.value.customerId);
+        const certLocs = await store.fetchCustomerApprovedCertLocations(
+          newProject.value.customerId,
+        );
         facilityOldOptions.value = certLocs.map((l) => ({
           id: l.id,
           label: `${l.name} — ${l.address1}, ${l.city}, ${l.state}`,
@@ -748,7 +817,16 @@ watch(
 const showNewLocationDialog = ref(false);
 const savingLocation = ref(false);
 const newLocationFormRef = ref<InstanceType<typeof QForm> | null>(null);
-const emptyLocationForm = () => ({ name: '', address1: '', address2: '', city: '', state: '', zipCode: '', country: 'USA', phone: '' });
+const emptyLocationForm = () => ({
+  name: '',
+  address1: '',
+  address2: '',
+  city: '',
+  state: '',
+  zipCode: '',
+  country: 'USA',
+  phone: '',
+});
 const newLocationForm = ref(emptyLocationForm());
 
 function resetNewLocationForm() {
@@ -768,7 +846,9 @@ async function saveNewLocation() {
     zipCode: newLocationForm.value.zipCode,
     country: newLocationForm.value.country,
     ...(newLocationForm.value.name.trim() ? { name: newLocationForm.value.name.trim() } : {}),
-    ...(newLocationForm.value.address2.trim() ? { address2: newLocationForm.value.address2.trim() } : {}),
+    ...(newLocationForm.value.address2.trim()
+      ? { address2: newLocationForm.value.address2.trim() }
+      : {}),
     ...(newLocationForm.value.phone.trim() ? { phone: newLocationForm.value.phone.trim() } : {}),
   });
   facilityNewOptions.value.push({
@@ -801,7 +881,9 @@ function buildProductTypeList(query: string) {
     const existing = new Set(certCustomerProductTypeIds.value);
     return [
       ...matched.filter((pt) => existing.has(pt.id)).sort((a, b) => a.label.localeCompare(b.label)),
-      ...matched.filter((pt) => !existing.has(pt.id)).sort((a, b) => a.label.localeCompare(b.label)),
+      ...matched
+        .filter((pt) => !existing.has(pt.id))
+        .sort((a, b) => a.label.localeCompare(b.label)),
     ];
   }
   return matched.slice().sort((a, b) => a.label.localeCompare(b.label));
@@ -838,7 +920,11 @@ watch(
     existingModelsForDraft.value = [];
     draftCategory.value.selectedExistingModelIds = [];
     const subtype = certification.value.projectSubtype;
-    if (productTypeId && newProject.value.customerId && ['redesign', 'scope change'].includes(subtype)) {
+    if (
+      productTypeId &&
+      newProject.value.customerId &&
+      ['redesign', 'scope change'].includes(subtype)
+    ) {
       existingModelsForDraft.value = await store.fetchCustomerProductTypeModels(
         newProject.value.customerId,
         productTypeId,
@@ -861,11 +947,19 @@ function addCategory() {
   draftCategories.value.push({
     id: maxId + 1,
     certificationProductTypeId: draftCategory.value.certificationProductTypeId,
-    ...(['new', 'scope change'].includes(subtype) && newNumbers.length ? { newModelNumbers: newNumbers } : {}),
+    ...(['new', 'scope change'].includes(subtype) && newNumbers.length
+      ? { newModelNumbers: newNumbers }
+      : {}),
     ...(subtype === 'redesign' && selectedModels.length ? { affectedModels: selectedModels } : {}),
-    ...(subtype === 'scope change' && selectedModels.length ? { removedModels: selectedModels } : {}),
+    ...(subtype === 'scope change' && selectedModels.length
+      ? { removedModels: selectedModels }
+      : {}),
   });
-  draftCategory.value = { certificationProductTypeId: null, newModelNumbersText: '', selectedExistingModelIds: [] };
+  draftCategory.value = {
+    certificationProductTypeId: null,
+    newModelNumbersText: '',
+    selectedExistingModelIds: [],
+  };
   existingModelsForDraft.value = [];
 }
 
@@ -875,8 +969,13 @@ function removeCategory(index: number) {
 
 const pendingCategoryPartial = computed(() => {
   if (!showProjectCategories.value) return false;
-  const { certificationProductTypeId, newModelNumbersText, selectedExistingModelIds } = draftCategory.value;
-  return certificationProductTypeId !== null || !!newModelNumbersText.trim() || selectedExistingModelIds.length > 0;
+  const { certificationProductTypeId, newModelNumbersText, selectedExistingModelIds } =
+    draftCategory.value;
+  return (
+    certificationProductTypeId !== null ||
+    !!newModelNumbersText.trim() ||
+    selectedExistingModelIds.length > 0
+  );
 });
 
 // --- Library ---
@@ -904,7 +1003,9 @@ const submitForm = async () => {
   if (!category) return;
 
   const activeFields = [...COMMON_FIELDS, ...(CATEGORY_FIELDS[category] ?? [])];
-  await Promise.all(activeFields.map((name) => fieldRefs[name]?.validate() ?? Promise.resolve(true)));
+  await Promise.all(
+    activeFields.map((name) => fieldRefs[name]?.validate() ?? Promise.resolve(true)),
+  );
   if (activeFields.some((name) => fieldRefs[name]?.hasError)) return;
 
   if (category === 'certification' && showProjectCategories.value) {
@@ -929,12 +1030,7 @@ const submitForm = async () => {
   if (category === 'testing') {
     payload = {
       ...payload,
-      manufacturer: testing.value.manufacturer,
       standardId: testing.value.standardIds,
-      sampleDescription: testing.value.sampleDescription,
-      samplePlan: testing.value.samplePlan,
-      samplingDate: testing.value.samplingDate,
-      samplingLocation: testing.value.samplingLocation,
     };
   } else if (category === 'inspection') {
     payload = {
@@ -973,11 +1069,18 @@ const submitForm = async () => {
 };
 
 onMounted(async () => {
-  if (store.allCustomers.length === 0 || store.projectTypes.length === 0 || store.certProductTypes.length === 0) {
+  if (
+    store.allCustomers.length === 0 ||
+    store.projectTypes.length === 0 ||
+    store.certProductTypes.length === 0
+  ) {
     await store.fetchProjectLookups();
   }
   filteredCustomers.value = [...store.allCustomers].sort((a, b) => a.name.localeCompare(b.name));
-  filteredStandards.value = store.allStandards.slice();
+  if (standardStore.standards.length === 0) {
+    await standardStore.fetchStandards();
+  }
+  filteredStandards.value = standardOptions.value.slice();
   filteredRevisions.value = store.allRevisions.slice();
   filteredProductTypes.value = store.certProductTypes.slice();
 });
