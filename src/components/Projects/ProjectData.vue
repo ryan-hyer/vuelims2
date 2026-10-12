@@ -51,41 +51,69 @@
       </div>
     </q-expansion-item>
 
-    <div v-for="sheet in standardSheets" :key="sheet.id" class="q-mt-lg">
-      <q-separator spaced />
-      <div class="text-subtitle2 q-mb-sm row items-center">
-        {{ standardLabel(sheet.standardId) }}
-        <span class="q-ml-xs">({{ revisionLabel(sheet.standardRevisionId) }})</span>
-        <q-btn
-          v-if="!isLocked && revisionsFor(sheet.standardId).length > 1"
-          flat
-          dense
-          size="sm"
-          icon="history"
-          color="grey-6"
-          class="q-ml-xs"
-        >
-          <q-tooltip>Use a different revision</q-tooltip>
-          <q-menu auto-close>
-            <q-list dense>
-              <q-item
-                v-for="rev in revisionsFor(sheet.standardId)"
-                :key="rev.id"
-                clickable
-                :active="rev.id === sheet.standardRevisionId"
-                @click="sheet.standardRevisionId = rev.id"
-              >
-                <q-item-section>{{ rev.revision }}</q-item-section>
-                <q-item-section v-if="rev.id === latestRevisionId(sheet.standardId)" side>
-                  <q-item-label caption>latest</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-menu>
-        </q-btn>
+    <q-expansion-item
+      v-for="sheet in standardSheets"
+      :key="sheet.id"
+      v-model="sheetExpanded[sheet.id]!"
+      bordered
+      class="rounded-borders q-mt-md"
+      header-class="bg-grey-2"
+    >
+      <template v-slot:header>
+        <q-item-section avatar>
+          <q-icon v-bind="sheetIcon(sheet)" />
+        </q-item-section>
+        <q-item-section>
+          <q-item-label class="text-subtitle2 row items-center">
+            {{ standardLabel(sheet.standardId) }} ({{ revisionLabel(sheet.standardRevisionId) }})
+            <q-btn
+              v-if="!isLocked && revisionsFor(sheet.standardId).length > 1"
+              flat
+              dense
+              round
+              size="sm"
+              icon="history"
+              color="grey-6"
+              class="q-ml-xs"
+              @click.stop
+            >
+              <q-tooltip>Use a different revision</q-tooltip>
+              <q-menu auto-close>
+                <q-list dense>
+                  <q-item
+                    v-for="rev in revisionsFor(sheet.standardId)"
+                    :key="rev.id"
+                    clickable
+                    :active="rev.id === sheet.standardRevisionId"
+                    @click="changeRevision(sheet, rev.id)"
+                  >
+                    <q-item-section>{{ rev.revision }}</q-item-section>
+                    <q-item-section v-if="rev.id === latestRevisionId(sheet.standardId)" side>
+                      <q-item-label caption>latest</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </q-item-label>
+          <q-item-label caption>{{ sheetSummary(sheet) }}</q-item-label>
+        </q-item-section>
+      </template>
+      <q-separator />
+      <div class="q-pa-md">
+        <StandardSheet
+          v-if="templateFor(sheet)"
+          v-model:data="sheet.data as unknown as StandardSheetData"
+          :template="templateFor(sheet)!"
+          :samples="testedSamples"
+          :equipment="store.equipment"
+          :readonly="isLocked"
+        />
+        <div v-else class="text-grey-6 text-italic">
+          Datasheet template for this standard revision not built yet.
+        </div>
       </div>
-      <div class="text-grey-6 text-italic">Datasheet template for this standard not built yet.</div>
-    </div>
+    </q-expansion-item>
 
     <q-separator spaced />
     <div v-if="!isLocked" class="row justify-end items-center q-gutter-sm">
@@ -162,6 +190,15 @@ import { useProjectStore } from 'src/stores/project-store';
 import { useStandardStore } from 'src/stores/standard-store';
 import { useAuthStore } from 'src/stores/auth-store';
 import TestingCommonSheet from './DataTemplates/TestingCommonSheet.vue';
+import StandardSheet from './DataTemplates/StandardSheet.vue';
+import {
+  clauseStatus,
+  findStandardTemplate,
+  normalizeSheetData,
+  sheetContext,
+  sheetMissing,
+} from './DataTemplates/standards';
+import type { StandardSheetData } from './DataTemplates/standards/types';
 import type {
   DataSheet,
   DraftSample,
@@ -194,6 +231,7 @@ function toDraftSample(s: Sample): DraftSample {
   return {
     id: s.id,
     number: s.number,
+    modelNumber: s.modelNumber ?? '',
     dateReceived: s.dateReceived,
     description: s.description,
     shippedVia: s.shippedVia,
@@ -201,23 +239,46 @@ function toDraftSample(s: Sample): DraftSample {
   };
 }
 
+// Snapshot of the drafts as loaded, after filling in defaults; compared to detect changes
+const baseline = ref('');
+const snapshot = () => JSON.stringify([draftSheets.value, draftSamples.value]);
+
 watch(
   () => store.projectData,
   (bundle) => {
-    draftSheets.value = JSON.parse(JSON.stringify(bundle?.sheets ?? [])) as DataSheet[];
+    const sheets = JSON.parse(JSON.stringify(bundle?.sheets ?? [])) as DataSheet[];
     draftSamples.value = (bundle?.samples ?? []).map(toDraftSample);
+    draftSheets.value = sheets.map(normalizeSheet);
+    baseline.value = snapshot();
   },
 );
 
-const isDirty = computed(() => {
-  const saved = store.projectData;
-  if (!saved) return false;
-  const savedSamples = saved.samples.map(toDraftSample);
-  return (
-    JSON.stringify(draftSheets.value) !== JSON.stringify(saved.sheets) ||
-    JSON.stringify(draftSamples.value) !== JSON.stringify(savedSamples)
-  );
+// Samples are identified by sample number in each datasheet's results
+const sampleKeys = computed(() => draftSamples.value.map((s) => s.number));
+const testedSamples = computed(() =>
+  draftSamples.value.map((s) => ({ key: s.number, model: s.modelNumber })),
+);
+
+// A newly logged sample gets an empty column of results in each datasheet
+watch(sampleKeys, () => {
+  for (const sheet of standardSheets.value) {
+    if (templateFor(sheet)) Object.assign(sheet, normalizeSheet(sheet));
+  }
 });
+
+const isDirty = computed(() => !!store.projectData && snapshot() !== baseline.value);
+
+function normalizeSheet(sheet: DataSheet): DataSheet {
+  if (sheet.kind === 'testing-common') {
+    const data = sheet.data as unknown as TestingCommonData;
+    data.modelNumbers ??= [];
+    return sheet;
+  }
+  const template = templateFor(sheet);
+  if (!template) return sheet;
+  const data = normalizeSheetData(template, sheet.data, sampleKeys.value);
+  return { ...sheet, data: data as unknown as Record<string, unknown> };
+}
 
 const commonSheet = computed(() => draftSheets.value.find((s) => s.kind === 'testing-common'));
 const standardSheets = computed(() =>
@@ -235,7 +296,10 @@ const MANUFACTURER_LABELS: Record<Exclude<keyof ManufacturerInfo, 'address2'>, s
   phone: 'manufacturer phone',
   website: 'manufacturer website',
 };
-const SAMPLE_LABELS: Record<Exclude<keyof TestingCommonData, 'manufacturer'>, string> = {
+const SAMPLE_LABELS: Record<
+  Exclude<keyof TestingCommonData, 'manufacturer' | 'modelNumbers'>,
+  string
+> = {
   sampleDescription: 'sample description',
   samplePlan: 'sampling plan',
   samplingDate: 'sampling date',
@@ -246,7 +310,11 @@ const commonMissing = computed(() => {
   const common = commonSheet.value?.data as TestingCommonData | undefined;
   if (!common) return [];
   const result: string[] = [];
+  if (!common.modelNumbers?.length) result.push('models covered');
   if (!draftSamples.value.length) result.push('at least one sample');
+  if (draftSamples.value.some((s) => !common.modelNumbers?.includes(s.modelNumber))) {
+    result.push('model for each sample');
+  }
   for (const [key, label] of Object.entries(MANUFACTURER_LABELS)) {
     if (!common.manufacturer[key as keyof ManufacturerInfo].trim()) result.push(label);
   }
@@ -256,8 +324,12 @@ const commonMissing = computed(() => {
   return result;
 });
 
-// Datasheets for individual standards will add their own required fields here once built
-const missing = computed(() => commonMissing.value);
+const missing = computed(() => [
+  ...commonMissing.value,
+  ...standardSheets.value
+    .filter((sheet) => sheetMissingFor(sheet).length)
+    .map((sheet) => `${standardLabel(sheet.standardId)} (${sheetMissingFor(sheet).join(', ')})`),
+]);
 
 const commonSummary = computed(() => {
   const count = commonMissing.value.length;
@@ -269,6 +341,55 @@ const commonSummary = computed(() => {
 
 // Collapsed once complete, so attention moves to the standard datasheets
 const commonExpanded = ref(true);
+
+// --- Standard datasheets ---
+const sheetExpanded = ref<Record<number, boolean>>({});
+
+function templateFor(sheet: DataSheet) {
+  const number = standardStore.standards.find((s) => s.id === sheet.standardId)?.number;
+  const revision = revisionLabel(sheet.standardRevisionId);
+  return number ? findStandardTemplate(number, revision) : undefined;
+}
+
+function sheetMissingFor(sheet: DataSheet): string[] {
+  const template = templateFor(sheet);
+  if (!template) return [];
+  return sheetMissing(template, sheet.data as unknown as StandardSheetData, sampleKeys.value);
+}
+
+function failingClauses(sheet: DataSheet) {
+  const template = templateFor(sheet);
+  if (!template) return [];
+  const data = sheet.data as unknown as StandardSheetData;
+  const ctx = sheetContext(template, data, sampleKeys.value);
+  return template.clauses.filter(
+    (c) => clauseStatus(c, data.clauses[c.number]!, ctx) === 'does-not-comply',
+  );
+}
+
+function sheetIcon(sheet: DataSheet) {
+  if (!templateFor(sheet)) return { name: 'construction', color: 'grey-5' };
+  if (failingClauses(sheet).length) return { name: 'cancel', color: 'negative' };
+  return sheetMissingFor(sheet).length
+    ? { name: 'pending', color: 'orange' }
+    : { name: 'check_circle', color: 'positive' };
+}
+
+function sheetSummary(sheet: DataSheet) {
+  if (!templateFor(sheet)) return 'No datasheet template yet';
+  const missingSections = sheetMissingFor(sheet);
+  if (missingSections.length) return `Still needed: ${missingSections.join(', ')}`;
+  const failures = failingClauses(sheet);
+  return failures.length
+    ? `Complete · ${failures.length} section${failures.length === 1 ? '' : 's'} DOES NOT COMPLY`
+    : 'Complete · Complies';
+}
+
+// Keeps whatever data still matches the new revision's template (by clause number and field key)
+function changeRevision(sheet: DataSheet, revisionId: number) {
+  sheet.standardRevisionId = revisionId;
+  Object.assign(sheet, normalizeSheet(sheet));
+}
 
 // --- Standards and revisions ---
 function standardLabel(standardId?: number) {
@@ -320,12 +441,17 @@ async function reopen() {
 onMounted(async () => {
   loading.value = true;
   store.$patch({ projectData: null });
+  // Standards first: picking each sheet's datasheet template (and its defaults) needs them
   await Promise.all([
-    store.fetchProjectData(props.project.id),
     standardStore.standards.length ? Promise.resolve() : standardStore.fetchStandards(),
+    store.equipment.length ? Promise.resolve() : store.fetchEquipment(),
   ]);
+  await store.fetchProjectData(props.project.id);
   await nextTick(); // let the drafts populate from the fetched data
   commonExpanded.value = commonMissing.value.length > 0;
+  for (const sheet of standardSheets.value) {
+    sheetExpanded.value[sheet.id] = sheetMissingFor(sheet).length > 0;
+  }
   loading.value = false;
 });
 </script>

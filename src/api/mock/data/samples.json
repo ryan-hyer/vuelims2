@@ -3,9 +3,30 @@
     "id": 1,
     "projectId": 3,
     "number": "P2500313-1",
+    "modelNumber": "",
     "dateReceived": "2024/01/18",
     "description": "White acrylic shower pan, 32 x 48 in., center drain",
     "shippedVia": "FedEx Freight",
+    "receivedBy": "Front Desk"
+  },
+  {
+    "id": 2,
+    "projectId": 6,
+    "number": "P2500316-1",
+    "modelNumber": "FW-C-20",
+    "dateReceived": "2025/09/22",
+    "description": "20 gal roto-molded polyethylene fresh water tank, center outlet",
+    "shippedVia": "Customer drop-off",
+    "receivedBy": "Front Desk"
+  },
+  {
+    "id": 3,
+    "projectId": 6,
+    "number": "P2500316-2",
+    "modelNumber": "FW-UC-11",
+    "dateReceived": "2025/09/22",
+    "description": "11 gal roto-molded polyethylene under-counter fresh water tank",
+    "shippedVia": "Customer drop-off",
     "receivedBy": "Front Desk"
   }
 ]

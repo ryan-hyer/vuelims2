@@ -1,11 +1,48 @@
 <template>
   <div>
+    <div class="text-subtitle2 q-mb-sm">Models Covered</div>
+    <q-select
+      v-model="data.modelNumbers"
+      filled
+      multiple
+      use-chips
+      use-input
+      hide-dropdown-icon
+      input-debounce="0"
+      label="Model / Part Numbers"
+      hint="Every model the project covers, tested or not. Type or paste, separated by commas."
+      :readonly="readonly"
+      @new-value="addModels"
+      class="q-mb-md"
+    />
+
     <div class="text-subtitle2 q-mb-sm">Samples Received</div>
     <q-list v-if="samples.length" bordered separator class="rounded-borders q-mb-sm">
       <q-item v-for="(sample, i) in samples" :key="sample.id ?? `new-${i}`">
         <q-item-section>
           <q-item-label>
-            <span class="text-bold">{{ sample.number }}</span> · {{ sample.description }}
+            <span class="text-bold">{{ sample.number }}</span>
+            <q-chip
+              dense
+              square
+              :color="sampleModelOk(sample) ? 'blue-grey-1' : 'orange-2'"
+              :clickable="!readonly"
+              class="q-ml-sm"
+            >
+              {{ sample.modelNumber || 'Model not set' }}
+              <q-menu v-if="!readonly && data.modelNumbers.length" auto-close>
+                <q-list dense>
+                  <q-item
+                    v-for="m in data.modelNumbers"
+                    :key="m"
+                    clickable
+                    @click="setSampleModel(i, m)"
+                    >{{ m }}</q-item
+                  >
+                </q-list>
+              </q-menu>
+            </q-chip>
+            · {{ sample.description }}
           </q-item-label>
           <q-item-label caption>
             Received {{ sample.dateReceived }}
@@ -53,7 +90,30 @@
             class="col-12 col-sm-4"
           />
         </div>
-        <q-input v-model="newSample.shippedVia" filled dense label="Shipped Via" />
+        <div class="row q-col-gutter-sm">
+          <q-select
+            v-model="newSample.modelNumber"
+            filled
+            dense
+            use-input
+            fill-input
+            hide-selected
+            input-debounce="0"
+            new-value-mode="add-unique"
+            label="Model Tested"
+            hint="Pick from Models Covered, or type a new one"
+            :options="data.modelNumbers"
+            @input-value="(val: string) => (newSample.modelNumber = val)"
+            class="col-12 col-sm-6"
+          />
+          <q-input
+            v-model="newSample.shippedVia"
+            filled
+            dense
+            label="Shipped Via"
+            class="col-12 col-sm-6"
+          />
+        </div>
         <q-input v-model="newSample.description" filled dense label="Sample Description" />
         <div class="row justify-end">
           <q-btn
@@ -236,6 +296,7 @@ const addingSample = ref(false);
 function emptySample(): DraftSample {
   return {
     number: `${props.jobNumber}-${samples.value.length + 1}`,
+    modelNumber: '',
     dateReceived: date.formatDate(Date.now(), 'YYYY/MM/DD'),
     description: '',
     shippedVia: '',
@@ -248,13 +309,16 @@ const newSample = ref<DraftSample>(emptySample());
 const canAddSample = computed(
   () =>
     !!newSample.value.number.trim() &&
+    !!newSample.value.modelNumber.trim() &&
     !!newSample.value.dateReceived &&
     !!newSample.value.description.trim(),
 );
 
 function addSample() {
   if (!canAddSample.value) return;
-  samples.value = [...samples.value, { ...newSample.value }];
+  const sample = { ...newSample.value, modelNumber: newSample.value.modelNumber.trim() };
+  addModels(sample.modelNumber);
+  samples.value = [...samples.value, sample];
   newSample.value = emptySample();
   addingSample.value = false;
 }
@@ -262,6 +326,27 @@ function addSample() {
 function removeSample(index: number) {
   samples.value = samples.value.filter((_, i) => i !== index);
   newSample.value = emptySample();
+}
+
+// --- Models ---
+// Accepts one model or a pasted list separated by commas, semicolons, or line breaks
+function addModels(input: string, done?: () => void) {
+  const parts = input
+    .split(/[,;\n]+/)
+    .map((m) => m.trim())
+    .filter(Boolean);
+  const merged = [...data.value.modelNumbers];
+  for (const m of parts) if (!merged.includes(m)) merged.push(m);
+  data.value.modelNumbers = merged;
+  done?.();
+}
+
+function sampleModelOk(sample: DraftSample) {
+  return !!sample.modelNumber && data.value.modelNumbers.includes(sample.modelNumber);
+}
+
+function setSampleModel(index: number, modelNumber: string) {
+  samples.value = samples.value.map((s, i) => (i === index ? { ...s, modelNumber } : s));
 }
 
 // --- Copy manufacturer from customer ---

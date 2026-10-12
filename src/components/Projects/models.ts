@@ -61,6 +61,7 @@ export interface Sample {
   id: number;
   projectId: number;
   number: string;
+  modelNumber: string; // one of the project's models; the models tested are those with samples
   dateReceived: string;
   description: string;
   shippedVia: string;
@@ -121,6 +122,7 @@ export interface TestingCommonData {
   samplePlan: string;
   samplingDate: string; // YYYY/MM/DD
   samplingLocation: string;
+  modelNumbers: string[]; // every model the project covers, tested or not
 }
 
 // Snapshot taken when locked data is formally revised (not yet implemented)

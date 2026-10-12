@@ -9,6 +9,7 @@ import projectsJson from './data/projects.json';
 import projectTypesJson from './data/projecttypes.json';
 import dataSheetsJson from './data/datasheets.json';
 import samplesJson from './data/samples.json';
+import equipmentJson from './data/equipment.json';
 import personnel from './data/personnel.json';
 import rolesJson from './data/roles.json';
 import legalDocsJson from './data/legaldocs.json';
@@ -103,12 +104,13 @@ const ensureDataSheets = (project) => {
         samplePlan: '',
         samplingDate: '',
         samplingLocation: '',
+        modelNumbers: [],
       },
     });
     for (const standardId of project.standardIds ?? []) {
       wanted.push({
         kind: 'testing-standard',
-        templateKey: 'generic',
+        templateKey: 'standard', // the client picks the template from standard + revision
         standardId,
         standardRevisionId: latestRevisionId(standardId),
         data: {},
@@ -327,6 +329,9 @@ export default {
     delete project.dataLockedAt;
     delete project.dataLockedBy;
     return Promise.resolve(joinProject(project));
+  },
+  fetchEquipment() {
+    return fetch(equipmentJson.map((e) => ({ ...e })), 200);
   },
   fetchAllCustomers() {
     return Promise.resolve(

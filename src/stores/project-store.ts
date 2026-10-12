@@ -8,6 +8,7 @@ import type {
   ProjectWithDetails,
 } from 'src/components/Projects/models';
 import type { Customer, CustomerLocation } from 'src/components/Customers/models';
+import type { Equipment } from 'src/components/Equipment/models';
 
 interface LookupItem {
   id: number;
@@ -36,6 +37,7 @@ export const useProjectStore = defineStore('projects', {
     allStandards: [] as StandardOption[],
     allRevisions: [] as StandardOption[],
     certProductTypes: [] as ProductTypeOption[],
+    equipment: [] as Equipment[],
   }),
 
   actions: {
@@ -133,6 +135,16 @@ export const useProjectStore = defineStore('projects', {
         })
         .catch((error) => {
           console.error('Error unlocking project data:', error);
+        });
+    },
+    async fetchEquipment() {
+      await api
+        .fetchEquipment()
+        .then((response) => {
+          this.equipment = response as Equipment[];
+        })
+        .catch((error) => {
+          console.error('Error fetching equipment:', error);
         });
     },
     fetchNextJobNumber(typeCode: string): Promise<string> {

@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "id": 1,
+    "projectId": 6,
+    "kind": "testing-common",
+    "templateKey": "testing-common",
+    "data": {
+      "manufacturer": {
+        "name": "N.P.S. Plastics LLC",
+        "address1": "1450 W Industrial Way",
+        "address2": "",
+        "city": "Nampa",
+        "state": "ID",
+        "zipCode": "83687",
+        "country": "USA",
+        "phone": "+1 208 555 0142",
+        "website": "www.npsplastics.com"
+      },
+      "sampleDescription": "Roto-molded polyethylene potable water holding tanks for recreational vehicles",
+      "samplePlan": "Recreational vehicle potable water tanks in \"NEW\" condition. Sampled by client.",
+      "samplingDate": "2025/09/19",
+      "samplingLocation": "Nampa, ID USA",
+      "modelNumbers": ["FW-C-20", "FW-C-24", "FW-C-36", "FW-L-20", "FW-R-20", "FW-UC-11", "FW-UC-22"]
+    },
+    "savedAt": "2025-09-22T17:04:00.000Z",
+    "savedBy": 2
+  }
+]

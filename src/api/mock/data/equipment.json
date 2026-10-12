@@ -1,0 +1,85 @@
+[
+  {
+    "id": 1,
+    "assetNumber": "TEi-P-012",
+    "description": "Digital pressure gauge, 0-300 psi",
+    "manufacturer": "Ashcroft",
+    "model": "2089",
+    "serialNumber": "AS-488213",
+    "calibrationCertificate": "CC-2026-0412",
+    "calibrationDate": "2026/04/14",
+    "calibrationDueDate": "2027/04/14"
+  },
+  {
+    "id": 2,
+    "assetNumber": "TEi-P-015",
+    "description": "Low-pressure test gauge, 0-15 psi (0.05 psi resolution)",
+    "manufacturer": "Wika",
+    "model": "CPG500",
+    "serialNumber": "W-1170452",
+    "calibrationCertificate": "CC-2026-0413",
+    "calibrationDate": "2026/04/14",
+    "calibrationDueDate": "2027/04/14"
+  },
+  {
+    "id": 3,
+    "assetNumber": "TEi-P-021",
+    "description": "Mass flow leak test panel",
+    "manufacturer": "Uson",
+    "model": "Sprint mL",
+    "serialNumber": "U-55190",
+    "calibrationCertificate": "CC-2025-1188",
+    "calibrationDate": "2025/09/02",
+    "calibrationDueDate": "2026/09/02"
+  },
+  {
+    "id": 4,
+    "assetNumber": "TEi-P-030",
+    "description": "Water column standpipe, 36 in, graduated",
+    "manufacturer": "TEi (in-house)"
+  },
+  {
+    "id": 5,
+    "assetNumber": "TEi-G-003",
+    "description": "Digital stopwatch",
+    "manufacturer": "Traceable",
+    "model": "1051",
+    "serialNumber": "T-220981",
+    "calibrationCertificate": "CC-2026-0201",
+    "calibrationDate": "2026/02/10",
+    "calibrationDueDate": "2027/02/10"
+  },
+  {
+    "id": 6,
+    "assetNumber": "TEi-G-007",
+    "description": "Thermohygrometer (lab temperature and humidity)",
+    "manufacturer": "Extech",
+    "model": "SD500",
+    "serialNumber": "E-0937714",
+    "calibrationCertificate": "CC-2026-0518",
+    "calibrationDate": "2026/05/18",
+    "calibrationDueDate": "2027/05/18"
+  },
+  {
+    "id": 7,
+    "assetNumber": "TEi-G-011",
+    "description": "Digital calipers, 0-6 in",
+    "manufacturer": "Mitutoyo",
+    "model": "500-196-30",
+    "serialNumber": "M-A1182734",
+    "calibrationCertificate": "CC-2026-0330",
+    "calibrationDate": "2026/03/30",
+    "calibrationDueDate": "2027/03/30"
+  },
+  {
+    "id": 8,
+    "assetNumber": "TEi-G-014",
+    "description": "Ultrasonic wall thickness gauge",
+    "manufacturer": "Olympus",
+    "model": "27MG",
+    "serialNumber": "O-150223",
+    "calibrationCertificate": "CC-2026-0602",
+    "calibrationDate": "2026/06/02",
+    "calibrationDueDate": "2027/06/02"
+  }
+]
